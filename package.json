@@ -1,0 +1,40 @@
+{
+  "name": "fost.r-api",
+  "version": "0.1.0",
+  "devDependencies": {
+    "husky": "^0.14.1",
+    "lint-staged": "^4.0.0",
+    "prettier": "^1.4.4"
+  },
+  "dependencies": {
+    "bcryptjs":"~2.4.3",
+    "body-parser": "~1.17.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "express-mysql-session": "^1.2.1",
+    "express-session": "^1.15.3",
+    "express-validator": "^3.2.0",
+    "morgan": "~1.8.1",
+    "mysql": "^2.5.4",
+    "pug": "~2.0.0-beta11",
+    "serve-favicon": "~2.4.2"
+  },
+  "scripts": {
+    "start": "node ./bin/www",
+    "prettify": "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write \"./src/**/*.js\"",
+    "precommit": "lint-staged",
+    "prepush": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write",
+      "git add"
+    ]
+  },
+  "description": "fost.r",
+  "main": "app.js",
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC"
+}

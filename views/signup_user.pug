@@ -1,0 +1,47 @@
+
+extends layout
+
+block content
+  .main.container
+    .row
+      .col-md-6.col-md-offset-3
+        h1.display-4.m-b-2 Sign Up
+
+        
+        // register form
+        form(method='POST' action='/signup_user')
+            p
+
+            label(for='Username') Username:
+            input#Username.form-control(type='text', placeholder='Username' name='Username')
+            p
+
+            label(for='firstname') First Name:
+            input#firstname.form-control(type='text', placeholder='first name' name='firstname')
+            p
+
+            label(for='lastname') Last Name:
+            input#lastname.form-control(type='text', placeholder='last name' name='lastname')
+            p
+
+            label(for='birthday') Birthday:
+            input#birthday.form-control(type='date', min='1917-01-01', max='2007-12-31', placeholder='MM-DD-YYYY' name='birthday')
+            p
+
+            label(for='address') Address:
+            input#address.form-control(type='text', placeholder='address' name='address')
+            p
+
+            label(for='contactnum') Contact Number:
+            input#contactnum.form-control(type='text', placeholder='Contact number' name='contactnum')
+            p
+
+            label(for='email') Email:
+            input#email.form-control(type='email', placeholder='name@email.com' name='email')
+            p
+
+            label(for='password') Password:
+            input#pw.form-control(type='password' name='password')
+            p
+            
+            button.btn.btn-primary(type='submit') Sign up
