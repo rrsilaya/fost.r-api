@@ -137,11 +137,11 @@ router.post('/signup_user', function(req, res, next) {
     req.checkBody('Username', 'Username is required').notEmpty();
     req.checkBody('firstname', 'First name is required').notEmpty();
     req.checkBody('lastname', 'Last name is required').notEmpty();
-    req.checkBody('birthday', 'Birthday is required').notEmpty();
+    req.checkBody('birthday', 'Birthday is required').notEmpty(); // birthday should be between 01-01-1917 and 12-31-2007 only
     req.checkBody('address', 'Address is required').notEmpty();
     req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty().isInt();
     req.checkBody('email', 'Email is required').isEmail();
-    req.checkBody('password', 'password is required').notEmpty;
+    req.checkBody('password', 'password is required').notEmpty();
     // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 
 
     var errors = req.validationErrors();
@@ -216,7 +216,7 @@ router.post('/signup_shelter', function(req, res, next) {
     req.checkBody('address', 'Address is required').notEmpty();
     req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty().isInt();
     req.checkBody('email', 'Email is required').isEmail();
-    req.checkBody('password', 'password is required').notEmpty;
+    req.checkBody('password', 'password is required').notEmpty();
     // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 
 
     var errors = req.validationErrors();
