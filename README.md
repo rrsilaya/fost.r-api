@@ -84,9 +84,9 @@ $ npm install && npm start
 | `/signup_user`    | sigunup_user    | Redirects to `/adopt` if logged in |
 | `/signup_shelter` | sigunup_shelter | Redirects to `/adopt` if logged in |
 | `/adopt`          | adopt           | Redirects to `/` if not logged in  |
-| `/community`      | community       |                        |
-| `/dates`          | dates           |                        |
-| `/rescue`         | rescue          |                        |
+| `/community`      | community       | Redirects to `/` if not logged in  |
+| `/dates`          | dates           | Redirects to `/` if not logged in  |
+| `/rescue`         | rescue          | Redirects to `/` if not logged in  |
 | `/*`              | no-page         | Error 404 Page, redirects to `/` if not logged in |
 
 ### Installing and Starting
