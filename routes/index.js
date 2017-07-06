@@ -123,6 +123,8 @@ router.post('/login_user', function (req, res, next){
 
 // signup_user post
 router.post('/signup_user', function(req, res, next) {
+
+
     var Username = req.body.Username;
     var firstname = req.body.firstname;
     var lastname = req.body.lastname;
@@ -153,6 +155,7 @@ router.post('/signup_user', function(req, res, next) {
         console.log('There was an error in the field');
         res.redirect('/signup_user');
     }else{
+        
         var today = new Date();
 
         var newUser = {
@@ -168,14 +171,40 @@ router.post('/signup_user', function(req, res, next) {
             "updated_at": today  
         }
 
-        controller.registerUser(newUser, function(err, user){
+        controller.registerUser(newUser, function(err, callback){
             if (err){
-                // console.log('There was an error in the register controller');
+                console.log(errors[0].msg);
+                console.log('There was an error in the register controller');
                 throw err;
             }
+            switch(callback){
+                case 'SIGNUP_SUCCESS':
+                    errors = "Successfully signed up.";
+                    console.log('Successfully created user');
+                    res.redirect('/login'); 
+                    break;
+                case 'QUERRY ERROR':
+                    console.log('Sorry, there was some error in the query.');
+                    // errors = "There was some error in the processing. Please try again.";
+                    res.redirect('/signup_user');
+                case 'TAKEN_BOTH_ERR':
+                    // console.log('Sorry, the email and username you entered are already taken.');
+                    errors = "Email and username are already taken. Please use another.";
+                    console.log(errors);
+                    res.redirect('/signup_user');
+                    break;
+                case 'TAKEN_EA':
+                    console.log('Sorry, the email address you entered is already taken');
+                    // errors = "The email address you entered is already taken. Please use another.";
+                    res.redirect('/signup_user');
+                    break;
+                case 'TAKEN_UN':
+                    console.log('Sorry, the username you entered is already taken.');
+                    // errors = "The username you entered is already taken. Please use another.";
+                    res.redirect('/signup_user');
+                    break;
+            }
         });
-
-        res.redirect('/login');
     }
 });
 
@@ -226,6 +255,7 @@ router.post('/signup_shelter', function(req, res, next) {
 
     if (errors){
         console.log('There was an error in the field');
+        console.log(errors[0].msg);
         res.render('signup_shelter');
     }else{
         var today = new Date();
@@ -241,14 +271,38 @@ router.post('/signup_shelter', function(req, res, next) {
             "updated_at": today  
         }
 
-        controller.registerShelter(newShelter, function(err, user){
+        controller.registerShelter(newShelter, function(err, callback){
             if (err){
-                // console.log('There was an error in the register controller');
+                console.log('There was an error in the register controller');
                 throw err;
             }
+            switch(callback){
+                case 'SIGNUP_SUCCESS':
+                    // errors = "Successfully signed up.";
+                    console.log('Successfully created user');
+                    res.redirect('/login'); 
+                    break;
+                case 'QUERRY ERROR':
+                    console.log('Sorry, there was some error in the query.');
+                    // errors = "There was some error in the processing. Please try again.";
+                    res.redirect('/signup_shelter');
+                case 'TAKEN_BOTH_ERR':
+                    console.log('Sorry, the email and username you entered are already taken.');
+                    // errors = "Email and username are already taken. Please use another.";
+                    res.redirect('/signup_shelter');
+                    break;
+                case 'TAKEN_EA':
+                    console.log('Sorry, the email address you entered is already taken');
+                    // errors = "The email address you entered is already taken. Please use another.";
+                    res.redirect('/signup_shelter');
+                    break;
+                case 'TAKEN_UN':
+                    console.log('Sorry, the username you entered is already taken.');
+                    // errors = "The username you entered is already taken. Please use another.";
+                    res.redirect('/signup_shelter');
+                    break;
+            }
         });
-
-        res.redirect('/login');
     }
 });
 
