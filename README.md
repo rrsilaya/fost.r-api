@@ -21,13 +21,13 @@ $ npm install && npm start
 
 #### users
   Field      | Type         |Null| Key | Default | Extra  
-  ---------- | ------------ | --- | ---  | ----- | -----  
+  ---------- | ------------ |--- | --- | ------- | -----  
   Username   | varchar(36)  | NO | PRI |         |        
   firstname  | varchar(36)  | NO |     | NULL    |        
   lastname 	 | varchar(36)  | NO |     | NULL    |        
   birthday   | date         | NO |     | NULL    |        
   address    | varchar(236) | NO |     | NULL    |        
-  contactnum | int(11)      | NO | UNI | NULL    |        
+  contactnum | int(11)      | NO |     | NULL    |        
   email      | varchar(36)  | NO | UNI | NULL    |        
   password   | varchar(255) | NO |     | NULL    |        
   created_at | datetime     | NO |     | NULL    |        
@@ -41,7 +41,7 @@ $ npm install && npm start
   lastname 	 | varchar(36)  | NO |     | NULL    |        
   address    | varchar(236) | NO |     | NULL    |        
   address    | date         | NO |     | NULL    |        
-  contactnum | int(11)      | NO | UNI | NULL    |        
+  contactnum | int(11)      | NO |     | NULL    |        
   email      | varchar(36)  | NO | UNI | NULL    |        
   password   | varchar(255) | NO |     | NULL    |        
   created_at | datetime     | NO |     | NULL    |        
