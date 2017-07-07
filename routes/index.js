@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var session = require('express-session');
-
+var fileUpload = require('express-fileupload');
+var mv = require('mv'); 
 var controller = require('./../controllers/signup_login_controller');
 
 var sess; 
@@ -12,6 +13,9 @@ router.use(session({
     resave: false,
     saveUninitialized: false
 })); 
+
+/* for express-fileupload */
+router.use(fileUpload());
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -123,8 +127,6 @@ router.post('/login_user', function (req, res, next){
 
 // signup_user post
 router.post('/signup_user', function(req, res, next) {
-
-
     var Username = req.body.Username;
     var firstname = req.body.firstname;
     var lastname = req.body.lastname;
@@ -173,14 +175,13 @@ router.post('/signup_user', function(req, res, next) {
 
         controller.registerUser(newUser, function(err, callback){
             if (err){
-                console.log(errors[0].msg);
                 console.log('There was an error in the register controller');
                 throw err;
             }
             switch(callback){
                 case 'SIGNUP_SUCCESS':
                     errors = "Successfully signed up.";
-                    console.log('Successfully created user');
+                    console.log('Successfully created account');
                     res.redirect('/login'); 
                     break;
                 case 'QUERRY ERROR':
@@ -229,6 +230,7 @@ router.post('/login_shelter', function (req, res, next){
     }
 });
 
+
 // signup_shelter post
 router.post('/signup_shelter', function(req, res, next) {
     var Username = req.body.Username;
@@ -237,7 +239,7 @@ router.post('/signup_shelter', function(req, res, next) {
     var contactnum = req.body.contactnum;
     var email = req.body.email;
     var password = req.body.password;
-
+    
     // checks req.<field>; the following messages can be sent to the views
     // https://github.com/ctavan/express-validator
     req.checkBody('Username', 'Username is required').notEmpty();
@@ -247,16 +249,16 @@ router.post('/signup_shelter', function(req, res, next) {
     req.checkBody('email', 'Email is required').isEmail();
     req.checkBody('password', 'password is required').notEmpty();
     // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 
-
     var errors = req.validationErrors();
 
     // may pop error message upon rendering of the signup page again;
     // res.render('signup_user', {<name for errors>: errors}) instead of what is placed in the if-statement
 
-    if (errors){
+    if ((errors) || (!req.files.document)){
         console.log('There was an error in the field');
-        console.log(errors[0].msg);
-        res.render('signup_shelter');
+        if (errors) console.log(errors);
+        if (!req.files.document) console.log('Please attach document');
+        res.redirect('/signup_shelter');
     }else{
         var today = new Date();
 
@@ -279,7 +281,17 @@ router.post('/signup_shelter', function(req, res, next) {
             switch(callback){
                 case 'SIGNUP_SUCCESS':
                     // errors = "Successfully signed up.";
-                    console.log('Successfully created user');
+                    console.log('Successfully created account');
+                    var file = req.files.document,
+                        name = Username + '-' + file.name,
+                        uploadpath = './database/shelter-docs/' + name;
+                    file.mv(uploadpath, function(err){
+                        if (err){
+                            console.log('File not uploaded, please try again');
+                            throw err;
+                            res.redirect('/signup_shelter');
+                        }
+                    });
                     res.redirect('/login'); 
                     break;
                 case 'QUERRY ERROR':

@@ -8,7 +8,7 @@ block content
 
         
         // register form
-        form(method='POST' action='signup_shelter')
+        form(method='POST' action='signup_shelter' enctype='multipart/form-data')
             p
 
             label(for='Username') Username:
@@ -33,6 +33,10 @@ block content
 
             label(for='password') Password:
             input#pw.form-control(type='password' name='password')
+            p
+            
+            label(for='document') Attach document:
+            input#document.form-control(type='file' name='document')
             p
 
             button.btn.btn-primary(type='submit') Sign up

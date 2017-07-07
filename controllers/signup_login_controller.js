@@ -30,7 +30,7 @@ module.exports.loginUser = function(credentials, callback){
     var password = credentials.password;
 
     connection.query('SELECT * FROM users WHERE Username = ?', [Username], function (error, results, fields) {
-      if (error) {
+      if (error){
         // console.log('login failed; error with query');
         console.log(error);
         callback(null, false);
@@ -75,9 +75,9 @@ module.exports.registerShelter = function(newShelter, callback){
     });
 }
 
-module.exports.loginShelter = function(req, callback){
-    var Username = req.Username;
-    var password = req.password;
+module.exports.loginShelter = function(credentials, callback){
+    var Username = credentials.Username;
+    var password = credentials.password;
 
     connection.query('SELECT * FROM shelters WHERE Username = ?', [Username], function (error, results, fields) {
         if (error){
@@ -101,4 +101,3 @@ module.exports.loginShelter = function(req, callback){
             }
         }});
 }
-
