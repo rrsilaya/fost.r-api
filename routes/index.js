@@ -28,10 +28,59 @@ router.get('/', function(req, res, next) {
 
 router.get('/community', function(req, res, next) {
     sess = req.session;
-    if (sess.body)  res.render('community', { title: 'fost.r' });
-    else {
+    if (sess.body){
+      res.render('community', { title: 'fost.r'});
+    }else {
       res.redirect('/');
     }
+});
+
+router.post('/community',function(req,res,next) {
+  sess = req.session;
+    if (sess.body) var Username=sess.body.Username;
+    var text_post= req.body.text_post;
+    var post_title=req.body.post_title;
+
+    if((!text_post) && (!req.files.photo)){
+      console.log('Nothing to post :Please attach document or enter text in textarea');
+    }else{
+      if(!req.files.photo){
+        console.log("no photo attached");
+        attachedfile_path=null;
+      }else{
+        var file=req.files.photo;
+        var name=file.name;
+        attachedfile_path='./database/post-photos/'+name;
+        file.mv(attachedfile_path, function(err){
+          if (err){
+            console.log('File not uploaded, please try again');
+            throw err;
+            res.redirect('/community');
+          }
+        });
+      }
+      var today = new Date();
+
+      var newPost={
+        "Posted_by":Username,
+        "post_title":post_title,
+        "text_post": text_post,
+        "attachedfile_path":attachedfile_path,
+        "created_at": today,
+        "updated_at":today
+      }
+     var connection = require('./../database/connection');
+
+
+      connection.query('INSERT INTO posts SET ?',newPost,function(err){
+        if(err) console.log(err);
+        else{
+          console.log("POSTED!!!!");
+          res.redirect('/community');
+        }
+      });
+    }
+
 });
 
 router.get('/dates', function(req, res, next) {
@@ -317,6 +366,7 @@ router.post('/signup_shelter', function(req, res, next) {
         });
     }
 });
+
 
 router.get('/logout', function(req, res, next) {
     req.session.destroy();  

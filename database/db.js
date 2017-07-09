@@ -8,5 +8,6 @@ module.exports = {
     },
     'database': 'db_fostr',
     'users_table': 'users',
-    'shelters_table': 'shelters'
+    'shelters_table': 'shelters',
+    'posts_table': 'posts'
 }

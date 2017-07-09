@@ -11,6 +11,7 @@ var expressValidator = require('express-validator');
 var index = require('./routes/index');
 var login = require('./routes/login');
 var signup = require('./routes/signup');
+var community=require('./routes/community');
 //var config = require('./database/config'); // creates the database
 var connection = require('./database/connection'); // connects to the database
 
@@ -53,7 +54,7 @@ app.use(expressValidator({
 app.use('/', index); 
 app.use('/login', login);
 app.use('/signup', signup);
-
+app.use('/community',community);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

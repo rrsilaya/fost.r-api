@@ -21,7 +21,7 @@ CREATE TABLE `' + db.database + '`.`' + db.users_table + '` (\
     `password` varchar(255) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL\
-    ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;'
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
     );
 
 connection.query('\
@@ -34,9 +34,20 @@ CREATE TABLE `' + db.database + '`.`' + db.shelters_table + '` (\
     `password` varchar(255) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL\
-    ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;'
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
     );
 
+connection.query('\
+    CREATE TABLE `' + db.database + '`.`' + db.posts_table + '` (\
+    `post_id` Integer NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,\
+    `Posted_by` varchar(52) NOT NULL,\
+    `post_title` varchar(52) NOT NULL,\
+    `text_post` varchar(305) NOT NULL,\
+    `attachedfile_path` varchar(255) NOT NULL UNIQUE,\
+    `created_at` datetime NOT NULL,\
+    `updated_at` datetime NOT NULL\
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
+    );
 /*
 connection.query('\
     CREATE TABLE `' + db.database + '`.`' + 'pets_of_users' + '` (\
@@ -51,7 +62,7 @@ connection.query('\
     REFERENCES shelters(Username) ON DELETE SET NULL,\
     created_at datetime NOT NULL, \
     updated_at datetime NOT NULL\
-    ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;'
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
     );
 
 connection.query('\
@@ -67,7 +78,7 @@ connection.query('\
     REFERENCES shelters(Username) ON DELETE SET NULL,\
     created_at datetime NOT NULL, \
     updated_at datetime NOT NULL\
-    ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;'
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
     );
 */
 
