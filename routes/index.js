@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var session = require('express-session');
 var fileUpload = require('express-fileupload');
-var mv = require('mv'); 
+//var mv = require('mv'); 
 var controller = require('./../controllers/signup_login_controller');
 
 var sess; 
