@@ -38,8 +38,7 @@ $ npm install && npm start
   ---------- | ------------ | ---| --- | ------- | -----  
   Username   | varchar(36)  | NO | PRI |         |        
   shelter_name  | varchar(36)  | NO |     | NULL    |     
-  address    | varchar(236) | NO |     | NULL    |        
-  address    | date         | NO |     | NULL    |        
+  address    | varchar(236) | NO |     | NULL    |       
   contactnum | int(11)      | NO |     | NULL    |        
   email      | varchar(36)  | NO | PRI | NULL    |        
   password   | varchar(255) | NO |     | NULL    |        
