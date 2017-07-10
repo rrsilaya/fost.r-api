@@ -29,18 +29,33 @@ router.get('/', function(req, res, next) {
 router.get('/community', function(req, res, next) {
     sess = req.session;
     if (sess.body){
-      res.render('community', { title: 'fost.r'});
+      var connection = require('./../database/connection');
+      connection.query('SELECT * FROM posts',function(err,results,field){
+        if(err) console.log(err);
+        else{
+            if(results.length>0){
+                res.render('community', { title: 'fost.r',data:results});
+
+                console.log(results);
+            }else{
+                res.render('community', { title: 'fost.r'});
+
+            }
+        }
+    });
     }else {
       res.redirect('/');
     }
 });
 
 router.post('/community',function(req,res,next) {
-  sess = req.session;
+    var connection = require('./../database/connection');
+    sess = req.session;
     if (sess.body) var Username=sess.body.Username;
     var text_post= req.body.text_post;
     var post_title=req.body.post_title;
 
+    
     if((!text_post) && (!req.files.photo)){
       console.log('Nothing to post :Please attach document or enter text in textarea');
     }else{
@@ -69,7 +84,6 @@ router.post('/community',function(req,res,next) {
         "created_at": today,
         "updated_at":today
       }
-     var connection = require('./../database/connection');
 
 
       connection.query('INSERT INTO posts SET ?',newPost,function(err){
@@ -80,6 +94,7 @@ router.post('/community',function(req,res,next) {
         }
       });
     }
+    
 
 });
 

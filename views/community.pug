@@ -6,7 +6,28 @@ block content
   p This is the community page
   include community_create_post
   p
-  this spot will be for the posts from db
+  if(data)
+    p Posts
+    p -----------------------------------------
+
+    each item in data
+      div
+        table
+          thead
+            tr
+          tbody
+            
+              tr=item.Posted_by
+              p
+              tr=item.post_title +" : "+item.text_post
+              p
+              tr=item.created_at
+              p
+              if(item.attachedfile_path)
+                img(src=item.attachedfile_path)
+
+          p -----------------------------------------
+
   p
   a(href='/logout') Logout
   p

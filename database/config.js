@@ -43,7 +43,7 @@ connection.query('\
     `Posted_by` varchar(52) NOT NULL,\
     `post_title` varchar(52) NOT NULL,\
     `text_post` varchar(305) NOT NULL,\
-    `attachedfile_path` varchar(255) NOT NULL UNIQUE,\
+    `attachedfile_path` varchar(255) UNIQUE,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL\
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
