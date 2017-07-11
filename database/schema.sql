@@ -37,6 +37,7 @@ CREATE TABLE pets_of_shelters (
     `breed` varchar(36) NOT NULL,
     `sex` enum("MALE", "FEMALE") NOT NULL,
     `birthday` DATE NOT NULL,
+    `status` enum("DATES", "ADOPT", "BOTH") NOT NULL,
     `created_at` datetime NOT NULL,
     `updated_at` datetime NOT NULL,
     `shelter_Username` varchar(52) NOT NULL,

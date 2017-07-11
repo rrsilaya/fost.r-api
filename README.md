@@ -67,6 +67,7 @@ $ npm install && npm start
   breed              | varchar(36)                           | NO |     | NULL    |                      
   sex                | enum('MALE', 'FEMALE')                | NO |     | NULL    |                      
   birthday           | date                                  | NO |     | NULL    |                      
+  status             | enum("DATES", "ADOPT", "BOTH")        | NO |     | NULL    |
   created_at         | datetime                              | NO |     | NULL    |                      
   updated_at         | datetime                              | NO |     | NULL    |                      
   shelter_Username   | varchar(52)                           | NO | MUL | NULL    |                      
