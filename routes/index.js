@@ -4,6 +4,7 @@ var session = require('express-session');
 var fileUpload = require('express-fileupload');
 //var mv = require('mv'); 
 var controller = require('./../controllers/signup_login_controller');
+var users_controller = require('./../controllers/users_adopt_controller');
 
 var sess; 
 
@@ -89,18 +90,63 @@ router.get('/signup_shelter', function(req, res, next) {
     else res.render('signup_shelter', { title: 'fost.r' });
 });
 
-router.get('/adopt', function (req, res, next) {
+router.use('/adopt', function(req, res, next) {
     sess = req.session;
-    if(sess.body){
-        res.render('adopt', { 
-            title: 'fost.r',
-            Username: sess.body.Username,
-            Password: sess.body.password 
-        });
+    if (sess.body){
+        if (sess.body.account == "user"){
+            res.redirect('/adopt_user');
+        }else{
+            res.redirect('/adopt_shelter');
+        }
     }else{
         res.redirect('/');
     }
+})
+
+router.use('/adopt_user', function(req,res,next){
+    sess = req.session;
+    if (sess.body){
+        next();
+    }else{
+        res.redirect('/');
+    }
+});
+
+router.get('/adopt_user', function (req, res, next) {
+    sess = req.session;
+
+    // http://expressjs.com/en/api.html#req.query
+    // https://stackoverflow.com/questions/26292267/how-do-i-check-if-query-string-has-values-in-express-js-node-js
+    
+    if(Object.keys(req.query).length == 0){
+        res.render('adopt_user', { 
+        title: 'fost.r',
+        Username: sess.body.Username,
+        Password: sess.body.password
+        });
+    }else{
+        users_controller.searchPet(req.query, function(err, callback){
+            console.log(callback);
+        });
+    }
  });
+
+router.use('/adopt_shelter', function(req,res,next){
+    sess = req.session;
+    if (sess.body){
+        next();
+    }else{
+        res.redirect('/');
+    }
+});
+
+router.get('/adopt_user', function (req, res, next) {
+    res.render('adopt_shelter', {
+        title: 'fost.r',
+        Username: sess.body.Username,
+        Password: sess.body.password
+    });
+});
 
 // login_user post
 router.post('/login_user', function (req, res, next){
@@ -116,6 +162,7 @@ router.post('/login_user', function (req, res, next){
             if (isMatch){
                 console.log('Successfully logged in');
                 sess.body = credentials;
+                sess.body.account = "user"; // this will serve as the checker for other pages later on
                 res.redirect('/adopt');
             }else{
                 res.redirect('login_user');
@@ -222,6 +269,7 @@ router.post('/login_shelter', function (req, res, next){
         if (isMatch){
             console.log('Successfully logged in');
             sess.body = req.body;
+            sess.body.account = "shelter"; // this will serve as the checker for other pages later on
             res.redirect('/adopt');
         }else{
             res.redirect('/login_shelter');

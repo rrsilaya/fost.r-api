@@ -1,0 +1,55 @@
+extends layout
+
+block content
+    form(action='/adopt_shelter' method='GET')
+        .container
+            
+        <select name="petType">
+            <option value="all">All</option>
+            <option value="dog">Dog</option>
+            <option value="cat">Cat</option>
+            <option value="snake">Snake</option>
+            <option value="turtle">Turtle</option>
+            <option value="rodent">Rodent</option>
+        </select>
+  
+        <select name="breed" disabled>
+            <option value="all">All</option>
+            <option value="breed1">breed1</option>
+            <option value="breed2">breed2</option>
+            <option value="breed3">breed2</option>
+            <option value="breed4">breed2</option>
+            <option value="breed5">breed2</option>
+        </select>
+
+        <select name="sex">
+            <option value="all">All</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select> 
+
+        <select name="age">
+            <option value="all">All</option>
+            <option value="less-6mos"><6 months</option>
+            <option value="less-1yr"><1 year</option>
+            <option value="1yr">1 year</option>
+            <option value="2yrs">2 years</option>
+            <option value="3yrs">3 years</option>
+        </select>
+
+        button(type='submit') Submit
+
+        p
+        b Username
+        p #{Username}
+        b Password
+        p #{Password}
+
+        p
+        a(href='/logout') Logout
+        p
+        a(href='/dates') Dates
+        p
+        a(href='/rescue') Rescue
+        p
+        a(href='/community') Community
