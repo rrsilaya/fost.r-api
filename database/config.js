@@ -42,12 +42,12 @@ CREATE TABLE shelters (\
     );
 
 connection.query('\
-CREATE TABLE pets_of_shelters (\
+    CREATE TABLE pets_of_shelters (\
     `pet_id` INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\
     `name` varchar(52) NOT NULL,\
-    `kind` varchar(36) NOT NULL,\
+    `kind` enum("DOG", "CAT", "BIRD", "OTHERS") NOT NULL,\
     `breed` varchar(36) NOT NULL,\
-    `sex` varchar(36) NOT NULL,\
+    `sex` enum("MALE", "FEMALE") NOT NULL,\
     `birthday` DATE NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
@@ -57,16 +57,16 @@ CREATE TABLE pets_of_shelters (\
     REFERENCES shelters(Username)\
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
-    ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;\
-    ');
+    ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;'
+    );
 
 connection.query('\
 CREATE TABLE pets_of_users (\
     `pet_id` INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\
     `name` varchar(52) NOT NULL,\
-    `kind` varchar(36) NOT NULL,\
+    `kind` enum("DOG", "CAT", "BIRD", "OTHERS") NOT NULL,\
     `breed` varchar(36) NOT NULL,\
-    `sex` varchar(36) NOT NULL,\
+    `sex` enum("MALE", "FEMALE") NOT NULL,\
     `birthday` DATE NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
@@ -76,8 +76,8 @@ CREATE TABLE pets_of_users (\
     REFERENCES users(Username)\
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
-    ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;\
-    ');
+    ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;'
+    );
 
 connection.end();
 

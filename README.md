@@ -28,7 +28,7 @@ $ npm install && npm start
   birthday   | date         | NO |     | NULL    |        
   address    | varchar(236) | NO |     | NULL    |        
   contactnum | int(11)      | NO |     | NULL    |        
-  email      | varchar(36)  | NO | UNI | NULL    |        
+  email      | varchar(36)  | NO | PRI | NULL    |        
   password   | varchar(255) | NO |     | NULL    |        
   created_at | datetime     | NO |     | NULL    |        
   updated_at | datetime     | NO |     | NULL    |        
@@ -42,36 +42,36 @@ $ npm install && npm start
   address    | varchar(236) | NO |     | NULL    |        
   address    | date         | NO |     | NULL    |        
   contactnum | int(11)      | NO |     | NULL    |        
-  email      | varchar(36)  | NO | UNI | NULL    |        
+  email      | varchar(36)  | NO | PRI | NULL    |        
   password   | varchar(255) | NO |     | NULL    |        
   created_at | datetime     | NO |     | NULL    |        
   updated_at | datetime     | NO |     | NULL    |        
 
 #### pets_of_users
-  Field      | Type                                  |Null| Key | Default | Extra                
-  ---------- | ------------------------------------- |----| --- | ------- | -------------------  
-  pet_id     | int (11)                              | NO | PRI | NULL    | auto_increment       
-  name       | varchar(52)                           | NO |     | NULL    |                      
-  kind   	   | enum('DOG', 'CAT', 'BIRD', 'OTHERS')  | NO |     | NULL    |                      
-  breed      | varchar(36)                           | NO |     | NULL    |                      
-  sex        | enum('MALE', 'FEMALE')                | NO |     | NULL    |                      
-  birthday   | date                                  | NO |     | NULL    |                      
-  username   | varchar(36)                           | NO | MUL | NULL    |                      
-  created_at | datetime                              | NO |     | NULL    |                      
-  updated_at | datetime                              | NO |     | NULL    |                      
+  Field           | Type                                  |Null| Key | Default | Extra                
+  --------------- | ------------------------------------- |----| --- | ------- | -------------------  
+  pet_id          | int (11)                              | NO | PRI | NULL    | auto_increment       
+  name            | varchar(52)                           | NO |     | NULL    |                      
+  kind   	        | enum('DOG', 'CAT', 'BIRD', 'OTHERS')  | NO |     | NULL    |                      
+  breed           | varchar(36)                           | NO |     | NULL    |                      
+  sex             | enum('MALE', 'FEMALE')                | NO |     | NULL    |                      
+  birthday        | date                                  | NO |     | NULL    |                      
+  created_at      | datetime                              | NO |     | NULL    |                      
+  updated_at      | datetime                              | NO |     | NULL    |                      
+  user_Username   | varchar(36)                           | NO | MUL | NULL    |                      
 
 #### pets_of_shelters
-  Field      | Type                                  |Null| Key | Default | Extra                
-  ---------- | ------------------------------------- | ---| --- | ------- | -------------------  
-  pet_id     | int (11)                              | NO | PRI | NULL    | auto_increment       
-  name       | varchar(52)                           | NO |     | NULL    |                      
-  kind   	   | enum('DOG', 'CAT', 'BIRD', 'OTHERS')  | NO |     | NULL    |                      
-  breed      | varchar(36)                           | NO |     | NULL    |                      
-  sex        | enum('MALE', 'FEMALE')                | NO |     | NULL    |                      
-  birthday   | date                                  | NO |     | NULL    |                      
-  username   | varchar(52)                           | NO | MUL | NULL    |                      
-  created_at | datetime                              | NO |     | NULL    |                      
-  updated_at | datetime                              | NO |     | NULL    |                      
+  Field              | Type                                  |Null| Key | Default | Extra                
+  ------------------ | ------------------------------------- | ---| --- | ------- | -------------------  
+  pet_id             | int (11)                              | NO | PRI | NULL    | auto_increment       
+  name               | varchar(52)                           | NO |     | NULL    |                      
+  kind   	           | enum('DOG', 'CAT', 'BIRD', 'OTHERS')  | NO |     | NULL    |                      
+  breed              | varchar(36)                           | NO |     | NULL    |                      
+  sex                | enum('MALE', 'FEMALE')                | NO |     | NULL    |                      
+  birthday           | date                                  | NO |     | NULL    |                      
+  created_at         | datetime                              | NO |     | NULL    |                      
+  updated_at         | datetime                              | NO |     | NULL    |                      
+  shelter_Username   | varchar(52)                           | NO | MUL | NULL    |                      
 
 ### App Routes
 | Route             | Page            | Remarks                            |
