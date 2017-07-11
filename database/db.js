@@ -4,9 +4,7 @@ module.exports = {
     'connection': {
         'host': 'localhost',
         'user': 'root',
-        'password': 'gnwZd#)*J72x'
+        'password': 'user'
     },
-    'database': 'db_fostr',
-    'users_table': 'users',
-    'shelters_table': 'shelters'
+    'database': 'db_fostr'
 }
