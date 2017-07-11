@@ -28,18 +28,42 @@ router.get('/', function(req, res, next) {
 
 router.get('/community', function(req, res, next) {
     sess = req.session;
+    var user_profile;
     if (sess.body){
       var connection = require('./../database/connection');
-      connection.query('SELECT * FROM posts',function(err,results,field){
+
+      connection.query('SELECT * FROM users where Username=?',[sess.body.Username],function(err,results,field){
+
+              if(results.length==0){
+                console.log("user not found");
+                  //user may be a shelter
+              }else{
+                    
+                    user_profile={
+                      "Username":sess.body.Username,
+                      "firstname": results[0].firstname,
+                      "lastname":results[0].lastname,
+                      "birthday":results[0].birthday,
+                      "address":results[0].address,
+                      "contactnum":results[0].contactnum,
+                      "email":results[0].email,
+                      "created_at":results[0].created_at
+                    }
+                    console.log(user_profile);
+
+              }
+      });
+     
+      connection.query('SELECT * FROM posts',user_profile,function(err,results,field){
         if(err) console.log(err);
         else{
             if(results.length>0){
-                res.render('community', { title: 'fost.r',data:results});
-
+                res.render('community', { title: 'fost.r',data:results,user_info:user_profile});
                 console.log(results);
+
                 
             }else{
-                res.render('community', { title: 'fost.r'});
+                res.render('community', { title: 'fost.r',});
 
             }
         }

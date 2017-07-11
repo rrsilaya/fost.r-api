@@ -6,6 +6,18 @@ block content
   p This is the community page
   include community_create_post
   p
+  if (user_info) 
+    p ---------------------------------------
+    p PROFILE
+    p space for profile picture
+    p="Username : " + user_info.Username
+    p="Name : "+ user_info.firstname + " " + user_info.lastname
+    p="Contact Number : "+ user_info.contactnum
+    p="Birthday :"+user_info.birthday
+    p="Address : "+ user_info.address
+    p="Account created on " + user_info.created_at
+    p ---------------------------------------
+
   if(data)
     p Posts
     p -----------------------------------------
