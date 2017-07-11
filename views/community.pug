@@ -25,6 +25,27 @@ block content
               p
               if(item.attachedfile_path)
                 img(src=item.attachedfile_path)
+              p
+              if(comments)
+                p ______________________________
+                each item in comments
+                  div
+                    table
+                      thead
+                        tr
+                      tbody
+                        tr=item.commented_by
+                        p
+                        tr=item.comment_body
+                        p
+                        tr=item.created_at
+                p________________________________
+
+              label(for='comment_body')
+              p
+              textarea#post(name='comment_body', placeholder='enter comment' ,cols='25', rows='3')
+              p
+              input(type='submit', value='reply')
 
           p -----------------------------------------
 

@@ -7,6 +7,8 @@ var connection = mysql.createConnection(db.connection);
 //creates the database
 connection.query('CREATE DATABASE `' + db.database + '`;');
 console.log('Created database!');
+connection.query('USE `' + db.database + '`;');
+
 
 //creates the tables
 connection.query('\
@@ -39,13 +41,27 @@ CREATE TABLE `' + db.database + '`.`' + db.shelters_table + '` (\
 
 connection.query('\
     CREATE TABLE `' + db.database + '`.`' + db.posts_table + '` (\
-    `post_id` Integer NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,\
+    `post_id` Integer UNIQUE NOT NULL PRIMARY KEY AUTO_INCREMENT,\
     `Posted_by` varchar(52) NOT NULL,\
     `post_title` varchar(52) NOT NULL,\
     `text_post` varchar(305) NOT NULL,\
     `attachedfile_path` varchar(255) UNIQUE,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL\
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
+    );
+
+connection.query('\
+    CREATE TABLE `' + db.database + '`.`' + db.comments_table + '` (\
+    `comment_id` Integer NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,\
+    `commented_by` varchar(52) NOT NULL,\
+    `comment_body` varchar(305) NOT NULL,\
+    `attachedfile_path` varchar(255) UNIQUE,\
+    `created_at` datetime NOT NULL,\
+    `updated_at` datetime NOT NULL,\
+    `post_id` Integer NOT NULL,\
+    CONSTRAINT comments_on_post_fk FOREIGN KEY(post_id)\
+    REFERENCES posts(post_id) \
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
     );
 /*

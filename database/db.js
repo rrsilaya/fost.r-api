@@ -9,5 +9,6 @@ module.exports = {
     'database': 'db_fostr',
     'users_table': 'users',
     'shelters_table': 'shelters',
-    'posts_table': 'posts'
+    'posts_table': 'posts',
+    'comments_table':'comments'
 }

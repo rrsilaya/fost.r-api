@@ -37,12 +37,16 @@ router.get('/community', function(req, res, next) {
                 res.render('community', { title: 'fost.r',data:results});
 
                 console.log(results);
+                
             }else{
                 res.render('community', { title: 'fost.r'});
 
             }
         }
-    });
+      });
+      
+      
+     
     }else {
       res.redirect('/');
     }
@@ -56,15 +60,15 @@ router.post('/community',function(req,res,next) {
     var post_title=req.body.post_title;
 
     
-    if((!text_post) && (!req.files.photo)){
-      console.log('Nothing to post :Please attach document or enter text in textarea');
+    if((!text_post)&& (!req.files.photo)){
+      console.log('Nothing to post: enter text in textarea');
     }else{
       if(!req.files.photo){
         console.log("no photo attached");
         attachedfile_path=null;
       }else{
         var file=req.files.photo;
-        var name=file.name;
+        var name=file.name+username;
         attachedfile_path='./database/post-photos/'+name;
         file.mv(attachedfile_path, function(err){
           if (err){
@@ -94,10 +98,34 @@ router.post('/community',function(req,res,next) {
         }
       });
     }
-    
+
 
 });
+/*
+router.post('/community',function(req,res,next){
+    var connection = require('./../database/connection');
+    sess = req.session;
+    if (sess.body) var Username=sess.body.Username;
+    var comment_body=req.body.comment_body;
 
+    if(comment_body){
+        var today=new Date();
+        var newComment={
+            "commented_by": Username,
+            "comment_body":comment_body,
+            "created_at": today,
+            "updated_at":today
+        }
+      connection.query('INSERT INTO comments SET ?',newComment,function(err){
+        if(err) console.log(err);
+        else{
+          console.log(" COMMENT POSTED!!!!");
+          res.redirect('/community');
+        }
+      });
+    }
+  });
+*/
 router.get('/dates', function(req, res, next) {
     sess=req.session;
     if (sess.body)  res.render('dates', { title: 'fost.r' });
