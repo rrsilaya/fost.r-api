@@ -7,41 +7,41 @@ block content
         h1.display-4.m-b-2
         form(action='/adopt_shelter' method='POST')
         
-        h2 ADD PET
-        p Note: if you are unsure of some fields, please just estimate or guess. You can update them later on.
+         h2 ADD PET
+         p Note: if you are unsure of some fields, please just estimate or guess. You can update them later on.
+         p
 
-        label(for='name') Name:
-        input#name.form-control(type='text', placeholder='Name of Pet' name='name')
-        p
+            label(for='name') Name:
+            input#name.form-control(type='text', placeholder='Name of Pet' name='name')
+            p
 
-        label(for='kind') Kind:
-        <select name="kind">
-            <option value="all">All</option>
-            <option value="dog">Dog</option>
-            <option value="cat">Cat</option>
-            <option value="bird">Bird</option>
-            <option value="snake">Snake</option>
-            <option value="turtle">Turtle</option>
-            <option value="rodent">Rodent</option>
-        </select>
-        p
+            label(for='kind') Kind:
+            input(type='text', list='kind' name='kind')
+            datalist#kind
+              option Dog
+              option Cat
+              option Bird
+              option Snake
+              option Turtle
+              option Rodent
+            p
 
-        label(for='breed') Breed:
-        input#breed.form-control(type='text', placeholder='Breed' name='breed')
-        p
+            label(for='breed') Breed:
+            input#breed.form-control(type='text', placeholder='Breed' name='breed')
+            p
 
-        label(for='sex') Sex:
-        <select name="sex">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-        </select> 
-        p
+            label(for='sex') Sex:
+            <select name="sex">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select> 
+            p
 
-        label(for='birthday') Birthday:
-        input#birthday.form-control(type='date', placeholder='MM-DD-YYYY' name='birthday')
-        p
+            label(for='birthday') Birthday:
+            input#birthday.form-control(type='date', placeholder='MM-DD-YYYY' name='birthday')
+            p
 
-        button(type='submit') Submit
+            button(type='submit') Submit
 
         p
         a(href='/logout') Logout

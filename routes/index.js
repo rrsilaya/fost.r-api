@@ -134,18 +134,34 @@ router.get('/adopt_user', function (req, res, next) {
 router.use('/adopt_shelter', function(req,res,next){
     sess = req.session;
     if (sess.body){
-        res.render('adopt_shelter');
+        next();
     }else{
         res.redirect('/');
     }
 });
 
-router.post('/adopt_user', function (req, res, next) {
-    res.render('adopt_shelter', {
-        title: 'fost.r',
-        Username: sess.body.Username,
-        Password: sess.body.password
-    });
+router.get('/adopt_shelter', function (req, res, next) {
+    res.render('adopt_shelter')
+});
+
+router.post('/adopt_shelter', function (req, res, next) {
+    console.log('ey');
+    sess = req.session;
+    if (req.body){
+        var today = new Date();
+        req.body.created_at = today;
+        req.body.updated_at = today;
+        req.body.status = "ADOPT";
+        req.body.shelter_Username = sess.body.Username;
+        adopt_controller.addPet(req.body, function(err, callback){
+            if (err){
+                throw err;
+                console.log('some error with controller');
+            }
+            console.log(callback);    
+        })
+    }else console.log('la pa laman');
+    res.redirect('/adopt_shelter');
 });
 
 // login_user post
