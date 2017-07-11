@@ -1,49 +1,47 @@
 extends layout
 
 block content
-    form(action='/adopt_shelter' method='GET')
-        .container
-            
-        <select name="petType">
+  .main.container
+    .row
+      .col-md-6.col-md-offset-3
+        h1.display-4.m-b-2
+        form(action='/adopt_shelter' method='POST')
+        
+        h2 ADD PET
+        p Note: if you are unsure of some fields, please just estimate or guess. You can update them later on.
+
+        label(for='name') Name:
+        input#name.form-control(type='text', placeholder='Name of Pet' name='name')
+        p
+
+        label(for='kind') Kind:
+        <select name="kind">
             <option value="all">All</option>
             <option value="dog">Dog</option>
             <option value="cat">Cat</option>
+            <option value="bird">Bird</option>
             <option value="snake">Snake</option>
             <option value="turtle">Turtle</option>
             <option value="rodent">Rodent</option>
         </select>
-  
-        <select name="breed" disabled>
-            <option value="all">All</option>
-            <option value="breed1">breed1</option>
-            <option value="breed2">breed2</option>
-            <option value="breed3">breed2</option>
-            <option value="breed4">breed2</option>
-            <option value="breed5">breed2</option>
-        </select>
+        p
 
+        label(for='breed') Breed:
+        input#breed.form-control(type='text', placeholder='Breed' name='breed')
+        p
+
+        label(for='sex') Sex:
         <select name="sex">
-            <option value="all">All</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
         </select> 
+        p
 
-        <select name="age">
-            <option value="all">All</option>
-            <option value="less-6mos"><6 months</option>
-            <option value="less-1yr"><1 year</option>
-            <option value="1yr">1 year</option>
-            <option value="2yrs">2 years</option>
-            <option value="3yrs">3 years</option>
-        </select>
+        label(for='birthday') Birthday:
+        input#birthday.form-control(type='date', placeholder='MM-DD-YYYY' name='birthday')
+        p
 
         button(type='submit') Submit
-
-        p
-        b Username
-        p #{Username}
-        b Password
-        p #{Password}
 
         p
         a(href='/logout') Logout

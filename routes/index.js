@@ -4,7 +4,7 @@ var session = require('express-session');
 var fileUpload = require('express-fileupload');
 //var mv = require('mv'); 
 var controller = require('./../controllers/signup_login_controller');
-var users_controller = require('./../controllers/users_adopt_controller');
+var adopt_controller = require('./../controllers/adopt_controller');
 
 var sess; 
 
@@ -125,7 +125,7 @@ router.get('/adopt_user', function (req, res, next) {
         Password: sess.body.password
         });
     }else{
-        users_controller.searchPet(req.query, function(err, callback){
+        adopt_controller.searchPet(req.query, function(err, callback){
             console.log(callback);
         });
     }
@@ -134,13 +134,13 @@ router.get('/adopt_user', function (req, res, next) {
 router.use('/adopt_shelter', function(req,res,next){
     sess = req.session;
     if (sess.body){
-        next();
+        res.render('adopt_shelter');
     }else{
         res.redirect('/');
     }
 });
 
-router.get('/adopt_user', function (req, res, next) {
+router.post('/adopt_user', function (req, res, next) {
     res.render('adopt_shelter', {
         title: 'fost.r',
         Username: sess.body.Username,
