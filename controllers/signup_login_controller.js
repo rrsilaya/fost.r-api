@@ -47,7 +47,7 @@ module.exports.loginUser = function(credentials, callback){
             });
         }else{
             // console.log('Username doesn\'t exist');
-            callback(null, true);
+            callback(null, false);
         }
     }});
 }
@@ -97,7 +97,7 @@ module.exports.loginShelter = function(credentials, callback){
                 });
             }else{
                 // console.log('Username doesn\'t exist');  
-                callback(null, true);
+                callback(null, false);
             }
         }});
 }
