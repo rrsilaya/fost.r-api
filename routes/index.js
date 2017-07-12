@@ -54,7 +54,7 @@ router.get('/community', function(req, res, next) {
               }
       });
      
-      connection.query('SELECT * FROM posts',user_profile,function(err,results,field){
+      connection.query('SELECT * FROM posts ORDER BY created_at DESC',user_profile,function(err,results,field){
         if(err) console.log(err);
         else{
             if(results.length>0){
