@@ -4,8 +4,9 @@ const router=express.Router();
 const connection=require('./database/connection');
 const controller=require('./entities/users_and_shelters/signup_login_controller');
 const validator = require('express-validator');
-const fileUpload = require('express-fileupload');
+//const fileUpload = require('express-fileupload');
 //const mv = require('mv'); 
+//router.use(fileUpload());
 
 
 
@@ -32,7 +33,8 @@ router.post('/signup/shelter',function(req,res,next){
     typeof req.body.address!=='undefined' &&
     typeof req.body.contactnum!=='undefined' &&
     typeof req.body.email!=='undefined' &&
-    typeof req.body.password!=='undefined'
+    typeof req.body.password!=='undefined' && 
+
     ){
     
     // checks req.<field>; the following messages can be sent to the views
@@ -50,8 +52,8 @@ router.post('/signup/shelter',function(req,res,next){
       res.json({message: errors})     
 
     }else{
-      //var file=req.files; use later for file-upload
-      //var name=Username+'-proof-'+file.name;
+      //var file=req.files; //use later for file-upload
+      //var name=req.body.Username+'-proof-'+file.name;
       //var uploadpath='./entities/users_and_shelters/shelters_docs'+name;
       var today=new Date();
       var newShelter={
@@ -75,23 +77,32 @@ router.post('/signup/shelter',function(req,res,next){
                 case 'SIGNUP_SUCCESS':
                     errors = "Successfully signed up.";
                     console.log(errors);
+                    /*file.mv(uploadpath, function(err){
+                        if (err){
+                            console.log('File not uploaded, please try again');
+                            return res.status(404).send(err);
+                        }
+                    }); note: produces error: file.mv is not a function*/
                     return res.status(200).send(newShelter);
                     break;
                 case 'QUERRY ERROR':
-                    console.log('Sorry, there was some error in the query.');                    
+                    errors = "Sorry, there was some error in the query.";
+                    console.log(errors);                    
                     return res.status(404).send(errors);
                     break;
                 case 'TAKEN_BOTH_ERR':
-                    console.log('Sorry, the email and username you entered are already taken.');
+                    errors = "Sorry, the email and username you entered are already taken.";
+                    console.log(errors);                    
                     return res.status(404).send(errors);
                     break;
                 case 'TAKEN_EA':
-                    console.log('Sorry, the email address you entered is already taken');
+                    errors="Sorry, the email address you entered is already taken"
+                    console.log(errors);                    
                     return res.status(404).send(errors);
-
                     break;
                 case 'TAKEN_UN':
-                    console.log('Sorry, the username you entered is already taken.');
+                    errors="Sorry, the username you entered is already taken."
+                    console.log(errors);                    
                     return res.status(404).send(errors);
                     break;
             }
@@ -162,20 +173,23 @@ router.post('/signup/user',function(req,res,next){
                     return res.status(200).send(newUser);
                     break;
                 case 'QUERRY ERROR':
-                    console.log('Sorry, there was some error in the query.');                    
+                    errors = "Sorry, there was some error in the query.";
+                    console.log(errors);                    
                     return res.status(404).send(errors);
                     break;
                 case 'TAKEN_BOTH_ERR':
-                    console.log('Sorry, the email and username you entered are already taken.');
+                    errors = "Sorry, the email and username you entered are already taken.";
+                    console.log(errors);                    
                     return res.status(404).send(errors);
                     break;
                 case 'TAKEN_EA':
-                    console.log('Sorry, the email address you entered is already taken');
+                    errors="Sorry, the email address you entered is already taken"
+                    console.log(errors);                    
                     return res.status(404).send(errors);
-
                     break;
                 case 'TAKEN_UN':
-                    console.log('Sorry, the username you entered is already taken.');
+                    errors="Sorry, the username you entered is already taken."
+                    console.log(errors);                    
                     return res.status(404).send(errors);
                     break;
             }
