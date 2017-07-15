@@ -33,7 +33,7 @@ router.post('/signup/shelter',function(req,res,next){
     typeof req.body.address!=='undefined' &&
     typeof req.body.contactnum!=='undefined' &&
     typeof req.body.email!=='undefined' &&
-    typeof req.body.password!=='undefined' && 
+    typeof req.body.password!=='undefined' 
 
     ){
     

@@ -43,7 +43,6 @@ CREATE TABLE shelters (\
     `password` varchar(255) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
-    `filepath` varchar(255) NOT NULL UNIQUE,\
     CONSTRAINT PRIMARY KEY(Username, email)\
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
     );
