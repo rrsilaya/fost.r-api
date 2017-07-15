@@ -114,7 +114,7 @@ connection.query('\
 
 connection.end();
 
-console.log('Created tables!');
+console.log('Database configuration done!');
 
  module.exports = connection;
 

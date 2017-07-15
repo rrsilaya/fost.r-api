@@ -4,6 +4,7 @@ const router=express.Router();
 const connection=require('./database/connection');
 const controller=require('./entities/users_and_shelters/signup_login_controller');
 const validator = require('express-validator');
+const session=require('express-session');
 //const fileUpload = require('express-fileupload');
 //const mv = require('mv'); 
 //router.use(fileUpload());
@@ -11,6 +12,12 @@ const validator = require('express-validator');
 
 
 router.use(validator());
+/* for express-session */
+router.use(session({
+    secret:"fost.r_jpad",
+    resave: true,
+    saveUninitialized: true
+})); 
 
 //https://scotch.io/tutorials/build-a-restful-api-using-node-and-express-4
 // middleware to use for all requests
@@ -26,7 +33,69 @@ router.get('/', function(req, res) {
   res.json({ message: 'Hello World' });   
 });
 
+
+
+router.post('/login/user',function(req,res,next) {
+
+  if (!req.session.body){
+    console.log("Enter keyy-value pairs necessary in body");
+    if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
+      var credentials=req.body;
+      controller.loginUser(credentials,function(err,isMatch){
+        if(err){
+          console.log(err);
+          res.status(404).send(err);
+        }else if (isMatch){
+          req.session.body=credentials;
+          res.status(200).send(credentials);
+
+        }else{
+          console.log('Something went wrong.');
+        }
+      });
+    }
+  }else if(req.session.body){
+    res.status(200).send(req.session.body);
+  }
+  
+});
+
+router.post('/login/shelter',function(req,res,next) {
+
+  if (!req.session.body){
+    console.log("Enter key-value pairs necessary in body");
+    if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
+      var credentials=req.body;
+      controller.loginShelter(credentials,function(err,isMatch){
+        if(err){
+          console.log(err);
+          res.status(404).send(err);
+        }else if (isMatch){
+          req.session.body=credentials;
+          res.status(200).send(credentials);
+
+        }else{
+          console.log('Something went wrong.');
+        }
+      });
+    }
+  }else if(req.session.body){
+    res.status(200).send(req.session.body);
+  }
+  
+});
+
+
+
+router.get('/logout',function(req,res,next){
+  req.session.destroy();
+  prompt="User logged out"
+  res.status(200).send(prompt);
+  console.log(prompt);
+});
+
 router.post('/signup/shelter',function(req,res,next){
+  
   if(
     typeof req.body.Username!== 'undefined' &&
     typeof req.body.shelter_name!=='undefined' &&
