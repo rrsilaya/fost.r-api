@@ -10,7 +10,6 @@ const session=require('express-session');
 //router.use(fileUpload());
 
 
-
 router.use(validator());
 /* for express-session */
 router.use(session({
@@ -95,7 +94,7 @@ router.get('/logout',function(req,res,next){
 });
 
 router.post('/signup/shelter',function(req,res,next){
-  
+
   if(
     typeof req.body.Username!== 'undefined' &&
     typeof req.body.shelter_name!=='undefined' &&

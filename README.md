@@ -74,9 +74,16 @@ $ npm install && npm start
 
 
 ##### Access API through localhost:3000/api/<route>
-### App Routes
-* /signup/user
-* /signup/shelter
+
+
+| Routes            | 
+| ----------------- |
+| `/`               | 
+| `/login/user`     | 
+| `/login/shelter`  | 
+| `/logout`         | 
+| `/signup/user`    | 
+| `/signup/shelter` | 
 
 
 ### Installing and Starting
