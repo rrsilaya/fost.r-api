@@ -46,7 +46,9 @@ router.post('/login/user',function(req,res,next) {
           res.status(404).send(err);
         }else if (isMatch){
           req.session.body=credentials;
-          res.status(200).send(credentials);
+          //res.status(200).send(credentials);
+          console.log(credentials);
+          res.redirect('/api/adopt');
 
         }else{
           console.log('Something went wrong.');
@@ -54,9 +56,15 @@ router.post('/login/user',function(req,res,next) {
       });
     }
   }else if(req.session.body){
-    res.status(200).send(req.session.body);
+    //res.status(200).send(req.session.body);
+    res.redirect('/api/adopt');
   }
   
+});
+
+router.get('/adopt',function(req,res,next){
+  if(req.session.body) res.json('This is the adopt page');
+  else res.json({message: 'Sign in or Sign up to access adopt page'})
 });
 
 router.post('/login/shelter',function(req,res,next) {
@@ -71,7 +79,9 @@ router.post('/login/shelter',function(req,res,next) {
           res.status(404).send(err);
         }else if (isMatch){
           req.session.body=credentials;
-          res.status(200).send(credentials);
+          //res.status(200).send(credentials);
+          console.log(credentials);
+          res.redirect('/api/adopt');
 
         }else{
           console.log('Something went wrong.');
@@ -79,11 +89,12 @@ router.post('/login/shelter',function(req,res,next) {
       });
     }
   }else if(req.session.body){
-    res.status(200).send(req.session.body);
+    //res.status(200).send(req.session.body);
+    res.redirect('/api/adopt');
+
   }
   
 });
-
 
 
 router.get('/logout',function(req,res,next){
@@ -94,8 +105,8 @@ router.get('/logout',function(req,res,next){
 });
 
 router.post('/signup/shelter',function(req,res,next){
-
-  if(
+  if(!req.session.body){
+    if(
     typeof req.body.Username!== 'undefined' &&
     typeof req.body.shelter_name!=='undefined' &&
     typeof req.body.address!=='undefined' &&
@@ -105,38 +116,38 @@ router.post('/signup/shelter',function(req,res,next){
 
     ){
     
-    // checks req.<field>; the following messages can be sent to the views
-    // https://github.com/ctavan/express-validator
-    req.checkBody('Username', 'Username is required').notEmpty();
-    req.checkBody('shelter_name', 'Shelter name is required').notEmpty();
-    req.checkBody('address', 'Address is required').notEmpty();
-    req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty().isInt();
-    req.checkBody('email', 'Email is required').isEmail();
-    req.checkBody('password', 'password is required').notEmpty();
-    // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 
+      // checks req.<field>; the following messages can be sent to the views
+      // https://github.com/ctavan/express-validator
+      req.checkBody('Username', 'Username is required').notEmpty();
+      req.checkBody('shelter_name', 'Shelter name is required').notEmpty();
+      req.checkBody('address', 'Address is required').notEmpty();
+      req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty().isInt();
+      req.checkBody('email', 'Email is required').isEmail();
+      req.checkBody('password', 'password is required').notEmpty();
+      // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 
 
-    var errors =req.validationErrors();
-    if(errors){
-      res.json({message: errors})     
+      var errors =req.validationErrors();
+      if(errors){
+        res.json({message: errors})     
 
-    }else{
-      //var file=req.files; //use later for file-upload
-      //var name=req.body.Username+'-proof-'+file.name;
-      //var uploadpath='./entities/users_and_shelters/shelters_docs'+name;
-      var today=new Date();
-      var newShelter={
-        "Username":req.body.Username,
-        "shelter_name":req.body.shelter_name,
-        "address":req.body.address,
-        "contactnum":req.body.contactnum,
-        "email":req.body.email,
-        "password":req.body.password,
-        "created_at": today,
-        "updated_at":today,
-        //"filepath":uploadpath
-      }
+      }else{
+        //var file=req.files; //use later for file-upload
+        //var name=req.body.Username+'-proof-'+file.name;
+        //var uploadpath='./entities/users_and_shelters/shelters_docs'+name;
+        var today=new Date();
+        var newShelter={
+          "Username":req.body.Username,
+          "shelter_name":req.body.shelter_name,
+          "address":req.body.address,
+          "contactnum":req.body.contactnum,
+          "email":req.body.email,
+          "password":req.body.password,
+          "created_at": today,
+          "updated_at":today,
+          //"filepath":uploadpath
+        }
 
-       controller.registerShelter(newShelter, function(err, callback){
+        controller.registerShelter(newShelter, function(err, callback){
             if (err){
                 console.log('There was an error in the register controller');
                 res.status(500).send(err);
@@ -151,7 +162,10 @@ router.post('/signup/shelter',function(req,res,next){
                             return res.status(404).send(err);
                         }
                     }); note: produces error: file.mv is not a function*/
-                    return res.status(200).send(newShelter);
+                    //res.status(200).send(newShelter);
+                    console.log(newShelter);
+                    res.redirect('/api/adopt');
+
                     break;
                 case 'QUERRY ERROR':
                     errors = "Sorry, there was some error in the query.";
@@ -175,21 +189,22 @@ router.post('/signup/shelter',function(req,res,next){
                     break;
             }
         });
+      }
+    }else{
+      res.status(500).send('registration failed');
     }
-
-
-    
-
-
-  }else{
-    return res.status(500).send('registration failed');
+  }else if(req.session.body){
+    res.redirect('/api/adopt');
   }
+  
 
 
 });
 
 router.post('/signup/user',function(req,res,next){
-  if(
+
+  if(!req.session.body){
+    if(
     typeof req.body.Username!== 'undefined' &&
     typeof req.body.firstname!=='undefined' &&
     typeof req.body.lastname!=='undefined' &&
@@ -200,36 +215,36 @@ router.post('/signup/user',function(req,res,next){
     typeof req.body.password!=='undefined'
     ){
     
-    // checks req.<field>; the following messages can be sent to the views
-    // https://github.com/ctavan/express-validator
-    req.checkBody('Username', 'Username is required').notEmpty();
-    req.checkBody('firstname', 'First name is required').notEmpty();
-    req.checkBody('lastname', 'Last name is required').notEmpty();
-    req.checkBody('birthday', 'Birthday is required').notEmpty(); // birthday should be between 01-01-1917 and 12-31-2007 only
-    req.checkBody('address', 'Address is required').notEmpty();
-    req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty().isInt();
-    req.checkBody('email', 'Email is required').isEmail();
-    req.checkBody('password', 'password is required').notEmpty();
-    // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 
+      // checks req.<field>; the following messages can be sent to the views
+      // https://github.com/ctavan/express-validator
+      req.checkBody('Username', 'Username is required').notEmpty();
+      req.checkBody('firstname', 'First name is required').notEmpty();
+      req.checkBody('lastname', 'Last name is required').notEmpty();
+      req.checkBody('birthday', 'Birthday is required').notEmpty(); // birthday should be between 01-01-1917 and 12-31-2007 only
+      req.checkBody('address', 'Address is required').notEmpty();
+      req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty().isInt();
+      req.checkBody('email', 'Email is required').isEmail();
+      req.checkBody('password', 'password is required').notEmpty();
+      // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 
 
-    var errors =req.validationErrors();
-    if(errors){
-      res.json({message: errors})
-    }else{
-      var today=new Date();
-      var newUser={
-        "Username":req.body.Username,
-        "firstname":req.body.firstname,
-        "lastname":req.body.lastname,
-        "birthday":req.body.birthday,
-        "address":req.body.address,
-        "contactnum":req.body.contactnum,
-        "email":req.body.email,
-        "password":req.body.password,
-        "created_at": today,
-        "updated_at":today
-      }
-       controller.registerUser(newUser, function(err, callback){
+      var errors =req.validationErrors();
+      if(errors){
+        res.json({message: errors})
+      }else{
+        var today=new Date();
+        var newUser={
+          "Username":req.body.Username,
+          "firstname":req.body.firstname,
+          "lastname":req.body.lastname,
+          "birthday":req.body.birthday,
+          "address":req.body.address,
+          "contactnum":req.body.contactnum,
+          "email":req.body.email,
+          "password":req.body.password,
+          "created_at": today,
+          "updated_at":today
+        }
+        controller.registerUser(newUser, function(err, callback){
             if (err){
                 console.log('There was an error in the register controller');
                 res.status(500).send(err);
@@ -238,7 +253,9 @@ router.post('/signup/user',function(req,res,next){
                 case 'SIGNUP_SUCCESS':
                     errors = "Successfully signed up.";
                     console.log(errors);
-                    return res.status(200).send(newUser);
+                    console.log(newUser);
+                    //return res.status(200).send(newUser);
+                    res.redirect('/api/adopt');
                     break;
                 case 'QUERRY ERROR':
                     errors = "Sorry, there was some error in the query.";
@@ -262,16 +279,15 @@ router.post('/signup/user',function(req,res,next){
                     break;
             }
         });
+      }
+    }else{
+      return res.status(500).send('registration failed');
     }
 
-
-    
-
-
   }else{
-    return res.status(500).send('registration failed');
+    res.redirect('/api/adopt');
   }
-
+  
 
 });
 module.exports=router;
