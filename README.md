@@ -76,14 +76,16 @@ $ npm install && npm start
 ##### Access API through localhost:3000/api/<route>
 
 
-| Routes            | 
-| ----------------- |
-| `/`               | 
-| `/login/user`     | 
-| `/login/shelter`  | 
-| `/logout`         | 
-| `/signup/user`    | 
-| `/signup/shelter` | 
+| Routes            | Remarks 
+| ----------------- | -------------------------------------------------------------------|
+| `/`               | Displays message(temp)                                             |
+| `/login/user`     | Redirects to `/adopt` if logged in                                 |
+| `/login/shelter`  | Redirects to `/adopt` if logged in                                 |
+| `/logout`         | Redirects to `/` after user logged out                             |
+| `/signup/user`    | Redirects to `/adopt` if logged in                                 |
+| `/signup/shelter` | Redirects to `/adopt` if logged in                                 |
+| `/adopt`          | Displays message (temp)                                            |
+| `/*`              | Redirects to `/adopt` if logged in, otherwise redirect to `/`      |
 
 
 ### Installing and Starting

@@ -98,10 +98,16 @@ router.post('/login/shelter',function(req,res,next) {
 
 
 router.get('/logout',function(req,res,next){
-  req.session.destroy();
-  prompt="User logged out"
-  res.status(200).send(prompt);
-  console.log(prompt);
+  if(req.session.body){
+    req.session.destroy();
+    prompt="User logged out"
+    res.status(200).send(prompt);
+    console.log(prompt);
+  }else{
+    console.log('cannot perform function');
+    res.redirect('/api/');
+  }
+  
 });
 
 router.post('/signup/shelter',function(req,res,next){
@@ -290,4 +296,11 @@ router.post('/signup/user',function(req,res,next){
   
 
 });
+
+
+router.get('*', function(req, res, next) {
+  if(req.session.body) res.redirect('/api/adopt');
+  else res.redirect('/api/');
+});
+
 module.exports=router;
