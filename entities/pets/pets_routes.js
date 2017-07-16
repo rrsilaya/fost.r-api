@@ -38,6 +38,25 @@ router.get('/:owner/viewUserPets', function(req, res){
     }); 
 });
 
+/* deletes all pets of <name> */
+router.delete('/:owner/deleteAllUserPets', function(req, res){
+    var owner = req.params.owner;
+    controller.deleteAllUserPets(owner, function(err, results){
+        if (err) return res.status(500).json(err);  // server error
+        if (results) return res.status(500).json({message: 'unable to delete?'});
+        res.status(204).redirect('/' + owner + '/viewUserPets');
+    });
+});
+
+router.delete('/:owner/deleteAllShelterPets', function(req, res){
+    var owner = req.params.owner;
+    controller.deleteAllShelterPets(owner, function(err, results){
+        if (err) return res.status(500).json(err);  // server error
+        if (results) return res.status(500).json({message: 'unable to delete?'});
+        res.status(204).redirect('/' + owner + '/viewShelterPets'); 
+    });
+});
+
 /* add pets to database (only if logged in) */
 router.post('/addShelterPet', function(req, res){
     console.log(req.session.body);
@@ -50,6 +69,7 @@ router.post('/addShelterPet', function(req, res){
             "breed": req.body.breed,
             "sex": req.body.sex,
             "birthday": req.body.birthday,
+            "status":"UNASSIGNED",
             "created_at": today,
             "updated_at": today,
             "shelter_Username": owner
