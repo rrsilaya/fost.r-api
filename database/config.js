@@ -56,7 +56,7 @@ connection.query('\
     `breed` varchar(36) NOT NULL,\
     `sex` enum("MALE", "FEMALE") NOT NULL,\
     `birthday` varchar(36) NOT NULL,\
-    `status` enum("DATES", "ADOPT", "BOTH") NOT NULL,\
+    `status` enum("DATES", "ADOPT", "BOTH", "UNASSIGNED") NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     `uuid` varchar(36) NOT NULL,\    

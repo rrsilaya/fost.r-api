@@ -68,3 +68,19 @@ module.exports.updateShelterPet = function(uuid, changes, callback){
 		return callback(null, changes);	// if successful
 	});
 }
+
+module.exports.deleteUserPet = function(uuid, callback){
+	connection.query('DELETE FROM pets_of_users WHERE uuid = ?', uuid, function(err, results){
+		if (err) return callback(err);	// some error with query
+		console.log(results);
+		return callback(null, results);	// if successful
+	});
+}
+
+module.exports.deleteShelterPet = function(uuid, callback){
+	connection.query('DELETE FROM pets_of_shelters WHERE uuid = ?', uuid, function(err, results){
+		if (err) return callback(err);	// some error with query
+		console.log(results);
+		return callback(null, results);	// if successful
+	});
+}

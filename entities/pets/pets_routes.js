@@ -56,7 +56,7 @@ router.post('/addShelterPet', function(req, res){
         }
         controller.addShelterPet(petInfo, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            res.status(201).json(pets); // returns pets of specified user
+            res.status(201).json(pets); // returns info of newly added pet
         });
     }else res.status(403).json({message: 'login first before adding'});
 });
@@ -77,7 +77,7 @@ router.post('/addUserPet', function(req, res){
         }
         controller.addUserPet(petInfo, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            res.status(201).json(results); // returns pets of specified user
+            res.status(201).json(results); // returns info of newly added pet
         });
     }else res.status(403).json({message: 'login first before adding'});
 });
@@ -87,9 +87,9 @@ router.put('/:pet_uuid/updateShelterPets', function(req, res){
     if (req.session.body){
         var pet_uuid = req.params.pet_uuid; 
         var changes = req.body;
-        controller.viewUserPetsOf(pet_uuid, changes, function(err, pets){
+        controller.updateShelterPet(pet_uuid, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            res.json(pets); // returns pets of specified user
+            res.json(results); // returns results
         }); 
     }else res.status(403).json({message: 'login first before updating'});
 });
@@ -98,11 +98,31 @@ router.put('/:pet_uuid/updateUserPets', function(req, res){
     if(req.session.body){
         var pet_uuid = req.params.pet_uuid;
         var changes = req.body;
-        controller.viewUserPetsOf(pet_uuid, changes, function(err, pets){
+        controller.updateUserPet(pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            res.json(pets); // returns pets of specified user
+            res.json(results); // returns pets of specified user
         }); 
     }else res.status(403).json({message: 'login first before updating'});
+});
+
+router.delete('/:pet_uuid/deleteUserPet', function(req, res){
+    if(req.session.body){
+        var pet_uuid = req.params.pet_uuid;
+        controller.deleteUserPet(pet_uuid, function(err, results){
+            if (err) return res.status(500).json(err);  // server error
+            res.json(results); // returns pets of specified user
+        }); 
+    }else res.status(403).json({message: 'login first before deleting'});
+});
+
+router.delete('/:pet_uuid/deleteShelterPet', function(req, res){
+    if(req.session.body){
+        var pet_uuid = req.params.pet_uuid;
+        controller.deleteShelterPet(pet_uuid, function(err, results){
+            if (err) return res.status(500).json(err);  // server error
+            res.json(results); // returns pets of specified user
+        }); 
+    }else res.status(403).json({message: 'login first before deleting'});
 });
 
 module.exports = router;

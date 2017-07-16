@@ -4,10 +4,7 @@ const router=express.Router();
 const validator = require('express-validator');
 const session=require('express-session');
 const connection=require('./database/connection');
-const controller=require('./entities/users_and_shelters/signup_login_controller');
-//const fileUpload = require('express-fileupload');
-//const mv = require('mv'); 
-//router.use(fileUpload());
+
 var signup = require('./entities/signup/signup_routes');
 var login = require('./entities/login/login_routes');
 var pets = require('./entities/pets/pets_routes');
@@ -39,7 +36,7 @@ router.get('/', function(req, res) {
 
 router.get('/feed',function(req,res,next){
   if(req.session.body) res.json('This is the feed');
-  else res.json({message: 'Sign in or Sign up to access feed'})
+  else res.status(403).json({message: 'Sign in or Sign up to access feed'})
 });
 
 router.get('/logout',function(req,res,next){
