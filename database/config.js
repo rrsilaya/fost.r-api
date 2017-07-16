@@ -59,6 +59,7 @@ connection.query('\
     `status` enum("DATES", "ADOPT", "BOTH") NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
+    `uuid` varchar(36) NOT NULL,\    
     `shelter_Username` varchar(52) NOT NULL,\
     CONSTRAINT pets_of_shelters_users_fk FOREIGN KEY (shelter_Username)\
     REFERENCES shelters(Username)\
@@ -76,6 +77,7 @@ CREATE TABLE pets_of_users (\
     `birthday` varchar(36) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
+    `uuid` varchar(36) NOT NULL,\
     `user_Username` varchar(36) NOT NULL,\
     CONSTRAINT pets_of_users_fk FOREIGN KEY (user_Username)\
     REFERENCES users(Username)\
