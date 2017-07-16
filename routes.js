@@ -33,7 +33,7 @@ router.use('/login', login);
 router.use('/pets', pets);
 
 router.get('/', function(req, res) {
-  res.json({ message: 'localhost:3000/api/<route>' });   
+  res.json({ message: 'to access api: localhost:3000/api/<route>' });   
 });
 
 

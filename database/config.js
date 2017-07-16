@@ -55,13 +55,12 @@ connection.query('\
     `kind` enum("DOG", "CAT", "BIRD", "OTHERS") NOT NULL,\
     `breed` varchar(36) NOT NULL,\
     `sex` enum("MALE", "FEMALE") NOT NULL,\
-    `birthday` DATE NOT NULL,\
+    `birthday` varchar(36) NOT NULL,\
     `status` enum("DATES", "ADOPT", "BOTH") NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     `shelter_Username` varchar(52) NOT NULL,\
-    INDEX par_ind (shelter_Username),\
-    CONSTRAINT fk_shelters FOREIGN KEY (shelter_Username)\
+    CONSTRAINT pets_of_shelters_users_fk FOREIGN KEY (shelter_Username)\
     REFERENCES shelters(Username)\
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
@@ -70,17 +69,15 @@ connection.query('\
 
 connection.query('\
 CREATE TABLE pets_of_users (\
-    `pet_id` INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\
     `name` varchar(52) NOT NULL,\
     `kind` enum("DOG", "CAT", "BIRD", "OTHERS") NOT NULL,\
     `breed` varchar(36) NOT NULL,\
     `sex` enum("MALE", "FEMALE") NOT NULL,\
-    `birthday` DATE NOT NULL,\
+    `birthday` varchar(36) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     `user_Username` varchar(36) NOT NULL,\
-    INDEX par_ind (user_Username),\
-    CONSTRAINT fk_users FOREIGN KEY (user_Username)\
+    CONSTRAINT pets_of_users_fk FOREIGN KEY (user_Username)\
     REFERENCES users(Username)\
     ON DELETE CASCADE\
     ON UPDATE CASCADE\

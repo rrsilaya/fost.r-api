@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "devstart": "nodemon server.js",
-    "build": "mysql -u root p > ./database/schema.sql"
+    "build": "mysql -u root -p > ./database/schema.sql"
   },
   "author": "Erlen Evangelista",
   "license": "ISC",
