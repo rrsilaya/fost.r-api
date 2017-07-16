@@ -9,7 +9,8 @@ const controller=require('./entities/users_and_shelters/signup_login_controller'
 //const mv = require('mv'); 
 //router.use(fileUpload());
 var signup = require('./entities/signup/signup_routes');
-
+var login = require('./entities/login/login_routes');
+var pets = require('./entities/pets/pets_routes');
 
 router.use(validator());
 /* for express-session */
@@ -28,83 +29,24 @@ router.use(function(req, res, next) {
 });
 
 router.use('/signup', signup);
+router.use('/login', login);
+router.use('/pets', pets);
 
 router.get('/', function(req, res) {
-  res.json({ message: 'Hello World' });   
+  res.json({ message: 'localhost:3000/api/<route>' });   
 });
 
-router.get('/login', function(req, res) {
-  res.json
-});
-
-router.post('/login/user',function(req,res,next) {
-
-  if (!req.session.body){
-    console.log("Enter keyy-value pairs necessary in body");
-    if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
-      var credentials=req.body;
-      controller.loginUser(credentials,function(err,isMatch){
-        if(err){
-          console.log(err);
-          res.status(404).send(err);
-        }else if (isMatch){
-          req.session.body=credentials;
-          //res.status(200).send(credentials);
-          console.log(credentials);
-          res.redirect('/api/adopt');
-
-        }else{
-          console.log('Something went wrong.');
-        }
-      });
-    }
-  }else if(req.session.body){
-    //res.status(200).send(req.session.body);
-    res.redirect('/api/adopt');
-  }
-  
-});
 
 router.get('/feed',function(req,res,next){
   if(req.session.body) res.json('This is the feed');
-  else res.json({message: 'Sign in or Sign up to access adopt page'})
+  else res.json({message: 'Sign in or Sign up to access feed'})
 });
-
-router.post('/login/shelter',function(req,res,next) {
-
-  if (!req.session.body){
-    console.log("Enter key-value pairs necessary in body");
-    if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
-      var credentials=req.body;
-      controller.loginShelter(credentials,function(err,isMatch){
-        if(err){
-          console.log(err);
-          res.status(404).send(err);
-        }else if (isMatch){
-          req.session.body=credentials;
-          //res.status(200).send(credentials);
-          console.log(credentials);
-          // res.redirect('/api/feed');
-          res.status(200).redirect('/api/feed');
-        }else{
-          console.log('Something went wrong.');
-        }
-      });
-    }
-  }else if(req.session.body){
-    //res.status(200).send(req.session.body);
-    res.redirect('/api/feed');
-
-  }
-  
-});
-
 
 router.get('/logout',function(req,res,next){
   if(req.session.body){
     req.session.destroy();
     prompt="User logged out"
-    res.status(200).send(prompt);
+    res.status(200).redirect('/api');
     console.log(prompt);
   }else{
     console.log('cannot perform function');
