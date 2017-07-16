@@ -1,10 +1,10 @@
-// this will import 
+// this will import all of the routes needed 
 const express=require('express');
 const router=express.Router();
-const connection=require('./database/connection');
-const controller=require('./entities/users_and_shelters/signup_login_controller');
 const validator = require('express-validator');
 const session=require('express-session');
+const connection=require('./database/connection');
+const controller=require('./entities/users_and_shelters/signup_login_controller');
 //const fileUpload = require('express-fileupload');
 //const mv = require('mv'); 
 //router.use(fileUpload());
@@ -33,7 +33,9 @@ router.get('/', function(req, res) {
   res.json({ message: 'Hello World' });   
 });
 
-
+router.get('/login', function(req, res) {
+  res.json
+});
 
 router.post('/login/user',function(req,res,next) {
 
@@ -63,8 +65,8 @@ router.post('/login/user',function(req,res,next) {
   
 });
 
-router.get('/adopt',function(req,res,next){
-  if(req.session.body) res.json('This is the adopt page');
+router.get('/feed',function(req,res,next){
+  if(req.session.body) res.json('This is the feed');
   else res.json({message: 'Sign in or Sign up to access adopt page'})
 });
 
@@ -82,8 +84,8 @@ router.post('/login/shelter',function(req,res,next) {
           req.session.body=credentials;
           //res.status(200).send(credentials);
           console.log(credentials);
-          res.redirect('/api/adopt');
-
+          // res.redirect('/api/feed');
+          res.status(200).redirect('/api/feed');
         }else{
           console.log('Something went wrong.');
         }
@@ -91,7 +93,7 @@ router.post('/login/shelter',function(req,res,next) {
     }
   }else if(req.session.body){
     //res.status(200).send(req.session.body);
-    res.redirect('/api/adopt');
+    res.redirect('/api/feed');
 
   }
   
@@ -112,7 +114,7 @@ router.get('/logout',function(req,res,next){
 });
 
 router.get('*', function(req, res, next) {
-  if(req.session.body) res.redirect('/api/adopt');
+  if(req.session.body) res.redirect('/api/feed');
   else res.redirect('/api/');
 });
 

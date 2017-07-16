@@ -41,6 +41,7 @@ CREATE TABLE shelters (\
     `contactnum` int(11) NOT NULL,\
     `email` varchar(36) NOT NULL UNIQUE,\
     `password` varchar(255) NOT NULL,\
+    `file_path` varchar(255) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     CONSTRAINT PRIMARY KEY(Username, email)\
