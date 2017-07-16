@@ -1,3 +1,6 @@
+## Temporary note: (haha)
+Start program with `npm run devstart` so you no longer have to restart (similar to React).
+
 # fost.r ![octal](https://img.shields.io/badge/Batch_o%28ctal%29-fost.r-blue.svg?style=flat-square?colorA=000000)
 ![status](https://img.shields.io/badge/status-development-yellow.svg)
 ![yarn](https://img.shields.io/badge/yarn-v0.24.5-green.svg)
