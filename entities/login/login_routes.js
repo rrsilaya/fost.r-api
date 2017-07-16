@@ -35,7 +35,7 @@ router.post('/user',function(req,res,next) {
           req.session.body=credentials;
           //res.status(200).send(credentials);
           console.log(credentials);
-          res.redirect('/api/adopt');
+          res.redirect('/api/feed');
 
         }else{
           console.log('Something went wrong.');
@@ -44,7 +44,7 @@ router.post('/user',function(req,res,next) {
     }
   }else if(req.session.body){
     //res.status(200).send(req.session.body);
-    res.redirect('/api/adopt');
+    res.redirect('/api/feed');
   }
 });
 
