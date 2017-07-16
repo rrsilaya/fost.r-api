@@ -155,7 +155,7 @@ router.post('/user',function(req,res,next){
 
       var errors =req.validationErrors();
       if(errors){
-        res.json({message: errors})
+        res.status(400).json(errors);
       }else{
         var today=new Date(); 
         var newUser={
