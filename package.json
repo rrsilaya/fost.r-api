@@ -17,6 +17,7 @@
     "express-fileupload": "^0.1.4",
     "express-session": "^1.15.3",
     "express-validator": "^3.2.1",
+    "image-size": "^0.6.0",
     "morgan": "^1.8.2",
     "mv": "^2.1.1",
     "mysql": "^2.13.0",

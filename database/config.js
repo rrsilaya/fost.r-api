@@ -56,10 +56,13 @@ connection.query('\
     `breed` varchar(36) NOT NULL,\
     `sex` enum("MALE", "FEMALE") NOT NULL,\
     `birthday` varchar(36) NOT NULL,\
-    `status` enum("DATES", "ADOPT", "BOTH", "UNASSIGNED") NOT NULL,\
+    `status` enum("DATES", "ADOPT", "BOTH") NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
-    `uuid` varchar(36) NOT NULL,\    
+    `uuid` varchar(36) NOT NULL,\
+    `url` varchar(255),\
+    `width` varchar (36),\
+    `height` varchar (36),\
     `shelter_Username` varchar(52) NOT NULL,\
     CONSTRAINT pets_of_shelters_users_fk FOREIGN KEY (shelter_Username)\
     REFERENCES shelters(Username)\
@@ -78,6 +81,9 @@ CREATE TABLE pets_of_users (\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     `uuid` varchar(36) NOT NULL,\
+    `url` varchar(255),\
+    `width` varchar (36),\
+    `height` varchar (36),\
     `user_Username` varchar(36) NOT NULL,\
     CONSTRAINT pets_of_users_fk FOREIGN KEY (user_Username)\
     REFERENCES users(Username)\

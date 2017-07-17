@@ -1,6 +1,13 @@
 const express=require('express');
-const router=express.Router();
+const router=express.Router(); 
+var sizeOf = require('image-size');
+var mv = require('mv'); 
+var fileUpload = require('express-fileupload');
 var controller = require('./pets_controller');
+var uuid = require('./generate_uuid');
+
+
+router.use(fileUpload());     // express-fileupload
 
 router.get('/', function(req, res, next){
     res.json({message:'get /api/pets'});
@@ -62,6 +69,7 @@ router.post('/addShelterPet', function(req, res){
     console.log(req.session.body);
     if (req.session.body){
         var owner = req.session.body.Username;
+        var uuid = uuid.generate();
         var today = new Date();
         var petInfo = {
             "name": req.body.name,
@@ -69,10 +77,30 @@ router.post('/addShelterPet', function(req, res){
             "breed": req.body.breed,
             "sex": req.body.sex,
             "birthday": req.body.birthday,
-            "status":"UNASSIGNED",
+            "status":NULL,
             "created_at": today,
             "updated_at": today,
+            "uuid": uuid,
             "shelter_Username": owner
+        }
+        if (req.files.photo){
+            var petDP = req.files.photo;
+            var name = petInfo.uuid + '-dp-' + petDP.name;
+            var url = __dirname + '/photos/' + name;
+            // checking file type is still not available~
+            petInfo.url = url;
+            petDP.mv(url, function(err){
+                if (err){
+                    console.log('api err: not able to receive image');
+                    petInfo.url = NULL;
+                    petInfo.length = NULL;
+                    petInfo.width = NULL;        
+                    controller.addUserPet(petInfo, function(err, results){
+                        if (err) return res.status(500).json(err);  // server error
+                        res.status(201).json(results); // returns info of newly added pet
+                    });
+                }
+            });
         }
         controller.addShelterPet(petInfo, function(err, results){
             if (err) return res.status(500).json(err);  // server error
@@ -84,6 +112,7 @@ router.post('/addShelterPet', function(req, res){
 router.post('/addUserPet', function(req, res){
     if (req.session.body){
         var owner = req.session.body.Username;
+        var uuid = uuid.generate();
         var today = new Date();
         var petInfo = {
             "name": req.body.name,
@@ -93,7 +122,30 @@ router.post('/addUserPet', function(req, res){
             "birthday": req.body.birthday,
             "created_at": today,
             "updated_at": today,
+            "uuid": uuid,
             "user_Username": owner
+        }
+        if (req.files.photo){
+            var petDP = req.files.photo;
+            var name = petInfo.uuid + '-dp-' + petDP.name;
+            var url = __dirname + '/photos/' + name;
+            // checking file type is still not available~
+            petDP.mv(url, function(err){
+                if (err){
+                    console.log('api err: not able to receive image');
+                    petInfo.url = NULL;
+                    petInfo.length = NULL;
+                    petInfo.width = NULL;        
+                    controller.addUserPet(petInfo, function(err, results){
+                        if (err) return res.status(500).json(err);  // server error
+                        res.status(201).json(results); // returns info of newly added pet
+                    });
+                }
+            });
+            var dimensions = sizeOf(url);
+            petInfo.url = url;
+            petInfo.length = dimensions.length;
+            petInfo.width = dimensions.width;
         }
         controller.addUserPet(petInfo, function(err, results){
             if (err) return res.status(500).json(err);  // server error
@@ -125,6 +177,7 @@ router.put('/:pet_uuid/updateUserPets', function(req, res){
     }else res.status(403).json({message: 'login first before updating'});
 });
 
+/* deletes a single pet given the pet's uuid */
 router.delete('/:pet_uuid/deleteUserPet', function(req, res){
     if(req.session.body){
         var pet_uuid = req.params.pet_uuid;
