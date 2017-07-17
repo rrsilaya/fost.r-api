@@ -31,7 +31,7 @@ router.get('/shelter', (req, res)=>{
 
 router.post('/shelter',function(req,res,next){
   if(!req.session.body){
-    console.log(req.files.file);
+    // console.log(req.files.file);
     if(
     typeof req.body.Username!== 'undefined' &&
     typeof req.body.shelter_name!=='undefined' &&
@@ -89,7 +89,7 @@ router.post('/shelter',function(req,res,next){
                         if (err){
                           console.log(err);
                           console.log('File not uploaded, please try again');
-                          res.status(400).redirect('/api/signup');
+                          res.status(500).redirect('/api/signup');
                         }});
                     //  note: produces error: file.mv is not a function
                     console.log(newShelter);
