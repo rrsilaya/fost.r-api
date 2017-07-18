@@ -60,8 +60,8 @@ router.delete('/:owner/deleteAllUserPets', function(req, res){
     var owner = req.params.owner;
     controller.deleteAllUserPets(owner, function(err, results){
         if (err) return res.status(500).json(err);  // server error
-        if (results) return res.status(500).json({message: 'unable to delete?'});
-        res.status(204).redirect('/' + owner + '/viewUserPets');
+        if (!results) return res.status(500).json({message: 'unable to delete?'});
+        res.status(204).json(null);
     });
 });
 
@@ -69,8 +69,8 @@ router.delete('/:owner/deleteAllShelterPets', function(req, res){
     var owner = req.params.owner;
     controller.deleteAllShelterPets(owner, function(err, results){
         if (err) return res.status(500).json(err);  // server error
-        if (results) return res.status(500).json({message: 'unable to delete?'});
-        res.status(204).redirect('/' + owner + '/viewShelterPets'); 
+        if (!results) return res.status(500).json({message: 'unable to delete?'});
+        res.status(204).json(null);
     });
 });
 
@@ -225,7 +225,8 @@ router.delete('/:pet_uuid/deleteUserPet', function(req, res){
         var pet_uuid = req.params.pet_uuid;
         controller.deleteUserPet(pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns pets of specified user
+            if (!results) return res.status(500).json({message: 'unable to delete?'});
+            res.status(204).json(null);
         }); 
     }else res.status(403).json({message: 'login first before deleting'});
 });
@@ -235,7 +236,8 @@ router.delete('/:pet_uuid/deleteShelterPet', function(req, res){
         var pet_uuid = req.params.pet_uuid;
         controller.deleteShelterPet(pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns pets of specified user
+            if (!results) return res.status(500).json({message: 'unable to delete?'});
+            res.status(204).json(null);
         }); 
     }else res.status(403).json({message: 'login first before deleting'});
 });
