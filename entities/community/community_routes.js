@@ -30,6 +30,16 @@ router.get('/feed', function(req,res,next){
   });
 });
 
+/*view all post of a specific user/shelter ; 'user' will be used for both user and shelter*/
+router.get('/:user/viewPosts',function(req,res,next){
+  var user=req.params.user;
+  console.log(user);
+  controller.viewPostsOf(user,function(err, posts){
+        if (err) return res.status(500).json(err);  // server error
+        res.json(posts); // returns pets of specified user
+    }); 
+});
+
 router.post('/addPost',function(req,res,next){
 
   if(req.session.body){
@@ -49,8 +59,7 @@ router.post('/addPost',function(req,res,next){
           image.mv(image_urlpath, function(err){
             if (err){
               console.log('api err: not able to receive image');  
-            }
-            
+            }  
           });
         }else{
           console.log('file uploaded is not image');
@@ -86,10 +95,10 @@ router.post('/addPost',function(req,res,next){
     res.redirect('/api/');
   }
 });
-/*
+
 router.get('*', function(req, res, next) {
-  if(req.session.body) res.redirect('/api/community/community-feed');
+  if(req.session.body) res.redirect('/api/community/feed');
   else res.redirect('/api/community/');
 });
-*/
+
 module.exports=router;
