@@ -95,10 +95,13 @@ CREATE TABLE pets_of_users (\
 connection.query('\
     CREATE TABLE `' + db.database + '`.`' + db.posts_table + '` (\
     `post_id` Integer UNIQUE NOT NULL PRIMARY KEY AUTO_INCREMENT,\
-    `Posted_by` varchar(52) NOT NULL,\
-    `post_title` varchar(52) NOT NULL,\
-    `text_post` varchar(305) NOT NULL,\
-    `attachedfile_path` varchar(255) UNIQUE,\
+    `Posted_by` varchar(255) NOT NULL,\
+    `post_title` varchar(255) NOT NULL,\
+    `text_post` TEXT NOT NULL,\
+    `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,\
+    `image_width` Integer DEFAULT NULL,\
+    `image_height` Integer DEFAULT NULL,\
+    `post_uuid` varchar(36) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL\
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
