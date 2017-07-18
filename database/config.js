@@ -98,9 +98,7 @@ connection.query('\
     `Posted_by` varchar(255) NOT NULL,\
     `post_title` varchar(255) NOT NULL,\
     `text_post` TEXT NOT NULL,\
-    `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,\
-    `image_width` Integer DEFAULT NULL,\
-    `image_height` Integer DEFAULT NULL,\
+    `image_urlpath` varchar(255) UNIQUE DEFAULT NULL ,\
     `post_uuid` varchar(36) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL\

@@ -22,52 +22,56 @@ router.get('/', function(req, res, next){
 });
 
 
+/* views all post sorted by date*/
+router.get('/feed', function(req,res,next){
+  controller.viewAllPosts(function(err,posts){
+    if (err) return res.status(500).json(err);  // server error
+    else res.json(posts); // returns all posts
+  });
+});
 
 router.post('/addPost',function(req,res,next){
 
   if(req.session.body){
     console.log(req.body);
-    var newPost={
-      "Posted_by": req.session.body.Username,
-      "post_title": req.body.post_title,
-      "text_post": req.body.text_post,
-      "post_uuid": shortid.generate(),
-      "created_at": new Date(),
-      "updated_at":new Date()
-    }
+    var post_uuid=shortid.generate();
+    var today=new Date();
+    var image_urlpath;
+
     console.log(req.files);
     if(typeof req.files!=='undefined'){
-      var image_urlpath,image_width,image_height;
-      if(!req.files.photo){
-        newPost.image_urlpath=null; 
-        newPost.image_width=null;
-        newPost.image_height=null;
-      }else{
+      if(req.files.photo){
         var image=req.files.photo;
-        var name = newPost.post_uuid + '-attached-image-' + image.name;
+        var name = post_uuid + '-attached-image-' + image.name;
         var image_urlpath = __dirname + '/images_attached_to_posts/' + name;
         var mime = req.files.photo.mimetype;
         if (mime.substring(0,5) === 'image'){
           image.mv(image_urlpath, function(err){
             if (err){
               console.log('api err: not able to receive image');  
-            }else{
-              newPost.image_urlpath = image_urlpath;
-              var dimensions = sizeOf(image_urlpath);
-              newPost.image_width = dimensions.width;
-              newPost.image_height = dimensions.height;
-            }     
+            }
+            
           });
         }else{
           console.log('file uploaded is not image');
         }
+      }else if(!req.files.photo){
+        image_urlpath = null;
+       
       }
     }else{
-      console.log('file is undefined');
-      newPost.image_urlpath=null; 
-      newPost.image_width=null;
-      newPost.image_height=null;
+      image_urlpath = null;
 
+      console.log('file is undefined');
+    }
+    var newPost={
+      "Posted_by": req.session.body.Username,
+      "post_title": req.body.post_title,
+      "text_post": req.body.text_post,
+      "post_uuid": post_uuid,
+      "image_urlpath":image_urlpath,
+      "created_at": today,
+      "updated_at":today
     }
     controller.addPost(newPost,function(err,results){
       if(err) res.status(500).send(err);//server error
@@ -79,7 +83,7 @@ router.post('/addPost',function(req,res,next){
    
   }else{
     console.log("Please sign in or sign up first");
-    res.redirect('/api/')
+    res.redirect('/api/');
   }
 });
 /*
