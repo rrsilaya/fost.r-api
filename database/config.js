@@ -60,9 +60,9 @@ connection.query('\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     `uuid` varchar(36) NOT NULL,\
-    `url` varchar(255),\
-    `width` varchar (36),\
-    `height` varchar (36),\
+    `url` varchar(255) DEFAULT NULL,\
+    `width` varchar(36) DEFAULT NULL,\
+    `height` varchar(36) DEFAULT NULL,\
     `shelter_Username` varchar(52) NOT NULL,\
     CONSTRAINT pets_of_shelters_users_fk FOREIGN KEY (shelter_Username)\
     REFERENCES shelters(Username)\
@@ -81,9 +81,9 @@ CREATE TABLE pets_of_users (\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     `uuid` varchar(36) NOT NULL,\
-    `url` varchar(255),\
-    `width` varchar (36),\
-    `height` varchar (36),\
+    `url` varchar(255) DEFAULT NULL,\
+    `width` varchar(36) DEFAULT NULL,\
+    `height` varchaR(36) DEFAULT NULL,\
     `user_Username` varchar(36) NOT NULL,\
     CONSTRAINT pets_of_users_fk FOREIGN KEY (user_Username)\
     REFERENCES users(Username)\

@@ -1,13 +1,23 @@
 const express=require('express');
 const router=express.Router(); 
-var sizeOf = require('image-size');
-var mv = require('mv'); 
-var fileUpload = require('express-fileupload');
+var fileUpload = require('express-fileupload'); // for file upload
+var mv = require('mv');                         // for file upload; won't work when declared as consta
+var sizeOf = require('image-size');             // get image dimensions
+const validator = require('express-validator');
+var shortid = require('shortid');
+shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'); 
+// default has "-"" and "_" ; this sets the characters to only the entered characters (https://www.npmjs.com/package/shortid)
+
 var controller = require('./pets_controller');
-var uuid = require('./generate_uuid');
 
 
+router.use(validator());      // express-validator
 router.use(fileUpload());     // express-fileupload
+router.use(function(req, res, next) {
+    // do logging
+    console.log('sending request...');
+    next(); // make sure we go to the next routes and don't stop here
+});
 
 router.get('/', function(req, res, next){
     res.json({message:'get /api/pets'});
@@ -66,54 +76,11 @@ router.delete('/:owner/deleteAllShelterPets', function(req, res){
 
 /* add pets to database (only if logged in) */
 router.post('/addShelterPet', function(req, res){
-    console.log(req.session.body);
     if (req.session.body){
         var owner = req.session.body.Username;
-        var uuid = uuid.generate();
+        var uuid = shortid.generate();
         var today = new Date();
-        var petInfo = {
-            "name": req.body.name,
-            "kind": req.body.kind,
-            "breed": req.body.breed,
-            "sex": req.body.sex,
-            "birthday": req.body.birthday,
-            "status":NULL,
-            "created_at": today,
-            "updated_at": today,
-            "uuid": uuid,
-            "shelter_Username": owner
-        }
-        if (req.files.photo){
-            var petDP = req.files.photo;
-            var name = petInfo.uuid + '-dp-' + petDP.name;
-            var url = __dirname + '/photos/' + name;
-            // checking file type is still not available~
-            petInfo.url = url;
-            petDP.mv(url, function(err){
-                if (err){
-                    console.log('api err: not able to receive image');
-                    petInfo.url = NULL;
-                    petInfo.length = NULL;
-                    petInfo.width = NULL;        
-                    controller.addUserPet(petInfo, function(err, results){
-                        if (err) return res.status(500).json(err);  // server error
-                        res.status(201).json(results); // returns info of newly added pet
-                    });
-                }
-            });
-        }
-        controller.addShelterPet(petInfo, function(err, results){
-            if (err) return res.status(500).json(err);  // server error
-            res.status(201).json(pets); // returns info of newly added pet
-        });
-    }else res.status(403).json({message: 'login first before adding'});
-});
-
-router.post('/addUserPet', function(req, res){
-    if (req.session.body){
-        var owner = req.session.body.Username;
-        var uuid = uuid.generate();
-        var today = new Date();
+        console.log(req.body.name);
         var petInfo = {
             "name": req.body.name,
             "kind": req.body.kind,
@@ -125,32 +92,107 @@ router.post('/addUserPet', function(req, res){
             "uuid": uuid,
             "user_Username": owner
         }
-        if (req.files.photo){
+        if (typeof(req.files) !== 'undefined'){
             var petDP = req.files.photo;
+            var mime = req.files.photo.mimetype;
             var name = petInfo.uuid + '-dp-' + petDP.name;
             var url = __dirname + '/photos/' + name;
-            // checking file type is still not available~
-            petDP.mv(url, function(err){
-                if (err){
-                    console.log('api err: not able to receive image');
-                    petInfo.url = NULL;
-                    petInfo.length = NULL;
-                    petInfo.width = NULL;        
+            if (mime.substring(0,5) === 'image'){
+                petDP.mv(url, function(err){
+                    if (err){
+                        console.log('api err: not able to receive image');  
+                        controller.addShelterPet(petInfo, function(err, results){
+                            if (err) return res.status(500).json(err);  // server error
+                            res.status(201).json(results); // returns info of newly added pet
+                        });
+                    }
+                    petInfo.url = url;
+                    var dimensions = sizeOf(url);
+                    petInfo.width = dimensions.width;
+                    petInfo.height = dimensions.height;
                     controller.addUserPet(petInfo, function(err, results){
                         if (err) return res.status(500).json(err);  // server error
                         res.status(201).json(results); // returns info of newly added pet
                     });
-                }
+                });
+            }else{
+                console.log('file uploaded is not image');
+                console.log('created pet but no image yet');
+                controller.addShelterPet(petInfo, function(err, results){
+                if (err) return res.status(500).json(err);  // server error
+                res.status(201).json(results); // returns info of newly added pet
             });
-            var dimensions = sizeOf(url);
-            petInfo.url = url;
-            petInfo.length = dimensions.length;
-            petInfo.width = dimensions.width;
+            }
+
+        }else{
+            console.log('no image received');
+            controller.addShelterPet(petInfo, function(err, results){
+                if (err) return res.status(500).json(err);  // server error
+                res.status(201).json(results); // returns info of newly added pet
+            });
         }
-        controller.addUserPet(petInfo, function(err, results){
-            if (err) return res.status(500).json(err);  // server error
-            res.status(201).json(results); // returns info of newly added pet
-        });
+    }else res.status(403).json({message: 'login first before adding'});
+});
+
+router.post('/addUserPet', function(req, res){
+    console.log('before session');
+    console.log(req.files.photo);
+    if (req.session.body){
+        var owner = req.session.body.Username;
+        var uuid = shortid.generate();
+        var today = new Date();
+        console.log(req.body.name);
+        var petInfo = {
+            "name": req.body.name,
+            "kind": req.body.kind,
+            "breed": req.body.breed,
+            "sex": req.body.sex,
+            "birthday": req.body.birthday,
+            "created_at": today,
+            "updated_at": today,
+            "uuid": uuid,
+            "user_Username": owner
+        }
+        console.log(req.files);
+        if (typeof(req.files) !== 'undefined'){
+            var petDP = req.files.photo;
+            var name = petInfo.uuid + '-dp-' + petDP.name;
+            var url = __dirname + '/photos/' + name;
+            var mime = req.files.photo.mimetype;
+            if (mime.substring(0,5) === 'image'){
+                petDP.mv(url, function(err){
+                    if (err){
+                        console.log('api err: not able to receive image');  
+                        controller.addUserPet(petInfo, function(err, results){
+                            if (err) return res.status(500).json(err);  // server error
+                            res.status(201).json(results); // returns info of newly added pet
+                        });
+                    }
+                    petInfo.url = url;
+                    var dimensions = sizeOf(url);
+                    petInfo.width = dimensions.width;
+                    petInfo.height = dimensions.height;
+                    controller.addUserPet(petInfo, function(err, results){
+                        if (err) return res.status(500).json(err);  // server error
+                        res.status(201).json(results); // returns info of newly added pet
+                    });
+                });
+            }else{
+                console.log('file uploaded is not image');
+                console.log('created pet but no image yet');
+                controller.addUserPet(petInfo, function(err, results){
+                if (err) return res.status(500).json(err);  // server error
+                res.status(201).json(results); // returns info of newly added pet
+            });
+            }
+
+        }else{
+            console.log('no image received');
+            controller.addUserPet(petInfo, function(err, results){
+                if (err) return res.status(500).json(err);  // server error
+                res.status(201).json(results); // returns info of newly added pet
+            });
+        }
     }else res.status(403).json({message: 'login first before adding'});
 });
 
