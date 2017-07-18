@@ -30,6 +30,8 @@ router.get('/feed', function(req,res,next){
   });
 });
 
+/* view a post given its uuid*/
+
 /*view all post of a specific user/shelter ; 'user' will be used for both user and shelter*/
 router.get('/:user/viewPosts',function(req,res,next){
   var user=req.params.user;
@@ -39,6 +41,30 @@ router.get('/:user/viewPosts',function(req,res,next){
         res.json(posts); // returns pets of specified user
     }); 
 });
+
+router.delete('/:post_uuid/deletePost',function(req,res,next){
+  var post_uuid=req.params.post_uuid;
+  controller.deletePost(post_uuid,function(err,results){
+    if (err) return res.status(500).json(err);  // server error
+    else if (!results) return res.status(500).json({message: 'unable to delete'});
+    else {
+      return res.status(200).end("Post with uuid : " + post_uuid + " was deleted ");
+    }
+
+  });
+});
+
+router.delete('/deleteAllMyPosts',function(req,res,next){
+  var user=req.session.body.Username;
+  controller.deleteAllPosts(user, function(err, results){
+        if (err) return res.status(500).json(err);  // server error
+        else if (!results) return res.status(500).json({message: 'unable to delete'});
+        else {
+          return res.status(200).end("All Your Posts were DELETED");
+        }
+    });
+});
+
 
 router.post('/addPost',function(req,res,next){
 
