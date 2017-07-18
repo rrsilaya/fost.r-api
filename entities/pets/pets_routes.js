@@ -242,4 +242,8 @@ router.delete('/:pet_uuid/deleteShelterPet', function(req, res){
     }else res.status(403).json({message: 'login first before deleting'});
 });
 
+router.get('*', function(req, res, next) {
+  if(req.session.body) res.redirect('/api/feed');
+  else res.redirect('/api/pet/');
+});
 module.exports = router;

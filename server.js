@@ -8,8 +8,8 @@ const mysql=require('mysql');
 const logger = require('morgan');
 const connection=require('./database/connection');
 const routes=require('./routes.js');
-//configure app to use bodyParser()
 
+//configure app to use bodyParser()
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({

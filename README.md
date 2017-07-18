@@ -82,13 +82,13 @@ $ npm install && npm start
 | Routes            | Remarks 
 | ----------------- | -------------------------------------------------------------------|
 | `/`               | Displays message(temp)                                             |
-| `/login/user`     | Redirects to `/adopt` if logged in                                 |
-| `/login/shelter`  | Redirects to `/adopt` if logged in                                 |
+| `/login/user`     | Redirects to `/feed` if logged in                                  |
+| `/login/shelter`  | Redirects to `/feed` if logged in v                                |
 | `/logout`         | Redirects to `/` after user logged out                             |
-| `/signup/user`    | Redirects to `/adopt` if logged in                                 |
-| `/signup/shelter` | Redirects to `/adopt` if logged in                                 |
-| `/adopt`          | Displays message (temp)                                            |
-| `/*`              | Redirects to `/adopt` if logged in, otherwise redirect to `/`      |
+| `/signup/user`    | Redirects to `/feed` if logged in  v                               |
+| `/signup/shelter` | Redirects to `/feed` if logged in   v                              |
+| `/feed `          | Displays message (temp)                                            |
+| `/*`              | Redirects to `/feed` if logged in, otherwise redirect to `/`v      |
 
 
 ### Installing and Starting

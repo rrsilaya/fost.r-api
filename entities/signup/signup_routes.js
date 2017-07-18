@@ -90,7 +90,10 @@ router.post('/shelter',function(req,res,next){
                           console.log(err);
                           console.log('File not uploaded, please try again');
                           res.status(500).redirect('/api/signup');
-                        }});
+                        }else{
+                          req.session.body=newShelter;
+                        }
+                    });
                     //  note: produces error: file.mv is not a function
                     console.log(newShelter);
                     res.status(201).redirect('/api/feed');
@@ -180,6 +183,7 @@ router.post('/user',function(req,res,next){
                     errors = "Successfully signed up.";
                     console.log(errors);
                     console.log(newUser);
+                    req.session.body=newUser;
                     //return res.status(200).json(newUser);
                     res.status(201).redirect('/api/feed');
                     // res.redirect('/api/feed');
@@ -216,5 +220,9 @@ router.post('/user',function(req,res,next){
   }
 });
 
+router.get('*', function(req, res, next) {
+  if(req.session.body) res.redirect('/api/feed');
+  else res.redirect('/api/signup');
+});
 
 module.exports = router;
