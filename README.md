@@ -40,11 +40,12 @@ $ npm install && npm start
   Field      | Type         |Null| Key | Default | Extra  
   ---------- | ------------ | ---| --- | ------- | -----  
   Username   | varchar(36)  | NO | PRI |         |        
-  shelter_tname  | varchar(36)  | NO |     | NULL    |        
+  shelter_name  | varchar(36)  | NO |     | NULL    |        
   address    | varchar(236) | NO |     | NULL    |        
   contactnum | int(11)      | NO |     | NULL    |        
   email      | varchar(36)  | NO | UNI | NULL    |        
-  password   | varchar(255) | NO |     | NULL    |        
+  password   | varchar(255) | NO |     | NULL    | 
+  file_path  |varchar(255)  | NO |     | NULL    |       
   created_at | datetime     | NO |     | NULL    |        
   updated_at | datetime     | NO |     | NULL    |        
 
