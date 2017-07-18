@@ -90,7 +90,7 @@ router.post('/addShelterPet', function(req, res){
             "created_at": today,
             "updated_at": today,
             "uuid": uuid,
-            "user_Username": owner
+            "shelter_Username": owner
         }
         if (typeof(req.files) !== 'undefined'){
             var petDP = req.files.photo;
@@ -110,7 +110,7 @@ router.post('/addShelterPet', function(req, res){
                     var dimensions = sizeOf(url);
                     petInfo.width = dimensions.width;
                     petInfo.height = dimensions.height;
-                    controller.addUserPet(petInfo, function(err, results){
+                    controller.addShelterPet(petInfo, function(err, results){
                         if (err) return res.status(500).json(err);  // server error
                         res.status(201).json(results); // returns info of newly added pet
                     });
