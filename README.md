@@ -103,10 +103,10 @@ $ npm install && npm start
 | `/pets/:owner/deleteAllShelter`     | Delete all pets of a given shelter                                    |
 | `/pets/addShelterPet`               | Add a pet to db (for shelters)                                        |
 | `/pets/addUserPet`                  | Add a pet to db (for users)                                           |
-| `/:pet_uuid/updateUserPets`         | Update info of a pet (for users)                                      |
-| `/:pet_uuid/updateShelterPets`      | Update info of a pet (for shelters)                                   |
-| `/:pet_uuid/deleteUserPet`          | Delete a single pet given the pet_uuid (for users)                    |
-| `/:pet_uuid/deleteShelterPet`       | Delete a single pet given the pet_uuid (for shelters)                 |
+| `/pets/:pet_uuid/updateUserPets`    | Update info of a pet (for users)                                      |
+| `/pets/:pet_uuid/updateShelterPets` | Update info of a pet (for shelters)                                   |
+| `/pets/:pet_uuid/deleteUserPet`     | Delete a single pet given the pet_uuid (for users)                    |
+| `/pets/:pet_uuid/deleteShelterPet`  | Delete a single pet given the pet_uuid (for shelters)                 |
 | `/community/ `                      | Displays all posts sorted by date                                     |
 | `/community/:post_uuid/viewPost`    | View a post given its uuid                                            |  
 | `/community/:user/viewPosts`        | View all posts of a user                                              |
