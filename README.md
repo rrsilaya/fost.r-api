@@ -85,16 +85,22 @@ $ npm install && npm start
 ##### Access API through localhost:3000/api/<route>
 
 
-| Routes            | Remarks 
-| ----------------- | ------------------------------------------------------------------|
-| `/`               | Displays message(temp)                                            |
-| `/login/user`     | Redirects to `/feed` if logged in                                 |
-| `/login/shelter`  | Redirects to `/feed` if logged in                                 |
-| `/logout`         | Redirects to `/` after user logged out                            |
-| `/signup/user`    | Redirects to `/feed` if logged in                                 |
-| `/signup/shelter` | Redirects to `/feed` if logged in                                 |
-| `/feed `          | Displays message (temp)                                           |
-| `/*`              | Redirects to `/feed` if logged in, otherwise redirect to `/`      |
+| Routes                              | Remarks 
+| ----------------------------------- | ----------------------------------------------------------------------|
+| `/`                                 | Displays message(temp)                                                |
+| `/login/user`                       | Redirects to `/feed` if logged in                                     |
+| `/login/shelter`                    | Redirects to `/feed` if logged in                                     |
+| `/logout`                           | Redirects to `/` after user logged out                                |
+| `/signup/user`                      | Redirects to `/feed` if logged in                                     |
+| `/signup/shelter`                   | Redirects to `/feed` if logged in                                     |
+| `/feed `                            | Displays message (temp)                                               |
+| `/community/ `                      | Displays all posts sorted by date                                     |
+| `/community/:post_uuid/viewPost`    | View a post given its uuid                                            |   
+| `/community/:user/viewPosts`        | View all posts of a user                                              |
+| `/community/:post_uuid/deletePost ` | Delete a post given its uuid (iff post is posted by the user itself)  |
+| `/community/deleteAllMyPosts`       | Delete all posts of user                                              |
+| `/community/addPost`                | Add post                                                              |
+| `/*`                                | Redirects to `/feed` if logged in, otherwise redirect to `/`          |
 
 
 ### Installing and Starting

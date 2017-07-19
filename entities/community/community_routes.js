@@ -16,14 +16,9 @@ router.use(function(req, res, next) {
     next(); // make sure we go to the next routes and don't stop here
 });
 
-router.get('/', function(req, res, next){
-  if(req.session.body)  res.json({message:'CANNOT get /api/community'});
-  else res.status(403).json("Please log in or sign up first .");
-});
-
 
 /* views all post sorted by date*/
-router.get('/feed', function(req,res,next){
+router.get('/', function(req,res,next){
   if(req.session.body){
     controller.viewAllPosts(function(err,posts){
       if (err) return res.status(500).json(err);  // server error
@@ -144,8 +139,8 @@ router.post('/addPost',function(req,res,next){
 });
 
 router.get('*', function(req, res, next) {
-  if(req.session.body) res.redirect('/api/community/feed');
-  else res.redirect('/api/community/');
+  if(req.session.body) res.redirect('/api/community/');
+  else res.status(403).json("Please log in or sign up first .");
 });
 
 module.exports=router;
