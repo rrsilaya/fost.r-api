@@ -107,13 +107,15 @@ connection.query('\
     CREATE TABLE comments_on_posts (\
     `comment_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `commented_by` varchar(52) NOT NULL,\
-    `comment_body` varchar(305) NOT NULL,\
-    `attachedfile_path` varchar(255) UNIQUE,\
+    `comment_body` varchar(255) NOT NULL,\
+    `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
-    `post_uuid` varchar(36) UNIQUE NOT NULL,\
+    `post_uuid` varchar(36) NOT NULL,\
     CONSTRAINT comments_on_post_fk FOREIGN KEY(post_uuid)\
     REFERENCES posts(post_uuid) \
+    ON DELETE CASCADE\
+    ON UPDATE CASCADE\
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
     );
 
