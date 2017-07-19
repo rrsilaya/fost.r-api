@@ -81,6 +81,19 @@ $ npm install && npm start
   width      | varchar(36)                           | NO |     | NULL    | 
   height     | varchar(36)                           | NO |     | NULL    |
 
+### posts
+
+  Field         | Type                                  |Null| Key | Default | Extra                
+  --------------| ------------------------------------- | ---| --- | ------- | -------------------
+  Posted_by     | varchar(52)                           | NO |     | NULL    |                      
+  post_title    | varchar(255)                          | NO |     | NULL    |                      
+  text_post     | TEXT                                  | NO |     | NULL    |                      
+  image_urlpath | varchar(255)                          | YES| UNI | NULL    |                      
+  post_uuid     | varchar(36)                           | NO | PRI | NULL    |                      
+  created_at    | datetime                              | NO |     | NULL    |                      
+  updated_at    | datetime                              | NO |     | NULL    |                      
+  
+
 
 ##### Access API through localhost:3000/api/<route>
 

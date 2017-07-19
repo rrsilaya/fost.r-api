@@ -93,7 +93,7 @@ CREATE TABLE pets_of_users (\
 
 connection.query('\
     CREATE TABLE posts (\
-    `Posted_by` varchar(255) NOT NULL,\
+    `Posted_by` varchar(52) NOT NULL,\
     `post_title` varchar(255) NOT NULL,\
     `text_post` TEXT NOT NULL,\
     `image_urlpath` varchar(255) UNIQUE  DEFAULT NULL ,\
