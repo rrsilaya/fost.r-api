@@ -2,12 +2,12 @@
 const connection = require('./../../database/connection');
 // contains all queries for community
 
-
+/********* controllers for posts *************/
 /*view a post with specified uuid*/
-module.exports.viewPostsOf=function(post_uuid,callback){
+module.exports.viewPost=function(post_uuid,callback){
   connection.query('SELECT * FROM posts WHERE post_uuid = ? ',post_uuid,function(err, results){
     if (err) return callback(err);   // some error with query
-    return callback(null, results); // success
+    else return callback(null, results); // success
   });
 }
 /* view posts of a specific user*/
@@ -56,4 +56,21 @@ module.exports.addPost=function(newPost,callback){
   });
 }
 
+/************ controllers for comments ******************/
+//add a comment 
+module.exports.addComment=function(newComment,callback){
+  connection.query('INSERT INTO comments_on_posts SET ?', newComment, function(err, results){
+    if (err) return callback(err);  // some error with query
+    else return callback(null, results); // if successful
+  });
+}
+
+//view all comments in a post
+
+module.exports.viewAllComments=function(post_uuid,callback){
+  connection.query('SELECT * FROM comments_on_posts WHERE post_uuid = ?',post_uuid,function(err,results){
+    if (err) return callback(err);   // some error with query
+    else return callback(null, results); // success
+  });
+}
 

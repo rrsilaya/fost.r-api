@@ -85,15 +85,24 @@ $ npm install && npm start
 
   Field         | Type                                  |Null| Key | Default | Extra                
   --------------| ------------------------------------- | ---| --- | ------- | -------------------
-  Posted_by     | varchar(52)                           | NO |     | NULL    |                      
+  Posted_by     | varchar(52)                           | NO | MUL | NULL    |                      
   post_title    | varchar(255)                          | NO |     | NULL    |                      
   text_post     | TEXT                                  | NO |     | NULL    |                      
   image_urlpath | varchar(255)                          | YES| UNI | NULL    |                      
   post_uuid     | varchar(36)                           | NO | PRI | NULL    |                      
   created_at    | datetime                              | NO |     | NULL    |                      
   updated_at    | datetime                              | NO |     | NULL    |                      
-  
 
+### comments_on_posts
+  Field         | Type         | Null | Key | Default | Extra |
+  --------------|--------------|------|-----|---------|-------|
+  comment_uuid  | varchar(36)  | NO   | PRI | NULL    |       |
+  commented_by  | varchar(52)  | NO   |     | NULL    |       |
+  comment_body  | varchar(255) | NO   |     | NULL    |       |
+  image_urlpath | varchar(255) | YES  | UNI | NULL    |       |
+  created_at    | datetime     | NO   |     | NULL    |       |
+  updated_at    | datetime     | NO   |     | NULL    |       |
+  post_uuid     | varchar(36)  | NO   | MUL | NULL    |       |
 
 ##### Access API through localhost:3000/api/<route>
 
