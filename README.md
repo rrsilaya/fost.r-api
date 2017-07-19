@@ -40,7 +40,7 @@ $ npm install && npm start
   Field      | Type         |Null| Key | Default | Extra  
   ---------- | ------------ | ---| --- | ------- | -----  
   Username   | varchar(36)  | NO | PRI |         |        
-  shelter_name  | varchar(36)  | NO |     | NULL    |        
+  shelter_name  | varchar(52)  | NO |     | NULL    |        
   address    | varchar(236) | NO |     | NULL    |        
   contactnum | int(11)      | NO |     | NULL    |        
   email      | varchar(36)  | NO | UNI | NULL    |        
@@ -60,7 +60,11 @@ $ npm install && npm start
   birthday   | date                                  | NO |     | NULL    |                      
   username   | varchar(36)                           | NO | MUL | NULL    |                      
   created_at | datetime                              | NO |     | NULL    |                      
-  updated_at | datetime                              | NO |     | NULL    |                      
+  updated_at | datetime                              | NO |     | NULL    |
+  uuid       | varchar(36)                           | NO | PRI | NULL    |
+  url        | varchar(255)                          | NO |     | NULL    |
+  width      | varchar(36)                           | NO |     | NULL    | 
+  height     | varchar(36)                           | NO |     | NULL    |                        
 
 #### pets_of_shelters
   Field      | Type                                  |Null| Key | Default | Extra                
@@ -74,22 +78,25 @@ $ npm install && npm start
   username   | varchar(52)                           | NO | MUL | NULL    |                      
   created_at | datetime                              | NO |     | NULL    |                      
   updated_at | datetime                              | NO |     | NULL    |                      
-
+  uuid       | varchar(36)                           | NO | PRI | NULL    |
+  url        | varchar(255)                          | NO |     | NULL    |
+  width      | varchar(36)                           | NO |     | NULL    | 
+  height     | varchar(36)                           | NO |     | NULL    |
 
 
 ##### Access API through localhost:3000/api/<route>
 
 
 | Routes            | Remarks 
-| ----------------- | -------------------------------------------------------------------|
-| `/`               | Displays message(temp)                                             |
-| `/login/user`     | Redirects to `/feed` if logged in                                  |
-| `/login/shelter`  | Redirects to `/feed` if logged in v                                |
-| `/logout`         | Redirects to `/` after user logged out                             |
-| `/signup/user`    | Redirects to `/feed` if logged in  v                               |
-| `/signup/shelter` | Redirects to `/feed` if logged in   v                              |
-| `/feed `          | Displays message (temp)                                            |
-| `/*`              | Redirects to `/feed` if logged in, otherwise redirect to `/`v      |
+| ----------------- | ------------------------------------------------------------------|
+| `/`               | Displays message(temp)                                            |
+| `/login/user`     | Redirects to `/feed` if logged in                                 |
+| `/login/shelter`  | Redirects to `/feed` if logged in                                 |
+| `/logout`         | Redirects to `/` after user logged out                            |
+| `/signup/user`    | Redirects to `/feed` if logged in                                 |
+| `/signup/shelter` | Redirects to `/feed` if logged in                                 |
+| `/feed `          | Displays message (temp)                                           |
+| `/*`              | Redirects to `/feed` if logged in, otherwise redirect to `/`      |
 
 
 ### Installing and Starting

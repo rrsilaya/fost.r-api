@@ -59,7 +59,7 @@ connection.query('\
     `status` enum("DATES", "ADOPT", "BOTH") NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
-    `uuid` varchar(36) NOT NULL,\
+    `uuid` varchar(36) NOT NULL PRIMARY KEY,\
     `url` varchar(255) DEFAULT NULL,\
     `width` varchar(36) DEFAULT NULL,\
     `height` varchar(36) DEFAULT NULL,\
@@ -80,7 +80,7 @@ CREATE TABLE pets_of_users (\
     `birthday` varchar(36) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
-    `uuid` varchar(36) NOT NULL,\
+    `uuid` varchar(36) NOT NULL PRIMARY KEY,\
     `url` varchar(255) DEFAULT NULL,\
     `width` varchar(36) DEFAULT NULL,\
     `height` varchaR(36) DEFAULT NULL,\
