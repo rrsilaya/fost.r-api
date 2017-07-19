@@ -104,7 +104,7 @@ $ npm install && npm start
   updated_at    | datetime     | NO   |     | NULL    |       |
   post_uuid     | varchar(36)  | NO   | MUL | NULL    |       |
 
-##### Access API through localhost:3000/api/<route>
+##### Access API through localhost:3000/api/replace-with-route
 
 
 | Routes                              | Remarks 
@@ -119,8 +119,8 @@ $ npm install && npm start
 | `/pets/`                            | Display message                                                       |
 | `/pets/viewShelterPets `            | View pets owned by the shelter                                        |
 | `/pets/viewUserPets`                | View pets owned by the user                                           |
-| `/pets/:owner/viewShelterPets`      | View pets of <owner>                                                  |
-| `/pets/:owner/viewUserPets`         | View pets of <owner>                                                  |
+| `/pets/:owner/viewShelterPets`      | View pets of owner                                                    |
+| `/pets/:owner/viewUserPets`         | View pets of owner                                                    |
 | `/pets/:owner/deleteAllUserPets`    | Delete all pets of a given user                                       |
 | `/pets/:owner/deleteAllShelter`     | Delete all pets of a given shelter                                    |
 | `/pets/addShelterPet`               | Add a pet to db (for shelters)                                        |
