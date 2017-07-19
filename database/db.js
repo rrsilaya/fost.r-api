@@ -6,9 +6,5 @@ module.exports = {
         'user': 'root',
         'password': 'gnwZd#)*J72x'
     },
-    'database': 'fostr',
-    'users_table': 'users',
-    'shelters_table': 'shelters',
-    'posts_table': 'posts',
-    'comments_table':'comments'
+    'database': 'fostr'
 }

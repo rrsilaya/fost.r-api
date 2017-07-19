@@ -1,8 +1,7 @@
 const express=require('express');
 const router=express.Router(); 
 var fileUpload = require('express-fileupload'); // for file upload
-var mv = require('mv');                         // for file upload; won't work when declared as consta
-var sizeOf = require('image-size');             // get image dimensions
+var mv = require('mv');                         // for file upload; won't work when declared as const
 const validator = require('express-validator');
 var shortid = require('shortid');
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'); 
@@ -18,51 +17,73 @@ router.use(function(req, res, next) {
 });
 
 router.get('/', function(req, res, next){
-    res.json({message:'get /api/community'});
+  if(req.session.body)  res.json({message:'CANNOT get /api/community'});
+  else res.status(403).json("Please log in or sign up first .");
 });
 
 
 /* views all post sorted by date*/
 router.get('/feed', function(req,res,next){
-  controller.viewAllPosts(function(err,posts){
-    if (err) return res.status(500).json(err);  // server error
-    else res.json(posts); // returns all posts
-  });
+  if(req.session.body){
+    controller.viewAllPosts(function(err,posts){
+      if (err) return res.status(500).json(err);  // server error
+      else res.json(posts); // returns all posts
+    });
+  }else res.status(403).json("Please log in or sign up first .");
+  
+  
 });
 
 /* view a post given its uuid*/
+router.get('/:post_uuid/viewPost',function(req,res,next){
+  if(req.session.body){
+    var post_uuid=req.params.post_uuid;
+    controller.viewPost(post_uuid,function(err,post){
+      if (err) return res.status(500).json(err);  // server error
+      else res.json(post); // returns pets of specified user
+    });
+  }else res.status(403).json("Please log in or sign up first .");
+
+  
+});
 
 /*view all post of a specific user/shelter ; 'user' will be used for both user and shelter*/
 router.get('/:user/viewPosts',function(req,res,next){
-  var user=req.params.user;
-  console.log(user);
-  controller.viewPostsOf(user,function(err, posts){
+  if(req.session.body){
+    var user=req.params.user;
+    console.log(user);
+    controller.viewPostsOf(user,function(err, posts){
         if (err) return res.status(500).json(err);  // server error
         res.json(posts); // returns pets of specified user
     }); 
+  }else res.status(403).json("Please log in or sign up first .");
+
 });
 
+/*delete a post given its uuid*/
 router.delete('/:post_uuid/deletePost',function(req,res,next){
-  var post_uuid=req.params.post_uuid;
-  controller.deletePost(post_uuid,function(err,results){
-    if (err) return res.status(500).json(err);  // server error
-    else if (!results) return res.status(500).json({message: 'unable to delete'});
-    else {
-      return res.status(200).end("Post with uuid : " + post_uuid + " was deleted ");
-    }
-
-  });
+  if(req.session.body){
+    var post_uuid=req.params.post_uuid;
+    var user=req.session.body.Username;
+    controller.deletePost(post_uuid,user,function(err,results){
+      if (err) return res.status(500).json(err);  // server error
+      else if (results.affectedRows==0) return res.status(500).json({message: 'unable to delete'});
+      else return res.status(200).json(results);
+    });
+  }else res.status(403).json("Please log in or sign up first .");
 });
 
+/*delete all posts of user*/
 router.delete('/deleteAllMyPosts',function(req,res,next){
-  var user=req.session.body.Username;
-  controller.deleteAllPosts(user, function(err, results){
+  if(req.session.body){
+    var user=req.session.body.Username;
+    controller.deleteAllPosts(user, function(err, results){
         if (err) return res.status(500).json(err);  // server error
-        else if (!results) return res.status(500).json({message: 'unable to delete'});
-        else {
-          return res.status(200).end("All Your Posts were DELETED");
-        }
+        else if (results.affectedRow==0) return res.status(500).json({message: 'unable to delete'});
+        else return res.status(200).end("All Your Posts were DELETED");    
     });
+  }else res.status(403).json("Please log in or sign up first .");
+  
 });
 
 

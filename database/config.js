@@ -50,7 +50,6 @@ CREATE TABLE shelters (\
 
 connection.query('\
     CREATE TABLE pets_of_shelters (\
-    `pet_id` INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\
     `name` varchar(52) NOT NULL,\
     `kind` enum("DOG", "CAT", "BIRD", "OTHERS") NOT NULL,\
     `breed` varchar(36) NOT NULL,\
@@ -59,7 +58,7 @@ connection.query('\
     `status` enum("DATES", "ADOPT", "BOTH") NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
-    `uuid` varchar(36) NOT NULL,\
+    `uuid` varchar(36) NOT NULL PRIMARY KEY,\
     `url` varchar(255) DEFAULT NULL,\
     `width` varchar(36) DEFAULT NULL,\
     `height` varchar(36) DEFAULT NULL,\
@@ -80,7 +79,7 @@ CREATE TABLE pets_of_users (\
     `birthday` varchar(36) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
-    `uuid` varchar(36) NOT NULL,\
+    `uuid` varchar(36) NOT NULL PRIMARY KEY,\
     `url` varchar(255) DEFAULT NULL,\
     `width` varchar(36) DEFAULT NULL,\
     `height` varchaR(36) DEFAULT NULL,\
@@ -93,30 +92,29 @@ CREATE TABLE pets_of_users (\
     );
 
 connection.query('\
-    CREATE TABLE `' + db.database + '`.`' + db.posts_table + '` (\
-    `post_id` Integer UNIQUE NOT NULL PRIMARY KEY AUTO_INCREMENT,\
+    CREATE TABLE posts (\
     `Posted_by` varchar(255) NOT NULL,\
     `post_title` varchar(255) NOT NULL,\
     `text_post` TEXT NOT NULL,\
-    `image_urlpath` varchar(255) UNIQUE DEFAULT NULL ,\
-    `post_uuid` varchar(36) NOT NULL,\
+    `image_urlpath` varchar(255) UNIQUE  DEFAULT NULL ,\
+    `post_uuid` varchar(36) UNIQUE PRIMARY KEY NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL\
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
     );
 
 connection.query('\
-    CREATE TABLE `' + db.database + '`.`' + db.comments_table + '` (\
-    `comment_id` Integer NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,\
+    CREATE TABLE comments_on_posts (\
+    `comment_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `commented_by` varchar(52) NOT NULL,\
     `comment_body` varchar(305) NOT NULL,\
     `attachedfile_path` varchar(255) UNIQUE,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
-    `post_id` Integer NOT NULL,\
-    CONSTRAINT comments_on_post_fk FOREIGN KEY(post_id)\
-    REFERENCES posts(post_id) \
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
+    `post_uuid` varchar(36) UNIQUE NOT NULL,\
+    CONSTRAINT comments_on_post_fk FOREIGN KEY(post_uuid)\
+    REFERENCES posts(post_uuid) \
+    ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
     );
 
 connection.end();

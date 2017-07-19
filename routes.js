@@ -45,7 +45,7 @@ router.get('/logout',function(req,res,next){
   if(req.session.body){
     req.session.destroy();
     prompt="User logged out"
-    res.status(200).redirect('/api');
+    res.status(200).redirect('/api/');
     console.log(prompt);
   }else{
     console.log('cannot perform function');
