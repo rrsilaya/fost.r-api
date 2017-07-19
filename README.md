@@ -94,8 +94,21 @@ $ npm install && npm start
 | `/signup/user`                      | Redirects to `/feed` if logged in                                     |
 | `/signup/shelter`                   | Redirects to `/feed` if logged in                                     |
 | `/feed `                            | Displays message (temp)                                               |
+| `/pets/`                            | Display message                                                       |
+| `/pets/viewShelterPets `            | View pets owned by the shelter                                        |
+| `/pets/viewUserPets`                | View pets owned by the user                                           |
+| `/pets/:owner/viewShelterPets`      | View pets of <owner>                                                  |
+| `/pets/:owner/viewUserPets`         | View pets of <owner>                                                  |
+| `/pets/:owner/deleteAllUserPets`    | Delete all pets of a given user                                       |
+| `/pets/:owner/deleteAllShelter`     | Delete all pets of a given shelter                                    |
+| `/pets/addShelterPet`               | Add a pet to db (for shelters)                                        |
+| `/pets/addUserPet`                  | Add a pet to db (for users)                                           |
+| `/:pet_uuid/updateUserPets`         | Update info of a pet (for users)                                      |
+| `/:pet_uuid/updateShelterPets`      | Update info of a pet (for shelters)                                   |
+| `/:pet_uuid/deleteUserPet`          | Delete a single pet given the pet_uuid (for users)                    |
+| `/:pet_uuid/deleteShelterPet`       | Delete a single pet given the pet_uuid (for shelters)                 |
 | `/community/ `                      | Displays all posts sorted by date                                     |
-| `/community/:post_uuid/viewPost`    | View a post given its uuid                                            |   
+| `/community/:post_uuid/viewPost`    | View a post given its uuid                                            |  
 | `/community/:user/viewPosts`        | View all posts of a user                                              |
 | `/community/:post_uuid/deletePost ` | Delete a post given its uuid (iff post is posted by the user itself)  |
 | `/community/deleteAllMyPosts`       | Delete all posts of user                                              |
