@@ -51,8 +51,7 @@ $ npm install && npm start
 
 #### pets_of_users
   Field      | Type                                  |Null| Key | Default | Extra                
-  ---------- | ------------------------------------- |----| --- | ------- | -------------------  
-  pet_id     | int (11)                              | NO | PRI | NULL    | auto_increment       
+  ---------- | ------------------------------------- |----| --- | ------- | -------------------   
   name       | varchar(52)                           | NO |     | NULL    |                      
   kind   	   | enum('DOG', 'CAT', 'BIRD', 'OTHERS')  | NO |     | NULL    |                      
   breed      | varchar(36)                           | NO |     | NULL    |                      
@@ -68,8 +67,7 @@ $ npm install && npm start
 
 #### pets_of_shelters
   Field      | Type                                  |Null| Key | Default | Extra                
-  ---------- | ------------------------------------- | ---| --- | ------- | -------------------  
-  pet_id     | int (11)                              | NO | PRI | NULL    | auto_increment       
+  ---------- | ------------------------------------- | ---| --- | ------- | -------------------
   name       | varchar(52)                           | NO |     | NULL    |                      
   kind   	   | enum('DOG', 'CAT', 'BIRD', 'OTHERS')  | NO |     | NULL    |                      
   breed      | varchar(36)                           | NO |     | NULL    |                      

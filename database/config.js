@@ -50,7 +50,6 @@ CREATE TABLE shelters (\
 
 connection.query('\
     CREATE TABLE pets_of_shelters (\
-    `pet_id` INT (11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\
     `name` varchar(52) NOT NULL,\
     `kind` enum("DOG", "CAT", "BIRD", "OTHERS") NOT NULL,\
     `breed` varchar(36) NOT NULL,\
