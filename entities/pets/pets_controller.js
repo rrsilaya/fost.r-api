@@ -4,14 +4,14 @@ const connection = require('./../../database/connection');
 /* view all pets */
 module.exports.viewShelterPets = function(callback){
 	connection.query('SELECT * FROM pets_of_shelters', function(err, results){
-		if (err) return calback(err); 	// some error with query
+		if (err) return callback(err); 	// some error with query
 		return callback(null, results); // if successful
 	});
 }
 
 module.exports.viewUserPets = function(callback){
 	connection.query('SELECT * FROM pets_of_users', function(err, results){
-		if (err) return calback(err);	// some error with query
+		if (err) return callback(err);	// some error with query
 		return callback(null, results); // if successful
 	});
 }
