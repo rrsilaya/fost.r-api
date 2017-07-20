@@ -4,17 +4,12 @@ var db = require('./db');
 //creates a mysql connection
 var connection = mysql.createConnection(db.connection);
 
-var mysql = require('mysql');
-var db = require('./db');
-
-//creates a mysql connection
-var connection = mysql.createConnection(db.connection);
-
 //creates the database
-connection.query('DROP DATABASE IF EXISTS `' + db.database + '`;')
+connection.query('DROP DATABASE IF EXISTS `' + db.database + '`;');
+
 connection.query('CREATE DATABASE `' + db.database + '`;');
 
-connection.query('USE `' + db.database + '`;');
+connection.query('USE ' + db.database + ';' );
 
 //creates the tables
 connection.query('\
@@ -27,6 +22,9 @@ CREATE TABLE users (\
     `contactnum` int(11) NOT NULL,\
     `email` varchar(36) NOT NULL UNIQUE,\
     `password` varchar(255) NOT NULL,\
+    `icon_url` varchar(255) DEFAULT NULL,\
+    `icon_width` varchar(36) DEFAULT NULL,\
+    `icon_height` varchar(36) DEFAULT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     PRIMARY KEY(Username, email)\
@@ -41,6 +39,9 @@ CREATE TABLE shelters (\
     `contactnum` int(11) NOT NULL,\
     `email` varchar(36) NOT NULL UNIQUE,\
     `password` varchar(255) NOT NULL,\
+    `icon_url` varchar(255) DEFAULT NULL,\
+    `icon_width` varchar(36) DEFAULT NULL,\
+    `icon_height` varchar(36) DEFAULT NULL,\
     `file_path` varchar(255) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
@@ -121,6 +122,4 @@ connection.end();
 
 console.log('Database configuration done!');
 
- module.exports = connection;
-
-
+module.exports = connection;
