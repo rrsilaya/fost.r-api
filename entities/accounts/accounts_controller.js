@@ -1,4 +1,20 @@
 const connection = require('./../../database/connection');
+const bcrypt = require('bcryptjs'); // for the password; ideally only the password's length should be passed
+
+/* viewing account information of an account */
+module.exports.viewUserInfo = function(Username, callback){
+	connection.query('SELECT * FROM users where Username = ?', Username, function(err, results){
+		if (err) return callback(err);	// some error with query
+		return callback(null, results); // if successful
+	});
+}
+
+module.exports.viewShelterInfo = function(Username, callback){
+	connection.query('SELECT * FROM shelters where Username = ?', Username, function(err, results){
+		if (err) return callback(err); 	// some error with query
+		return callback(null, results); // if successful
+	});
+}
 
 /* updating account infos */
 module.exports.updateUserInfo = function(Username, changes, callback){

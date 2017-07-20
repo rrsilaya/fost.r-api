@@ -19,14 +19,14 @@ module.exports.viewUserPets = function(callback){
 /* view pet of specific user/shelter */
 module.exports.viewShelterPetsOf = function(shelter_Username, callback){
 	connection.query('SELECT * FROM pets_of_shelters WHERE shelter_Username = ?', shelter_Username, function(err, results){
-		if (err) return calback(err); 	// some error with query
+		if (err) return callback(err); 	// some error with query
 		return callback(null, results); // if successful
 	});
 }
 
 module.exports.viewUserPetsOf = function(user_Username, callback){
 	connection.query('SELECT * FROM pets_of_users WHERE user_Username = ?', user_Username, function(err, results){
-		if (err) return calback(err); 	// some error with query
+		if (err) return callback(err); 	// some error with query
 		return callback(null, results); // if successful
 	});
 }
