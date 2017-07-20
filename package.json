@@ -25,23 +25,6 @@
     "shortid": "^2.2.8"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0",
-  "name": "fost.r-api",
-  "version": "0.1.0",
-  "devDependencies": {
-    "husky": "^0.14.1",
-    "lint-staged": "^4.0.0",
-    "prettier": "^1.4.4"
-  },
-  "scripts": {
-    "prettify": "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write \"./src/**/*.js\"",
-    "precommit": "lint-staged",
-    "prepush": "lint-staged"
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write",
-      "git add"
-    ]
+    "nodemon": "^1.11.0"
   }
 }

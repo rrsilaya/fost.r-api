@@ -150,12 +150,8 @@ $ npm install && npm start
 ##### Backend
 * Evangelista, Erlen Mae
 * Somabes, Kia Mei
-=======
-### Developers
-##### Backend
-* Evangelista, Erlen Mae
-* Sombaes, Kia Mei
->>>>>>> 90f2efc24ed130c2aa8f51be08ef810fb466c0b0
+
+
 
 ##### Frontend
 * Gotis, Ciara Mae
