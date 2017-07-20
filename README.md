@@ -23,63 +23,75 @@ $ npm install && npm start
 ### Database
 
 #### users
-  Field      | Type         |Null| Key | Default | Extra  
-  ---------- | ------------ |--- | --- | ------- | -----  
-  Username   | varchar(36)  | NO | PRI |         |        
-  firstname  | varchar(36)  | NO |     | NULL    |        
-  lastname 	 | varchar(36)  | NO |     | NULL    |        
-  birthday   | date         | NO |     | NULL    |        
-  address    | varchar(236) | NO |     | NULL    |        
-  contactnum | int(11)      | NO |     | NULL    |        
-  email      | varchar(36)  | NO | UNI | NULL    |        
-  password   | varchar(255) | NO |     | NULL    |        
-  created_at | datetime     | NO |     | NULL    |        
-  updated_at | datetime     | NO |     | NULL    |        
+  Field       | Type         | Null | Key | Default | Extra |
+ -------------|--------------|------|-----|---------|-------|
+  Username    | varchar(36)  | NO   | PRI | NULL    |       |
+  firstname   | varchar(36)  | NO   |     | NULL    |       |
+  lastname    | varchar(36)  | NO   |     | NULL    |       |
+  birthday    | varchar(36)  | NO   |     | NULL    |       |
+  address     | varchar(236) | NO   |     | NULL    |       |
+  contactnum  | int(11)      | NO   |     | NULL    |       |
+  email       | varchar(36)  | NO   | PRI | NULL    |       |
+  password    | varchar(255) | NO   |     | NULL    |       |
+  icon_url    | varchar(255) | YES  |     | NULL    |       |
+  icon_width  | varchar(36)  | YES  |     | NULL    |       |
+  icon_height | varchar(36)  | YES  |     | NULL    |       |
+  created_at  | datetime     | NO   |     | NULL    |       |
+  updated_at  | datetime     | NO   |     | NULL    |       |
+
 
 #### shelters
-  Field      | Type         |Null| Key | Default | Extra  
-  ---------- | ------------ | ---| --- | ------- | -----  
-  Username   | varchar(36)  | NO | PRI |         |        
-  shelter_name  | varchar(52)  | NO |     | NULL    |        
-  address    | varchar(236) | NO |     | NULL    |        
-  contactnum | int(11)      | NO |     | NULL    |        
-  email      | varchar(36)  | NO | UNI | NULL    |        
-  password   | varchar(255) | NO |     | NULL    | 
-  file_path  |varchar(255)  | NO |     | NULL    |       
-  created_at | datetime     | NO |     | NULL    |        
-  updated_at | datetime     | NO |     | NULL    |        
+
+
+  Field        | Type         | Null | Key | Default | Extra |
+ --------------|--------------|------|-----|---------|-------|
+  Username     | varchar(52)  | NO   | PRI | NULL    |       |
+  shelter_name | varchar(52)  | NO   |     | NULL    |       |
+  address      | varchar(236) | NO   |     | NULL    |       |
+  contactnum   | int(11)      | NO   |     | NULL    |       |
+  email        | varchar(36)  | NO   | PRI | NULL    |       |
+  password     | varchar(255) | NO   |     | NULL    |       |
+  file_path    | varchar(255) | NO   |     | NULL    |       |
+  created_at   | datetime     | NO   |     | NULL    |       |
+  updated_at   | datetime     | NO   |     | NULL    |       |
+      
 
 #### pets_of_users
-  Field      | Type                                  |Null| Key | Default | Extra                
-  ---------- | ------------------------------------- |----| --- | ------- | -------------------   
-  name       | varchar(52)                           | NO |     | NULL    |                      
-  kind   	   | enum('DOG', 'CAT', 'BIRD', 'OTHERS')  | NO |     | NULL    |                      
-  breed      | varchar(36)                           | NO |     | NULL    |                      
-  sex        | enum('MALE', 'FEMALE')                | NO |     | NULL    |                      
-  birthday   | date                                  | NO |     | NULL    |                      
-  username   | varchar(36)                           | NO | MUL | NULL    |                      
-  created_at | datetime                              | NO |     | NULL    |                      
-  updated_at | datetime                              | NO |     | NULL    |
-  uuid       | varchar(36)                           | NO | PRI | NULL    |
-  url        | varchar(255)                          | NO |     | NULL    |
-  width      | varchar(36)                           | NO |     | NULL    | 
-  height     | varchar(36)                           | NO |     | NULL    |                        
+
+  Field         | Type                              | Null | Key | Default | Extra |
+  ---------------|-----------------------------------|------|-----|---------|-------|
+  name          | varchar(52)                       | NO   |     | NULL    |       |
+  kind          | enum('DOG','CAT','BIRD','OTHERS') | NO   |     | NULL    |       |
+  breed         | varchar(36)                       | NO   |     | NULL    |       |
+  sex           | enum('MALE','FEMALE')             | NO   |     | NULL    |       |
+  birthday      | varchar(36)                       | NO   |     | NULL    |       |
+  created_at    | datetime                          | NO   |     | NULL    |       |
+  updated_at    | datetime                          | NO   |     | NULL    |       |
+  uuid          | varchar(36)                       | NO   | PRI | NULL    |       |
+  url           | varchar(255)                      | YES  |     | NULL    |       |
+  width         | varchar(36)                       | YES  |     | NULL    |       |
+  height        | varchar(36)                       | YES  |     | NULL    |       |
+  user_Username | varchar(36)                       | NO   | MUL | NULL    |       |
+
+                  
 
 #### pets_of_shelters
-  Field      | Type                                  |Null| Key | Default | Extra                
-  ---------- | ------------------------------------- | ---| --- | ------- | -------------------
-  name       | varchar(52)                           | NO |     | NULL    |                      
-  kind   	   | enum('DOG', 'CAT', 'BIRD', 'OTHERS')  | NO |     | NULL    |                      
-  breed      | varchar(36)                           | NO |     | NULL    |                      
-  sex        | enum('MALE', 'FEMALE')                | NO |     | NULL    |                      
-  birthday   | date                                  | NO |     | NULL    |                      
-  username   | varchar(52)                           | NO | MUL | NULL    |                      
-  created_at | datetime                              | NO |     | NULL    |                      
-  updated_at | datetime                              | NO |     | NULL    |                      
-  uuid       | varchar(36)                           | NO | PRI | NULL    |
-  url        | varchar(255)                          | NO |     | NULL    |
-  width      | varchar(36)                           | NO |     | NULL    | 
-  height     | varchar(36)                           | NO |     | NULL    |
+
+  Field            | Type                              | Null | Key | Default | Extra |
+ ------------------|-----------------------------------|------|-----|---------|-------|
+  name             | varchar(52)                       | NO   |     | NULL    |       |
+  kind             | enum('DOG','CAT','BIRD','OTHERS') | NO   |     | NULL    |       |
+  breed            | varchar(36)                       | NO   |     | NULL    |       |
+  sex              | enum('MALE','FEMALE')             | NO   |     | NULL    |       |
+  birthday         | varchar(36)                       | NO   |     | NULL    |       |
+  status           | enum('DATES','ADOPT','BOTH')      | YES  |     | NULL    |       |
+  created_at       | datetime                          | NO   |     | NULL    |       |
+  updated_at       | datetime                          | NO   |     | NULL    |       |
+  uuid             | varchar(36)                       | NO   | PRI | NULL    |       |
+  url              | varchar(255)                      | YES  |     | NULL    |       |
+  width            | varchar(36)                       | YES  |     | NULL    |       |
+  height           | varchar(36)                       | YES  |     | NULL    |       |
+ shelter_Username | varchar(52)                       | NO   | MUL | NULL    |       |
 
 ### posts
 
@@ -135,6 +147,9 @@ $ npm install && npm start
 | `/community/:post_uuid/deletePost ` | Delete a post given its uuid (iff post is posted by the user itself)  |
 | `/community/deleteAllMyPosts`       | Delete all posts of user                                              |
 | `/community/addPost`                | Add post                                                              |
+| `/community/:post_uuid/addComment   | Add a comment                                                         |
+| `/community/:post_uuid/viewAllComments`| View all comments in the post                                      |
+| `/:post_uuid/:comment_uuid/deleteComment` | Delete a comment                                                |
 | `/*`                                | Redirects to `/feed` if logged in, otherwise redirect to `/`          |
 
 
@@ -147,6 +162,7 @@ $ npm install && npm start
 
 
 ### Developers
+
 ##### Backend
 * Evangelista, Erlen Mae
 * Somabes, Kia Mei
