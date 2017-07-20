@@ -62,6 +62,7 @@ module.exports.updateShelterPet = function(uuid, changes, callback){
 	});
 }
 
+/* delete specific pets given the uuid of pet */
 module.exports.deleteUserPet = function(uuid, callback){
 	connection.query('DELETE FROM pets_of_users WHERE uuid = ?', uuid, function(err, results){
 		if (err) return callback(err);	// some error with query

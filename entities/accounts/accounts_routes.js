@@ -42,7 +42,7 @@ router.put('/:Username/updateUserInfo', function(req, res){
 });
 
 /* deletion of accounts (only if logged in) */
-router.put('/:Username/deleteShelterAccount', function(req, res){
+router.delete('/:Username/deleteShelterAccount', function(req, res){
     if (req.session.body){
         var Username = req.params.Username;
         controller.deleteShelterAccount(Username, function(err, results){
@@ -53,7 +53,7 @@ router.put('/:Username/deleteShelterAccount', function(req, res){
     }else res.status(403).json({message: 'login first before updating'});
 });
 
-router.put('/:Username/deleteUserAccount', function(req, res){
+router.delete('/:Username/deleteUserAccount', function(req, res){
     if(req.session.body){
         var Username = req.params.Username;
         controller.deleteUserAccount(Username, function(err, results){
