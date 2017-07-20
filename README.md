@@ -81,20 +81,61 @@ $ npm install && npm start
   width      | varchar(36)                           | NO |     | NULL    | 
   height     | varchar(36)                           | NO |     | NULL    |
 
+### posts
 
-##### Access API through localhost:3000/api/<route>
+  Field         | Type                                  |Null| Key | Default | Extra                
+  --------------| ------------------------------------- | ---| --- | ------- | -------------------
+  Posted_by     | varchar(52)                           | NO | MUL | NULL    |                      
+  post_title    | varchar(255)                          | NO |     | NULL    |                      
+  text_post     | TEXT                                  | NO |     | NULL    |                      
+  image_urlpath | varchar(255)                          | YES| UNI | NULL    |                      
+  post_uuid     | varchar(36)                           | NO | PRI | NULL    |                      
+  created_at    | datetime                              | NO |     | NULL    |                      
+  updated_at    | datetime                              | NO |     | NULL    |                      
+
+### comments_on_posts
+  Field         | Type         | Null | Key | Default | Extra |
+  --------------|--------------|------|-----|---------|-------|
+  comment_uuid  | varchar(36)  | NO   | PRI | NULL    |       |
+  commented_by  | varchar(52)  | NO   |     | NULL    |       |
+  comment_body  | varchar(255) | NO   |     | NULL    |       |
+  image_urlpath | varchar(255) | YES  | UNI | NULL    |       |
+  created_at    | datetime     | NO   |     | NULL    |       |
+  updated_at    | datetime     | NO   |     | NULL    |       |
+  post_uuid     | varchar(36)  | NO   | MUL | NULL    |       |
+
+##### Access API through localhost:3000/api/replace-with-route
 
 
-| Routes            | Remarks 
-| ----------------- | ------------------------------------------------------------------|
-| `/`               | Displays message(temp)                                            |
-| `/login/user`     | Redirects to `/feed` if logged in                                 |
-| `/login/shelter`  | Redirects to `/feed` if logged in                                 |
-| `/logout`         | Redirects to `/` after user logged out                            |
-| `/signup/user`    | Redirects to `/feed` if logged in                                 |
-| `/signup/shelter` | Redirects to `/feed` if logged in                                 |
-| `/feed `          | Displays message (temp)                                           |
-| `/*`              | Redirects to `/feed` if logged in, otherwise redirect to `/`      |
+| Routes                              | Remarks 
+| ----------------------------------- | ----------------------------------------------------------------------|
+| `/`                                 | Displays message(temp)                                                |
+| `/login/user`                       | Redirects to `/feed` if logged in                                     |
+| `/login/shelter`                    | Redirects to `/feed` if logged in                                     |
+| `/logout`                           | Redirects to `/` after user logged out                                |
+| `/signup/user`                      | Redirects to `/feed` if logged in                                     |
+| `/signup/shelter`                   | Redirects to `/feed` if logged in                                     |
+| `/feed `                            | Displays message (temp)                                               |
+| `/pets/`                            | Display message                                                       |
+| `/pets/viewShelterPets `            | View pets owned by the shelter                                        |
+| `/pets/viewUserPets`                | View pets owned by the user                                           |
+| `/pets/:owner/viewShelterPets`      | View pets of owner                                                    |
+| `/pets/:owner/viewUserPets`         | View pets of owner                                                    |
+| `/pets/:owner/deleteAllUserPets`    | Delete all pets of a given user                                       |
+| `/pets/:owner/deleteAllShelter`     | Delete all pets of a given shelter                                    |
+| `/pets/addShelterPet`               | Add a pet to db (for shelters)                                        |
+| `/pets/addUserPet`                  | Add a pet to db (for users)                                           |
+| `/pets/:pet_uuid/updateUserPets`    | Update info of a pet (for users)                                      |
+| `/pets/:pet_uuid/updateShelterPets` | Update info of a pet (for shelters)                                   |
+| `/pets/:pet_uuid/deleteUserPet`     | Delete a single pet given the pet_uuid (for users)                    |
+| `/pets/:pet_uuid/deleteShelterPet`  | Delete a single pet given the pet_uuid (for shelters)                 |
+| `/community/ `                      | Displays all posts sorted by date                                     |
+| `/community/:post_uuid/viewPost`    | View a post given its uuid                                            |  
+| `/community/:user/viewPosts`        | View all posts of a user                                              |
+| `/community/:post_uuid/deletePost ` | Delete a post given its uuid (iff post is posted by the user itself)  |
+| `/community/deleteAllMyPosts`       | Delete all posts of user                                              |
+| `/community/addPost`                | Add post                                                              |
+| `/*`                                | Redirects to `/feed` if logged in, otherwise redirect to `/`          |
 
 
 ### Installing and Starting
