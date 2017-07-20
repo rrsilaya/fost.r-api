@@ -17,7 +17,10 @@ router.use(function(req, res, next) {
 });
 /************************* POSTS *******************************/
 
-/* views all post sorted by date*/
+/*  views all post sorted by date
+    comments are not shown
+
+*/
 router.get('/', function(req,res,next){
   if(req.session.body){
     controller.viewAllPosts(function(err,posts){
@@ -29,20 +32,35 @@ router.get('/', function(req,res,next){
   
 });
 
-/* view a post given its uuid*/
+/* view a post given its uuid ; shows all comments on the post*/
 router.get('/:post_uuid/viewPost',function(req,res,next){
   if(req.session.body){
     var post_uuid=req.params.post_uuid;
     controller.viewPost(post_uuid,function(err,post){
       if (err) return res.status(500).json(err);  // server error
-      else res.json(post); // returns pets of specified user
+      else{
+        //res.send(post,comments); // returns pets of specified user
+        controller.viewAllComments(post_uuid,function(err,comments){
+          if(err) return res.status(500).json(err);  // server error
+          else {
+
+            res.send([post,comments]);
+          }
+        });
+      }
     });
+    
+
   }else res.status(403).json("Please log in or sign up first .");
 
   
 });
 
-/*view all post of a specific user/shelter ; 'user' will be used for both user and shelter*/
+/*
+view all post of a specific user/shelter ; 
+'user' will be used for both user and shelter
+does not show comments on the post
+*/
 router.get('/:user/viewPosts',function(req,res,next){
   if(req.session.body){
     var user=req.params.user;
@@ -60,11 +78,18 @@ router.delete('/:post_uuid/deletePost',function(req,res,next){
   if(req.session.body){
     var post_uuid=req.params.post_uuid;
     var user=req.session.body.Username;
+    //delete post on db
     controller.deletePost(post_uuid,user,function(err,results){
       if (err) return res.status(500).json(err);  // server error
-      else if (results.affectedRows==0) return res.status(500).json({message: 'unable to delete'});
+      else if (results.affectedRows==0) return res.status(500).json({message: 'unable to delete post'});
       else return res.status(200).json(results);
     });
+    //delete all comments in db
+    controller.deleteAllComments(post_uuid,function(err,results){
+      if (err) return res.status(500).json(err);  // server error
+      else if (results.affectedRows==0) return res.status(500).json({message: 'unable to delete comments'});
+      else return res.status(200).json(results);
+    })
   }else res.status(403).json("Please log in or sign up first .");
 });
 
@@ -214,6 +239,19 @@ router.get('/:post_uuid/viewAllComments',function(req,res,next){
   }else res.status(403).json("Post_uuid can be invalid or user is not logged in");
 });
 
+/*delete a comment in a post (iff comment is posted by user itself)*/
+router.delete('/:post_uuid/:comment_uuid/deleteComment',function(req,res,next){
+  if(req.session.body){
+    var post_uuid=req.params.post_uuid;
+    var comment_uuid=req.params.comment_uuid;
+    var user=req.session.body.Username;
+    controller.deleteComment(post_uuid,comment_uuid,user,function(err,results){
+      if(err) return res.status(500).json(err);
+      else if(results.affectedRows==0) return res.status(500).json("unable to delete comment");
+      else res.json(results);
+    });
+  }else res.status(403).json("Post_uuid can be invalid or user is not logged in");
+});
 /*****************************************************************/
 
 router.get('*', function(req, res, next) {
