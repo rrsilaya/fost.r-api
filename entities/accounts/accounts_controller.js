@@ -14,3 +14,20 @@ module.exports.updateShelterInfo = function(Username, changes, callback){
 		return callback(null, changes);	// if successful
 	});
 }
+
+/* deleting account given the Username */
+module.exports.deleteUserAccount = function(Username, callback){
+	connection.query('DELETE FROM users WHERE Username = ?', Username, function(err, results){
+		if (err) return callback(err);	// some error with query
+		console.log(results);
+		return callback(null, results);	// if successful
+	});
+}
+
+module.exports.deleteShelterAccount = function(Username, callback){
+	connection.query('DELETE FROM shelters WHERE Username = ?', Username, function(err, results){
+		if (err) return callback(err);	// some error with query
+		console.log(results);
+		return callback(null, results);	// if successful
+	});
+}
