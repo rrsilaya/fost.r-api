@@ -13,6 +13,7 @@ var controller = require('./pets_controller');
 
 router.use(validator());      // express-validator
 router.use(fileUpload());     // express-fileupload
+
 router.use(function(req, res, next) {
     // do logging
     console.log('sending request...');
@@ -80,7 +81,6 @@ router.post('/addShelterPet', function(req, res){
         var owner = req.session.body.Username;
         var uuid = shortid.generate();
         var today = new Date();
-        console.log(req.body.name);
         var petInfo = {
             "name": req.body.name,
             "kind": req.body.kind,
@@ -135,8 +135,6 @@ router.post('/addShelterPet', function(req, res){
 });
 
 router.post('/addUserPet', function(req, res){
-    console.log('before session');
-    console.log(req.files.photo);
     if (req.session.body){
         var owner = req.session.body.Username;
         var uuid = shortid.generate();
@@ -212,7 +210,7 @@ router.put('/:pet_uuid/updateUserPets', function(req, res){
     if(req.session.body){
         var pet_uuid = req.params.pet_uuid;
         var changes = req.body;
-        controller.updateUserPet(pet_uuid, function(err, results){
+        controller.updateUserPet(pet_uuid, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns pets of specified user
         }); 
@@ -246,4 +244,5 @@ router.get('*', function(req, res, next) {
   if(req.session.body) res.redirect('/api/feed');
   else res.redirect('/api/pet/');
 });
+
 module.exports = router;
