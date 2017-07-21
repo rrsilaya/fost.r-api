@@ -2,21 +2,21 @@ const connection = require('./../../database/connection');
 /* queries for pets are all here */
 
 /* view all pets */
-module.exports.viewShelterPets = function(callback){
+module.exports.viewAllShelterPets = function(callback){
 	connection.query('SELECT * FROM pets_of_shelters', function(err, results){
 		if (err) return callback(err); 	// some error with query
 		return callback(null, results); // if successful
 	});
 }
 
-module.exports.viewUserPets = function(callback){
+module.exports.viewAllUserPets = function(callback){
 	connection.query('SELECT * FROM pets_of_users', function(err, results){
 		if (err) return callback(err);	// some error with query
 		return callback(null, results); // if successful
 	});
 }
 
-/* view pet of specific user/shelter */
+/* view pets of specific user/shelter */
 module.exports.viewShelterPetsOf = function(shelter_Username, callback){
 	connection.query('SELECT * FROM pets_of_shelters WHERE shelter_Username = ?', shelter_Username, function(err, results){
 		if (err) return callback(err); 	// some error with query
@@ -28,6 +28,21 @@ module.exports.viewUserPetsOf = function(user_Username, callback){
 	connection.query('SELECT * FROM pets_of_users WHERE user_Username = ?', user_Username, function(err, results){
 		if (err) return callback(err); 	// some error with query
 		return callback(null, results); // if successful
+	});
+}
+
+/* view specific pet of user/shelter */
+module.exports.viewSpecificPetUser = function(Username, uuid, callback){
+	connection.query('SELECT * FROM pets_of_users where user_Username = ? and uuid = ?'. [Username, uuid], function(err, results){
+		if (err) return callback(err);	// some error with query
+		return callback(null, results);	// if successful
+	});
+}
+
+module.exports.viewSpecificPetShelter = function(Username, uuid, callback){
+	connection.query('SELECT * FROM pets_of_shelters where shelter_Username = ? and uuid = ?'. [Username, uuid], function(err, results){
+		if (err) return callback(err);	// some error with query
+		return callback(null, results);	// if successful
 	});
 }
 

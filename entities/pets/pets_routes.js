@@ -26,14 +26,14 @@ router.get('/', function(req, res, next){
 
 /* views pets owned by all shelters or users */
 router.get('/viewShelterPets', function(req, res){
-    controller.viewShelterPets(function(err, pets){
+    controller.viewAllShelterPets(function(err, pets){
         if (err) return res.status(500).json(err);  // server error
         res.json(pets); // returns pets
     });
 });
 
 router.get('/viewUserPets', function(req, res){
-    controller.viewUserPets(function(err, pets){
+    controller.viewAllUserPets(function(err, pets){
         if (err) return res.status(500).json(err);  // server error
         res.json(pets); // returns pets
     });
@@ -192,6 +192,29 @@ router.post('/addUserPet', function(req, res){
             });
         }
     }else res.status(403).json({message: 'login first before adding'});
+});
+
+/* returns specific pet of logged in user/shelter */ 
+router.get('/:pet_uuid/viewSpecificPetUser', function(req, res){
+    if (req.session.body){
+        var pet_uuid = req.params.pet_uuid;
+        var Username = req.session.body.Username;
+        controller.viewSpecificPetUser(Username, pet_uuid, function(err, results){
+            if (err) return res.status(500).json(err);  // server error
+            res.json(results); // returns results
+        }); 
+    }else res.status(403).json({message: 'login first before retrieving info'});
+});
+
+router.get('/:pet_uuid/viewSpecificPetShelter', function(req, res){
+    if (req.session.body){
+        var pet_uuid = req.params.pet_uuid;
+        var Username = req.session.body.Username;
+        controller.viewSpecificPetShelter(Username, pet_uuid, function(err, results){
+            if (err) return res.status(500).json(err);  // server error
+            res.json(results); // returns results
+        }); 
+    }else res.status(403).json({message: 'login first before retrieving info'});
 });
 
 /* update certain info of pets (only if logged in && pet exists) */

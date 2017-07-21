@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS fostr;
+
 CREATE DATABASE fostr;
-USE fostr;
 
 CREATE TABLE users (
     `Username` varchar(36) NOT NULL UNIQUE,
@@ -13,13 +13,13 @@ CREATE TABLE users (
     `password` varchar(255) NOT NULL,
     `icon_url` varchar(255) DEFAULT NULL,
     `icon_width` varchar(36) DEFAULT NULL,
-    `icon_height` varchar(36) DEFAULT NULL,    
+    `icon_height` varchar(36) DEFAULT NULL,
     `created_at` datetime NOT NULL,
     `updated_at` datetime NOT NULL,
     PRIMARY KEY(Username, email)
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE shelters (
+CREATE TABLE shelters (\
     `Username` varchar(52) NOT NULL UNIQUE,
     `shelter_name` varchar(52) NOT NULL,
     `address` varchar(236) NOT NULL,
@@ -74,27 +74,26 @@ CREATE TABLE pets_of_users (
     ON UPDATE CASCADE
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
- CREATE TABLE posts (
-    `Posted_by` varchar(52) NOT NULL,\
-    `post_title` varchar(255) NOT NULL,\
-    `text_post` TEXT NOT NULL,\
-    `image_urlpath` varchar(255) UNIQUE  DEFAULT NULL ,\
-    `post_uuid` varchar(36) UNIQUE PRIMARY KEY NOT NULL,\
-    `created_at` datetime NOT NULL,\
-    `updated_at` datetime NOT NULL\
+CREATE TABLE posts (
+    `Posted_by` varchar(52) NOT NULL,
+    `post_title` varchar(255) NOT NULL,
+    `text_post` TEXT NOT NULL,
+    `image_urlpath` varchar(255) UNIQUE  DEFAULT NULL ,
+    `post_uuid` varchar(36) UNIQUE PRIMARY KEY NOT NULL,
+    `created_at` datetime NOT NULL,
+    `updated_at` datetime NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-    
 
- CREATE TABLE comments_on_posts (
-    `comment_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
-    `commented_by` varchar(52) NOT NULL,\
-    `comment_body` varchar(255) NOT NULL,\
-    `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,\
-    `created_at` datetime NOT NULL,\
-    `updated_at` datetime NOT NULL,\
-    `post_uuid` varchar(36) NOT NULL,\
-    CONSTRAINT comments_on_post_fk FOREIGN KEY(post_uuid)\
-    REFERENCES posts(post_uuid) \
-    ON DELETE CASCADE\
-    ON UPDATE CASCADE\
+CREATE TABLE comments_on_posts (
+    `comment_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,
+    `commented_by` varchar(52) NOT NULL,
+    `comment_body` varchar(255) NOT NULL,
+    `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,
+    `created_at` datetime NOT NULL,
+    `updated_at` datetime NOT NULL,
+    `post_uuid` varchar(36) NOT NULL,
+    CONSTRAINT comments_on_post_fk FOREIGN KEY(post_uuid)
+    REFERENCES posts(post_uuid) 
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
