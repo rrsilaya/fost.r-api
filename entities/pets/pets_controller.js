@@ -78,16 +78,16 @@ module.exports.updateShelterPet = function(uuid, changes, callback){
 }
 
 /* delete specific pets given the uuid of pet */
-module.exports.deleteUserPet = function(uuid, callback){
-	connection.query('DELETE FROM pets_of_users WHERE uuid = ?', uuid, function(err, results){
+module.exports.deleteUserPet = function(Username, uuid, callback){
+	connection.query('DELETE FROM pets_of_users WHERE user_Username = ? and uuid = ?', [Username, uuid], function(err, results){
 		if (err) return callback(err);	// some error with query
 		console.log(results);
 		return callback(null, results);	// if successful
 	});
 }
 
-module.exports.deleteShelterPet = function(uuid, callback){
-	connection.query('DELETE FROM pets_of_shelters WHERE uuid = ?', uuid, function(err, results){
+module.exports.deleteShelterPet = function(Username, uuid, callback){
+	connection.query('DELETE FROM pets_of_shelters WHERE shelter_Username = ? and uuid = ?', [Username, uuid], function(err, results){
 		if (err) return callback(err);	// some error with query
 		console.log(results);
 		return callback(null, results);	// if successful

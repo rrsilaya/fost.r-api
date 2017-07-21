@@ -244,7 +244,8 @@ router.put('/:pet_uuid/updateUserPets', function(req, res){
 router.delete('/:pet_uuid/deleteUserPet', function(req, res){
     if(req.session.body){
         var pet_uuid = req.params.pet_uuid;
-        controller.deleteUserPet(pet_uuid, function(err, results){
+        var Username = req.session.body.Username;
+        controller.deleteUserPet(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500).json({message: 'unable to delete?'});
             res.status(204).json(null);
@@ -255,7 +256,8 @@ router.delete('/:pet_uuid/deleteUserPet', function(req, res){
 router.delete('/:pet_uuid/deleteShelterPet', function(req, res){
     if(req.session.body){
         var pet_uuid = req.params.pet_uuid;
-        controller.deleteShelterPet(pet_uuid, function(err, results){
+        var Username = req.session.body.Username;
+        controller.deleteShelterPet(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500).json({message: 'unable to delete?'});
             res.status(204).json(null);
