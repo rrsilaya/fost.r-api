@@ -141,7 +141,7 @@ $ npm install && npm start
 | `/pets/:pet_uuid/viewSpecificPetUser`| View a pet of user                                                   |
 | `/pets/:pet_uuid/viewSpecificPetShelter`| View a pet of shelter                                             |
 | `/pets/:pet_uuid/updateUserPets`    | Update info of a pet (for users)                                      |
-| `/pets/:pet_uuid/updateShelterPets` | Update info of a pet (for shelters)                                   |
+| `/pets/:pet_uuid/updateShelterPets` | Update info of a pet (for shelters; could be used for ADOPT and DATES, set status to ADOPT, DATES, OR BOTH)                                   |
 | `/pets/:pet_uuid/deleteUserPet`     | Delete a single pet given the pet_uuid (for users)                    |
 | `/pets/:pet_uuid/deleteShelterPet`  | Delete a single pet given the pet_uuid (for shelters)                 |
 | `/community/ `                      | Displays all posts sorted by date                                     |
