@@ -123,12 +123,12 @@ $ npm install && npm start
 | `/signup/user`                      | Redirects to `/feed` if logged in                                     |
 | `/signup/shelter`                   | Redirects to `/feed` if logged in                                     |
 | `/feed `                            | Displays message (temp)                                               |
-| `/accounts/viewShelters             | View all shelter accounts                                             |
-| `/accounts/viewUsers                | View all user accounts                                                |
-| `/accounts/updateShelterInfo        | Update info (shelter)                                                 |
-| `/accounts/updateUserInfo           | Update info (user)                                                    |
-| `/accounts/deleteShelterAccount     | Delete account (shelter)                                              |
-| `/accounts/deleteUserAccount        | Delete account (user)                                                 |   
+| `/accounts/viewShelters`            | View all shelter accounts                                             |
+| `/accounts/viewUsers`               | View all user accounts                                                |
+| `/accounts/updateShelterInfo`       | Update info (shelter)                                                 |
+| `/accounts/updateUserInfo`          | Update info (user)                                                    |
+| `/accounts/deleteShelterAccount`    | Delete account (shelter)                                              |
+| `/accounts/deleteUserAccount`       | Delete account (user)                                                 |   
 | `/pets/`                            | Display message                                                       |
 | `/pets/viewShelterPets `            | View pets owned by the shelter                                        |
 | `/pets/viewUserPets`                | View pets owned by the user                                           |
