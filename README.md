@@ -32,7 +32,10 @@ $ npm install && npm start
   address    | varchar(236) | NO |     | NULL    |        
   contactnum | int(11)      | NO |     | NULL    |        
   email      | varchar(36)  | NO | UNI | NULL    |        
-  password   | varchar(255) | NO |     | NULL    |        
+  password   | varchar(255) | NO |     | NULL    |
+  icon_url   | varchar(255) | YES|     | NULL    |
+  icon_width | varchar(36)  | YES|     | NULL    |
+  icon_height| varchar(36)  | YES|     | NULL    |   
   created_at | datetime     | NO |     | NULL    |        
   updated_at | datetime     | NO |     | NULL    |        
 
@@ -44,7 +47,10 @@ $ npm install && npm start
   address    | varchar(236) | NO |     | NULL    |        
   contactnum | int(11)      | NO |     | NULL    |        
   email      | varchar(36)  | NO | UNI | NULL    |        
-  password   | varchar(255) | NO |     | NULL    | 
+  password   | varchar(255) | NO |     | NULL    |
+  icon_url   | varchar(255) | YES|     | NULL    |
+  icon_width | varchar(36)  | YES|     | NULL    |
+  icon_height| varchar(36)  | YES|     | NULL    | 
   file_path  |varchar(255)  | NO |     | NULL    |       
   created_at | datetime     | NO |     | NULL    |        
   updated_at | datetime     | NO |     | NULL    |        
@@ -72,7 +78,8 @@ $ npm install && npm start
   kind   	   | enum('DOG', 'CAT', 'BIRD', 'OTHERS')  | NO |     | NULL    |                      
   breed      | varchar(36)                           | NO |     | NULL    |                      
   sex        | enum('MALE', 'FEMALE')                | NO |     | NULL    |                      
-  birthday   | date                                  | NO |     | NULL    |                      
+  birthday   | date                                  | NO |     | NULL    |
+  status     | enum("DATES", "ADOPT", "BOTH")        | YES|     | NULL    |                      
   username   | varchar(52)                           | NO | MUL | NULL    |                      
   created_at | datetime                              | NO |     | NULL    |                      
   updated_at | datetime                              | NO |     | NULL    |                      
@@ -116,6 +123,12 @@ $ npm install && npm start
 | `/signup/user`                      | Redirects to `/feed` if logged in                                     |
 | `/signup/shelter`                   | Redirects to `/feed` if logged in                                     |
 | `/feed `                            | Displays message (temp)                                               |
+| `/accounts/viewShelters             | View all shelter accounts                                             |
+| `/accounts/viewUsers                | View all user accounts                                                |
+| `/accounts/updateShelterInfo        | Update info (shelter)                                                 |
+| `/accounts/updateUserInfo           | Update info (user)                                                    |
+| `/accounts/deleteShelterAccount     | Delete account (shelter)                                              |
+| `/accounts/deleteUserAccount        | Delete account (user)                                                 |   
 | `/pets/`                            | Display message                                                       |
 | `/pets/viewShelterPets `            | View pets owned by the shelter                                        |
 | `/pets/viewUserPets`                | View pets owned by the user                                           |
@@ -125,6 +138,8 @@ $ npm install && npm start
 | `/pets/:owner/deleteAllShelter`     | Delete all pets of a given shelter                                    |
 | `/pets/addShelterPet`               | Add a pet to db (for shelters)                                        |
 | `/pets/addUserPet`                  | Add a pet to db (for users)                                           |
+| `/pets/:pet_uuid/viewSpecificPetUser`| View a pet of user                                                   |
+| `/pets/:pet_uuid/viewSpecificPetShelter`| View a pet of shelter                                             |
 | `/pets/:pet_uuid/updateUserPets`    | Update info of a pet (for users)                                      |
 | `/pets/:pet_uuid/updateShelterPets` | Update info of a pet (for shelters)                                   |
 | `/pets/:pet_uuid/deleteUserPet`     | Delete a single pet given the pet_uuid (for users)                    |
@@ -136,7 +151,6 @@ $ npm install && npm start
 | `/community/deleteAllMyPosts`       | Delete all posts of user                                              |
 | `/community/addPost`                | Add post                                                              |
 | `/*`                                | Redirects to `/feed` if logged in, otherwise redirect to `/`          |
-
 
 ### Installing and Starting
 1. Install [NodeJS](https://nodejs.org/en/download/) and [MySQL](https://dev.mysql.com/downloads/installer/).

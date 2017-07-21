@@ -18,10 +18,25 @@ router.get('/', function(req, res, next){
     res.json({message:'get /api/accounts'});
 }); 
 
+/* view all accounts (users or shelters) */
+router.get('/viewShelters', function(req, res){
+    controller.viewAllShelters(function(err, shelters){
+        if (err) return res.status(500).json(err);  // server error
+        res.json(shelters); // returns accounts of shelters
+    });
+});
+
+router.get('/viewUsers', function(req, res){
+    controller.viewAllUsers(function(err, users){
+        if (err) return res.status(500).json(err);  // server error
+        res.json(users); // returns accounts of users
+    });
+});
+
 /* update certain info of accounts (only if logged in) */
-router.put('/:Username/updateShelterInfo', function(req, res){
+router.put('/updateShelterInfo', function(req, res){
     if (req.session.body){
-        var Username = req.params.Username;
+        var Username = req.session.body.Username;
         var changes = req.body;
         controller.updateShelterInfo(Username, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
@@ -30,9 +45,9 @@ router.put('/:Username/updateShelterInfo', function(req, res){
     }else res.status(403).json({message: 'login first before updating'});
 });
 
-router.put('/:Username/updateUserInfo', function(req, res){
+router.put('/updateUserInfo', function(req, res){
     if(req.session.body){
-        var Username = req.params.Username;
+        var Username = req.session.body.Username;
         var changes = req.body;
         controller.updateUserInfo(Username, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
@@ -42,9 +57,9 @@ router.put('/:Username/updateUserInfo', function(req, res){
 });
 
 /* deletion of accounts (only if logged in) */
-router.delete('/:Username/deleteShelterAccount', function(req, res){
+router.delete('/deleteShelterAccount', function(req, res){
     if (req.session.body){
-        var Username = req.params.Username;
+        var Username = req.session.body.Username;
         controller.deleteShelterAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500).json({message: 'unable to delete'});
@@ -53,9 +68,9 @@ router.delete('/:Username/deleteShelterAccount', function(req, res){
     }else res.status(403).json({message: 'login first before updating'});
 });
 
-router.delete('/:Username/deleteUserAccount', function(req, res){
+router.delete('/deleteUserAccount', function(req, res){
     if(req.session.body){
-        var Username = req.params.Username;
+        var Username = req.session.body.Username;
         controller.deleteUserAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500).json({message: 'unable to delete'});
