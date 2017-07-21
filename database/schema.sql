@@ -95,3 +95,20 @@ CREATE TABLE comments (
     CONSTRAINT comments_on_post_fk FOREIGN KEY(post_id)
     REFERENCES posts(post_id) 
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE rescue (
+    `rescue_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,
+    `rescue_body` TEXT NOT NULL ,
+    `rescue_imgurl` varchar(255) UNIQUE DEFAULT NULL, 
+    `sender_Username` varchar(52) NOT NULL ,
+    `date_submitted` datetime NOT NULL,
+    `contactnum_sender` int(11) NOT NULL,
+    `email_sender` varchar(36) NOT NULL,
+    `address_sender` varchar(236) NOT NULL,
+    `updated on` datetime NOT NULL,
+    CONSTRAINT rescue_fk FOREIGN KEY (sender_Username)
+    REFERENCES users(Username)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

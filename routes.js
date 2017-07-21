@@ -8,7 +8,8 @@ const connection=require('./database/connection');
 var signup = require('./entities/signup/signup_routes');
 var login = require('./entities/login/login_routes');
 var pets = require('./entities/pets/pets_routes');
-var community=require('./entities/community/community_routes');
+var community = require('./entities/community/community_routes');
+var rescue = require('./entities/rescue/rescue_routes');
 
 router.use(validator());
 /* for express-session */
@@ -30,6 +31,7 @@ router.use('/signup', signup);
 router.use('/login', login);
 router.use('/pets', pets);
 router.use('/community',community);
+router.use('/rescue',rescue);
 
 router.get('/', function(req, res) {
   res.json({ message: 'to access api: localhost:3000/api/<route>' });   
@@ -53,7 +55,6 @@ router.get('/logout',function(req,res,next){
   }
   
 });
-
 router.get('*', function(req, res, next) {
   if(req.session.body) res.redirect('/api/feed');
   else res.redirect('/api/');
