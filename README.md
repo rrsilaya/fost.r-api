@@ -59,11 +59,11 @@ $ npm install && npm start
   Field      | Type                                  |Null| Key | Default | Extra                
   ---------- | ------------------------------------- |----| --- | ------- | -------------------   
   name       | varchar(52)                           | NO |     | NULL    |                      
-  kind   	   | enum('DOG', 'CAT', 'BIRD', 'OTHERS')  | NO |     | NULL    |                      
+  kind   	   | enum("DOG", "CAT", "BIRD", "OTHERS")  | NO |     | NULL    |                      
   breed      | varchar(36)                           | NO |     | NULL    |                      
-  sex        | enum('MALE', 'FEMALE')                | NO |     | NULL    |                      
+  sex        | enum("MALE", "FEMALE")                | NO |     | NULL    |                      
   birthday   | date                                  | NO |     | NULL    |                      
-  username   | varchar(36)                           | NO | MUL | NULL    |                      
+  user_Username   | varchar(36)                           | NO | MUL | NULL    |                      
   created_at | datetime                              | NO |     | NULL    |                      
   updated_at | datetime                              | NO |     | NULL    |
   uuid       | varchar(36)                           | NO | PRI | NULL    |
@@ -75,12 +75,12 @@ $ npm install && npm start
   Field      | Type                                  |Null| Key | Default | Extra                
   ---------- | ------------------------------------- | ---| --- | ------- | -------------------
   name       | varchar(52)                           | NO |     | NULL    |                      
-  kind   	   | enum('DOG', 'CAT', 'BIRD', 'OTHERS')  | NO |     | NULL    |                      
+  kind   	   | enum("DOG", "CAT", "BIRD", "OTHERS")  | NO |     | NULL    |                      
   breed      | varchar(36)                           | NO |     | NULL    |                      
-  sex        | enum('MALE', 'FEMALE')                | NO |     | NULL    |                      
+  sex        | enum("MALE", "FEMALE")                | NO |     | NULL    |                      
   birthday   | date                                  | NO |     | NULL    |
   status     | enum("DATES", "ADOPT", "BOTH")        | YES|     | NULL    |                      
-  username   | varchar(52)                           | NO | MUL | NULL    |                      
+  shelter_Username   | varchar(52)                           | NO | MUL | NULL    |                      
   created_at | datetime                              | NO |     | NULL    |                      
   updated_at | datetime                              | NO |     | NULL    |                      
   uuid       | varchar(36)                           | NO | PRI | NULL    |
