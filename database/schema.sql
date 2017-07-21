@@ -74,27 +74,31 @@ CREATE TABLE pets_of_users (
     ON UPDATE CASCADE
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE posts (
-    `post_id` Integer UNIQUE NOT NULL PRIMARY KEY AUTO_INCREMENT,
+
+ CREATE TABLE posts (
     `Posted_by` varchar(52) NOT NULL,
-    `post_title` varchar(52) NOT NULL,
-    `text_post` varchar(305) NOT NULL,
-    `attachedfile_path` varchar(255) UNIQUE,
+    `post_title` varchar(255) NOT NULL,
+    `text_post` TEXT NOT NULL,
+    `image_urlpath` varchar(255) UNIQUE  DEFAULT NULL ,
+    `post_uuid` varchar(36) UNIQUE PRIMARY KEY NOT NULL,
     `created_at` datetime NOT NULL,
     `updated_at` datetime NOT NULL
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE comments (
-    `comment_id` Integer NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE comments_on_posts (
+    `comment_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,
     `commented_by` varchar(52) NOT NULL,
-    `comment_body` varchar(305) NOT NULL,
-    `attachedfile_path` varchar(255) UNIQUE,
+    `comment_body` varchar(255) NOT NULL,
+    `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,
     `created_at` datetime NOT NULL,
     `updated_at` datetime NOT NULL,
-    `post_id` Integer NOT NULL,
-    CONSTRAINT comments_on_post_fk FOREIGN KEY(post_id)
-    REFERENCES posts(post_id) 
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+    `post_uuid` varchar(36) NOT NULL,
+    CONSTRAINT comments_on_post_fk FOREIGN KEY(post_uuid)
+    REFERENCES posts(post_uuid) 
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+    );
 
 
 CREATE TABLE rescue (

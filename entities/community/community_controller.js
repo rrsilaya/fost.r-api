@@ -57,11 +57,20 @@ module.exports.addPost=function(newPost,callback){
 }
 
 /************ controllers for comments ******************/
+
 //add a comment 
 module.exports.addComment=function(newComment,callback){
   connection.query('INSERT INTO comments_on_posts SET ?', newComment, function(err, results){
     if (err) return callback(err);  // some error with query
     else return callback(null, results); // if successful
+  });
+}
+//view a comment in the post
+
+module.exports.viewComment=function(post_uuid,comment_uuid,callback){
+  connection.query('SELECT * FROM comments_on_posts WHERE post_uuid = ? && comment_uuid = ?',[post_uuid,comment_uuid],function(err,results){
+    if (err) return callback(err);   // some error with query
+    else return callback(null, results); // success
   });
 }
 
@@ -81,6 +90,7 @@ module.exports.deleteComment=function(post_uuid,comment_uuid,user,callback){
     else return callback(null, results); // success
   });
 }
+
 //delete all comments in a post
 
 module.exports.deleteAllComments=function(post_uuid,callback){
