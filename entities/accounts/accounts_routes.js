@@ -1,6 +1,8 @@
 const express=require('express');
 const router=express.Router();
 var controller = require('./accounts_controller');
+const validator = require('express-validator');
+var fileUpload = require('express-fileupload'); // for file upload
 
 /* users and shelters accounts handling will all be here */
 
@@ -10,8 +12,8 @@ router.use(fileUpload());     // express-fileupload
 
 router.use(function(req, res, next) {
     // do logging
-    console.log('sending request...');
-    next(); // make sure we go to the next routes and don't stop here
+    if(req.session.body)next(); // make sure we go to the next routes and don't stop here
+    else res.status(403).send("Please log in or sign up first");   
 });
 
 router.get('/', function(req, res, next){
@@ -36,13 +38,13 @@ router.get('/viewUsers', function(req, res){
 
 /*view basic info */
 router.get('/viewMyInfo',function(req,res){
-    if(req.session.accountType == 'shelter'){
+    if(req.session.accountType ='shelter'){
         controller.viewUserInfo(req.session.body.Username,function(err,results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns accounts of users
         });
 
-    }else if(req.session.accountType == 'user'){
+    }else if(req.session.accountType ='user'){
         controller.viewShelterInfo(req.session.body.Username,function(err,results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns accounts of users

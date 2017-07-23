@@ -16,9 +16,10 @@ router.use(fileUpload());     // express-fileupload
 
 router.use(function(req, res, next) {
     // do logging
-    console.log('sending request...');
-    next(); // make sure we go to the next routes and don't stop here
+    if(req.session.body)next(); // make sure we go to the next routes and don't stop here
+    else res.status(403).send("Please log in or sign up first");   
 });
+
 
 router.get('/', function(req, res, next){
     res.json({message:'get /api/pets'});

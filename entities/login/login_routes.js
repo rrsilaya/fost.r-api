@@ -5,9 +5,10 @@ const session=require('express-session');
 const connection = require('./../../database/connection');
 const controller = require('./login_controller');
 
-router.use(function(req, res, next){
-    console.log('Sending request...');
-    next();
+router.use(function(req, res, next) {
+    // do logging
+    if(!req.session.body)next(); // make sure we go to the next routes and don't stop here
+    else res.redirect('/api/feed');   
 });
 
 router.get('/', function(req, res) {
@@ -23,7 +24,6 @@ router.get('/user', function(req, res) {
 });
 
 router.post('/user',function(req,res,next) {
-
   console.log("Enter key-value pairs necessary in body");
   if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
     var credentials=req.body;
@@ -45,7 +45,6 @@ router.post('/user',function(req,res,next) {
 });
 
 router.post('/shelter',function(req,res,next) {
-
   console.log("Enter key-value pairs necessary in body");
   if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
     var credentials=req.body;

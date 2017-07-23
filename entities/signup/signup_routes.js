@@ -11,11 +11,10 @@ const controller = require('./signup_controller');
 router.use(validator());      // express-validator
 router.use(fileUpload());     // express-fileupload
 
-
 router.use(function(req, res, next) {
     // do logging
-    console.log('sending request...');
-    next(); // make sure we go to the next routes and don't stop here
+    if(!req.session.body)next(); // make sure we go to the next routes and don't stop here
+    else res.redirect('/api/feed');   
 });
 
 router.get('/', (req, res)=>{
@@ -31,17 +30,16 @@ router.get('/shelter', (req, res)=>{
 });
 
 router.post('/shelter', function(req,res,next){
-  if (req.session.body) res.redirect('/api/feed');
-  else{
+ 
     // console.log(req.files);
-    if( typeof req.body.Username!== 'undefined' &&
+  if( typeof req.body.Username!== 'undefined' &&
     typeof req.body.shelter_name!=='undefined' &&
     typeof req.body.address!=='undefined' &&
     typeof req.body.contactnum!=='undefined' &&
     typeof req.body.email!=='undefined' &&
     typeof req.body.password!=='undefined' && 
     typeof req.files.file!=='undefined' 
-    ){
+  ){
     
       // checks req.<field>; the following messages can be sent to the views
       // https://github.com/ctavan/express-validator
@@ -131,12 +129,13 @@ router.post('/shelter', function(req,res,next){
               break;
           }
         });
-     }}else res.status(400).json({message:'invalid input'});
-}});
+    }
+  }else res.status(400).json({message:'invalid input'});
+  
+});
 
 router.post('/user', function(req,res,next){
-  if (req.session.body) res.redirect('/api/feed');
-  else{
+ 
     if(
     typeof req.body.Username!== 'undefined' &&
     typeof req.body.firstname!=='undefined' &&
@@ -233,8 +232,9 @@ router.post('/user', function(req,res,next){
                 break;
             }
         });
-    }}else res.status(400).json({message:'invalid input'});    
-}});
+    }
+  }else res.status(400).json({message:'invalid input'});    
+});
 
 router.get('*', function(req, res, next) {
   if(req.session.body) res.redirect('/api/feed');
