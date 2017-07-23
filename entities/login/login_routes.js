@@ -23,28 +23,23 @@ router.get('/user', function(req, res) {
 });
 
 router.post('/user',function(req,res,next) {
-  if (!req.session.body){
-    console.log("Enter key-value pairs necessary in body");
-    if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
-      var credentials=req.body;
-      controller.loginUser(credentials,function(err,isMatch){
-        if(err){
-          console.log(err);
-          res.status(404).send(err);
-        }else if (isMatch){
-          req.session.body=credentials;
-          //res.status(200).send(credentials);
-          console.log(credentials);
-          res.redirect('/api/feed');
-
-        }else{
-          console.log('Something went wrong.');
-        }
-      });
-    }
-  }else if(req.session.body){
-    //res.status(200).send(req.session.body);
-    res.redirect('/api/feed');
+  console.log("Enter key-value pairs necessary in body");
+  if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
+    var credentials=req.body;
+    controller.loginUser(credentials,function(err,isMatch){
+      if(err){
+        console.log(err);
+        res.status(500).send(err);
+      }else if (isMatch){
+        req.session.body=credentials;
+        //res.status(200).send(credentials);
+        console.log(credentials);
+        res.redirect('/api/feed');
+      }else{
+        console.log('Invalid credentials.');
+        res.status(404).json({message:'Invalid credentials.'});
+      }
+    });
   }
 });
 

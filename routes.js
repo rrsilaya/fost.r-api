@@ -19,11 +19,13 @@ router.use(session({
 })); 
 
 //https://scotch.io/tutorials/build-a-restful-api-using-node-and-express-4
-// middleware to use for all requests
+// middleware to use for all requests; check if logged in
 router.use(function(req, res, next) {
-    // do logging
-    console.log('Sending request...');
-    next(); // make sure we go to the next routes and don't stop here
+    if (req.session.body){
+      next();
+      var isAuth = true; 
+    } 
+    else res.status(403).send(null);
 });
 
 router.use('/signup', signup);
@@ -37,15 +39,14 @@ router.get('/', function(req, res) {
 
 
 router.get('/feed',function(req,res,next){
-  if(req.session.body) res.json('This is the feed');
-  else res.status(403).json({message: 'Sign in or Sign up to access feed'})
+  res.json('This is the feed');
 });
 
 router.get('/logout',function(req,res,next){
   if(req.session.body){
     req.session.destroy();
     prompt="User logged out"
-    res.status(200).redirect('/api/');
+    res.status(200).return(null);
     console.log(prompt);
   }else{
     console.log('cannot perform function');

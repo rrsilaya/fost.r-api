@@ -33,14 +33,14 @@ module.exports.viewUserPetsOf = function(user_Username, callback){
 
 /* view specific pet of user/shelter */
 module.exports.viewSpecificPetUser = function(Username, uuid, callback){
-	connection.query('SELECT * FROM pets_of_users where user_Username = ? and uuid = ?'. [Username, uuid], function(err, results){
+	connection.query('SELECT * FROM pets_of_users where user_Username = ? and uuid = ?', [Username, uuid], function(err, results){
 		if (err) return callback(err);	// some error with query
 		return callback(null, results);	// if successful
 	});
 }
 
 module.exports.viewSpecificPetShelter = function(Username, uuid, callback){
-	connection.query('SELECT * FROM pets_of_shelters where shelter_Username = ? and uuid = ?'. [Username, uuid], function(err, results){
+	connection.query('SELECT * FROM pets_of_shelters where shelter_Username = ? and uuid = ?', [Username, uuid], function(err, results){
 		if (err) return callback(err);	// some error with query
 		return callback(null, results);	// if successful
 	});
