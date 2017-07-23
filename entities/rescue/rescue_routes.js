@@ -25,16 +25,6 @@ router.get('/',function(req,res,next){
     });
   }else res.status(403).json("Please log in or sign up first .");
 });
-//view a request given the rescue_uuid
-router.get('/:rescue_uuid/viewRequest',function(req,res,next){
-  if(req.session.body){
-    var rescue_uuid= req.params.rescue_uuid;
-    controller.viewRequest(rescue_uuid,function(err,request){
-      if (err) return res.status(500).json(err);  // server error
-      else res.json(request); // returns request
-    });
-  }else res.status(403).json("Please log in or sign up first .");
-});
 
 //view all request a user has submitted 
 router.get('/viewMyRequests',function(req,res,next){
@@ -48,7 +38,7 @@ router.get('/viewMyRequests',function(req,res,next){
 
 //view all request of a user
 router.get('/:user/viewAllRequests',function(req,res,next){
-  if(req.session.body){
+  if(req.session.body && req.session.body.accountType === 'shelter'){
     var user = req.params.user;
     controller.viewUserRequests(user,function(err,requests){
       if (err) return res.status(500).json(err);  // server error
@@ -80,7 +70,18 @@ router.delete('/deleteAllMyRequests',function(req,res,next){
   }else res.status(403).json("Please log in or sign up first .");
 });
 
-//add a rescue request to db*/
+router.get('/:rescue_uuid/viewRescueRequest', function (req, res, next){
+  if(req.session.body && req.session.body.accountType === 'shelter'){
+    // since shelters are the only one who can view the rescue requests; the account also has to be checked (added the accountType variable to login as well)
+    var rescue_uuid = req.params.rescue_uuid;
+    controller.viewRequest(rescue_uuid, function (err, request){
+      if (err) return res.status(500).json(err); // server error
+      res.json(request); // returns specific post
+    })
+  }
+});
+
+//add a rescue request to db
 router.post('/submit_a_rescue_request',function(req,res,next){
   if(req.session.body && req.body.rescue_body){
     var today=new Date();

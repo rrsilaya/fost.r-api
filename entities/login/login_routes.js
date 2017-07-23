@@ -33,6 +33,7 @@ router.post('/user',function(req,res,next) {
           res.status(404).send(err);
         }else if (isMatch){
           req.session.body=credentials;
+          req.session.body.accountType = 'user';
           //res.status(200).send(credentials);
           console.log(credentials);
           res.redirect('/api/feed');
@@ -59,6 +60,7 @@ router.post('/shelter',function(req,res,next) {
           res.status(404).send(err);
         }else if (isMatch){
           req.session.body=credentials;
+          req.session.body.accountType = 'shelter';
           console.log('Successfully logged in');
           res.status(200).redirect('/api/feed');
         }else{
@@ -76,4 +78,5 @@ router.get('*', function(req, res, next) {
   if(req.session.body) res.redirect('/api/feed');
   else res.redirect('/api/login');
 });
+
 module.exports = router;
