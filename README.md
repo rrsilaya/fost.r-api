@@ -170,7 +170,7 @@ $ npm install && npm start
 | `/community/:post_uuid/deletePost ` | Delete a post given its uuid (iff post is posted by the user itself)  |
 | `/community/deleteAllMyPosts`       | Delete all posts of user                                              |
 | `/community/addPost`                | Add post                                                              |
-| `/community/:post_uuid/addComment   | Add a comment                                                         |
+| `/community/:post_uuid/addComment`   | Add a comment                                                         |
 | `/community/:post_uuid/viewAllComments`| View all comments in the post                                      |
 | `/community/:post_uuid/:comment_uuid/deleteComment` | Delete a comment                                                |
 | `/rescue/`                          | View all requests                                                     |
