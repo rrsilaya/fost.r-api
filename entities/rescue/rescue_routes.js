@@ -26,8 +26,60 @@ router.get('/',function(req,res,next){
   }else res.status(403).json("Please log in or sign up first .");
 });
 //view a request given the rescue_uuid
-/*
-router.get('/:rescue_uuid/viewRequest')
+router.get('/:rescue_uuid/viewRequest',function(req,res,next){
+  if(req.session.body){
+    var rescue_uuid= req.params.rescue_uuid;
+    controller.viewRequest(rescue_uuid,function(err,request){
+      if (err) return res.status(500).json(err);  // server error
+      else res.json(request); // returns request
+    });
+  }else res.status(403).json("Please log in or sign up first .");
+});
+
+//view all request a user has submitted 
+router.get('/viewMyRequests',function(req,res,next){
+  if(req.session.body){
+    controller.viewUserRequests(req.session.body.Username,function(err,requests){
+      if (err) return res.status(500).json(err);  // server error
+      else res.json(requests); // returns request
+    });
+  }else res.status(403).json("Please log in or sign up first .");
+});
+
+//view all request of a user
+router.get('/:user/viewAllRequests',function(req,res,next){
+  if(req.session.body){
+    var user = req.params.user;
+    controller.viewUserRequests(user,function(err,requests){
+      if (err) return res.status(500).json(err);  // server error
+      else res.json(requests); // returns request
+    });
+  }else res.status(403).json("Please log in or sign up first .");
+});
+
+//delete a request 
+router.delete('/:rescue_uuid/deleteRequest',function(req,res,next){
+  if(req.session.body){
+    var rescue_uuid= req.params.rescue_uuid;
+    controller.deleteRequest(rescue_uuid,req.session.body.Username,function(err,results){
+      if (err) return res.status(500).json(err);  // server error
+      else if(results.affectedRows==0) return res.status(403).send("unable to delete request");
+      else res.json(results); // returns request
+    });
+  }else res.status(403).json("Please log in or sign up first .");
+});
+
+//delete all my requests 
+router.delete('/deleteAllMyRequests',function(req,res,next){
+  if(req.session.body){
+    controller.deleteAllMyRequests(req.session.body.Username,function(err,results){
+      if (err) return res.status(500).json(err);  // server error
+      else if(results.affectedRows==0) return res.status(403).send("unable to delete all request");
+      else res.json(results); // returns request
+    });
+  }else res.status(403).json("Please log in or sign up first .");
+});
+
 //add a rescue request to db*/
 router.post('/submit_a_rescue_request',function(req,res,next){
   if(req.session.body && req.body.rescue_body){
