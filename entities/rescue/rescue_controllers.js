@@ -17,13 +17,6 @@ module.exports.addRescue=function(newRescue,callback){
   });
 }
 
-/* view specific request given the rescue_uuid */
-module.exports.viewRequest = function (uuid, callback){
-  connection.query('SELECT * FROM rescue where uuid = ?', uuid, function(err, results){
-    if (err) return callback(err); // some error with query
-    return callback(null, results) // success; will return the specific rescue request 
-  })
-}
 
 /* view all requests sorted from newest to oldest*/
 module.exports.viewAllRequests=function(callback){
