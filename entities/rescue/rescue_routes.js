@@ -13,22 +13,21 @@ router.use(fileUpload());     // express-fileupload
 
 router.use(function(req, res, next) {
     // do logging
-    console.log('sending request...');
-    next(); // make sure we go to the next routes and don't stop here
+    if(req.session.body)next(); // make sure we go to the next routes and don't stop here
+    else res.status(403).send("Please log in or sign up first");   
 });
 //display all requests for rescue 
 router.get('/',function(req,res,next){
-  if(req.session.body && req.session.body.accountType === 'shelter'){
+  if(req.session.body.accountType ='shelter'){
     controller.viewAllRequests(function(err,requests){
       if (err) return res.status(500).json(err);  // server error
       else res.json(requests); // returns all posts
     });
-  }else if(req.session.body && req.session.body.accountType === 'user') res.redirect('/viewMyRequests');
-  else res.status(403).json("Please log in or sign up first .");
+  }else if(req.session.body.accountType === 'user') res.redirect('/viewMyRequests');
 });
 
 router.get('/:rescue_uuid/viewRescueRequest', function (req, res, next){
-  if(req.session.body && req.session.body.accountType === 'shelter'){
+  if( req.session.body.accountType = 'shelter'){
     // since shelters are the only one who can view the rescue requests; the account also has to be checked (added the accountType variable to login as well)
     var rescue_uuid = req.params.rescue_uuid;
     controller.viewRequest(rescue_uuid, function (err, request){
@@ -39,64 +38,62 @@ router.get('/:rescue_uuid/viewRescueRequest', function (req, res, next){
 });
 
 router.get('/:rescue_uuid/viewMyRequest', function (req, res, next){
-  if(req.session.body){
+ 
     var rescue_uuid = req.params.rescue_uuid;
     controller.viewMyRequest(rescue_uuid,req.session.body.Username,function (err, request){
       if (err) return res.status(500).json(err); // server error
       res.json(request); // returns specific post
     })
-  }else res.status(403).json("Please log in or sign up first .");
 });
 
 
 //view all request a user has submitted 
 router.get('/viewMyRequests',function(req,res,next){
-  if(req.session.body && req.session.body.accountType== 'user'){
+  if(req.session.body.accountType = 'user'){
     controller.viewUserRequests(req.session.body.Username,function(err,requests){
       if (err) return res.status(500).json(err);  // server error
       else res.json(requests); // returns request
     });
-  }else res.status(403).json("Please log in or sign up first .");
+  }
 });
 
 //view all request of a user
 router.get('/:user/viewAllRequests',function(req,res,next){
-  if(req.session.body && req.session.body.accountType== 'shelter'){
+  if(req.session.body.accountType ='shelter'){
     var user = req.params.user;
     controller.viewUserRequests(user,function(err,requests){
       if (err) return res.status(500).json(err);  // server error
       else res.json(requests); // returns request
     });
-  }else res.status(403).json("Please log in or sign up first .");
+  }
 });
-
 //delete a request 
 router.delete('/:rescue_uuid/deleteRequest',function(req,res,next){
-  if(req.session.body && req.session.body.accountType== 'user'){
+  if(req.session.body.accountType='user'){
     var rescue_uuid= req.params.rescue_uuid;
     controller.deleteRequest(rescue_uuid,req.session.body.Username,function(err,results){
       if (err) return res.status(500).json(err);  // server error
       else if(results.affectedRows==0) return res.status(403).send("unable to delete request");
       else res.json(results); // returns request
     });
-  }else res.status(403).json("Please log in or sign up first .");
+  }
 });
 
 //delete all my requests 
 router.delete('/deleteAllMyRequests',function(req,res,next){
-  if(req.session.body && req.session.body.accountType== 'user'){
+  if(req.session.body.accountType= 'user'){
     controller.deleteAllMyRequests(req.session.body.Username,function(err,results){
       if (err) return res.status(500).json(err);  // server error
       else if(results.affectedRows==0) return res.status(403).send("unable to delete all request");
       else res.json(results); // returns request
     });
-  }else res.status(403).json("Please log in or sign up first .");
+  }
 });
 
 
 //add a rescue request to db
 router.post('/submit_a_rescue_request',function(req,res,next){
-  if(req.session.body && req.body.rescue_body && req.session.body.accountType== 'user'){
+  if(req.body.rescue_body && (req.session.body.accountType= 'user')){
     var today=new Date();
     var rescue_uuid=shortid.generate();
     var rescue_imgurl;
@@ -125,16 +122,16 @@ router.post('/submit_a_rescue_request',function(req,res,next){
             }else{
               rescue_imgurl = null;
               console.log('file uploaded is not image');
+            }
+          }else if(!req.files.photo){
+            rescue_imgurl = null;
           }
-        }else if(!req.files.photo){
+        }else{
           rescue_imgurl = null;
+          console.log('file is undefined');
         }
-      }else{
-        rescue_imgurl = null;
-        console.log('file is undefined');
-      }
 
-      var newRescue={
+        var newRescue={
         "rescue_uuid" : rescue_uuid,
         "rescue_body" : req.body.rescue_body,
         "rescue_imgurl": rescue_imgurl,
@@ -144,20 +141,15 @@ router.post('/submit_a_rescue_request',function(req,res,next){
         "email_sender": email_sender,
         "address_sender" : address_sender,
         "updated_on": today
+        }
       }
-
       controller.addRescue(newRescue,function(err,results){
         if(err) res.status(500).send(err);
         else if (results.affectedRows==1) res.json(newRescue);
         else res.status(403).send("unable to submit request");
       });
-
-    }
-
-  });
-    
-    
-  }else res.status(403).json("Please log in or sign up first .")
+    });
+  }
 });
 
 router.get('*', function(req, res, next) {

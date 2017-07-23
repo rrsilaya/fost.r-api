@@ -40,12 +40,7 @@ module.exports.viewMyRequest=function(rescue_uuid,Username,callback){
   });
 }
 
-module.exports.viewRequest=function(rescue_uuid,callback){
-  connection.query('SELECT * FROM rescue WHERE rescue_uuid = ? ',rescue_uuid,function(err,results){
-    if (err) return callback(err);   // some error with query
-    else return callback(null, results); // success
-  });
-}
+
 /* delete a request given that the request is posted by the user and its rescue_uuid is specified*/
 module.exports.deleteRequest=function(rescue_uuid,sender_Username,callback){
   connection.query('DELETE FROM rescue WHERE rescue_uuid = ? && sender_Username = ?',[rescue_uuid,sender_Username],function(err,results){

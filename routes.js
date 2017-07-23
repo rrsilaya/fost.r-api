@@ -25,15 +25,6 @@ router.use(session({
 // middleware to use for all requests; check if logged in
 router.use('/signup', signup);
 router.use('/login', login);
-
-router.use(function(req, res, next) {
-    if (req.session.body){
-      next();
-      var isAuth = true; 
-    } 
-    else res.status(403).send(null);
-});
-
 router.use('/pets', pets);
 router.use('/community',community);
 router.use('/rescue',rescue);
@@ -51,7 +42,7 @@ router.get('/feed',function(req,res,next){
 router.get('/logout',function(req,res,next){
   req.session.destroy();
   prompt="User logged out"
-  res.status(200).return(null);
+  res.status(200).return(prompt);
   console.log(prompt);
 });
 router.get('*', function(req, res, next) {

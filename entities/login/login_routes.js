@@ -6,8 +6,8 @@ const connection = require('./../../database/connection');
 const controller = require('./login_controller');
 
 router.use(function(req, res, next){
-    console.log('Sending request...');
-    next();
+    if(!req.session.body)next(); // make sure we go to the next routes and don't stop here
+    else res.redirect('/api/feed');
 });
 
 router.get('/', function(req, res) {
