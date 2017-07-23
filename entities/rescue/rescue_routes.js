@@ -28,7 +28,7 @@ router.get('/',function(req,res,next){
 
 //view all request a user has submitted 
 router.get('/viewMyRequests',function(req,res,next){
-  if(req.session.body){
+  if(req.session.body && req.session.body.accountType== 'user'){
     controller.viewUserRequests(req.session.body.Username,function(err,requests){
       if (err) return res.status(500).json(err);  // server error
       else res.json(requests); // returns request
@@ -38,7 +38,7 @@ router.get('/viewMyRequests',function(req,res,next){
 
 //view all request of a user
 router.get('/:user/viewAllRequests',function(req,res,next){
-  if(req.session.body && req.session.body.accountType === 'shelter'){
+  if(req.session.body){
     var user = req.params.user;
     controller.viewUserRequests(user,function(err,requests){
       if (err) return res.status(500).json(err);  // server error
@@ -49,7 +49,7 @@ router.get('/:user/viewAllRequests',function(req,res,next){
 
 //delete a request 
 router.delete('/:rescue_uuid/deleteRequest',function(req,res,next){
-  if(req.session.body){
+  if(req.session.body && req.session.body.accountType== 'user'){
     var rescue_uuid= req.params.rescue_uuid;
     controller.deleteRequest(rescue_uuid,req.session.body.Username,function(err,results){
       if (err) return res.status(500).json(err);  // server error
@@ -61,7 +61,7 @@ router.delete('/:rescue_uuid/deleteRequest',function(req,res,next){
 
 //delete all my requests 
 router.delete('/deleteAllMyRequests',function(req,res,next){
-  if(req.session.body){
+  if(req.session.body && req.session.body.accountType== 'user'){
     controller.deleteAllMyRequests(req.session.body.Username,function(err,results){
       if (err) return res.status(500).json(err);  // server error
       else if(results.affectedRows==0) return res.status(403).send("unable to delete all request");
@@ -83,7 +83,7 @@ router.get('/:rescue_uuid/viewRescueRequest', function (req, res, next){
 
 //add a rescue request to db
 router.post('/submit_a_rescue_request',function(req,res,next){
-  if(req.session.body && req.body.rescue_body){
+  if(req.session.body && req.body.rescue_body && req.session.body.accountType== 'user'){
     var today=new Date();
     var rescue_uuid=shortid.generate();
     var rescue_imgurl;

@@ -117,6 +117,20 @@ $ npm install && npm start
   updated_at    | datetime     | NO   |     | NULL    |       |
   post_uuid     | varchar(36)  | NO   | MUL | NULL    |       |
 
+
+### rescue
+  Field             | Type         | Null | Key | Default | Extra |
+ -------------------|--------------|------|-----|---------|-------|
+  rescue_uuid       | varchar(36)  | NO   | PRI | NULL    |       |
+  rescue_body       | varchar(255) | NO   |     | NULL    |       |
+  rescue_imgurl     | varchar(255) | YES  | UNI | NULL    |       |
+  date_submitted    | datetime     | NO   |     | NULL    |       |
+  updated_on        | datetime     | NO   |     | NULL    |       |
+  contactnum_sender | int(11)      | NO   |     | NULL    |       |
+  email_sender      | varchar(36)  | NO   |     | NULL    |       |
+  address_sender    | varchar(236) | NO   |     | NULL    |       |
+  sender_Username   | varchar(52)  | NO   | MUL | NULL    |       |
+
 ##### Access API through localhost:3000/api/replace-with-route
 
 
@@ -158,7 +172,14 @@ $ npm install && npm start
 | `/community/addPost`                | Add post                                                              |
 | `/community/:post_uuid/addComment   | Add a comment                                                         |
 | `/community/:post_uuid/viewAllComments`| View all comments in the post                                      |
-| `/:post_uuid/:comment_uuid/deleteComment` | Delete a comment                                                |
+| `/community/:post_uuid/:comment_uuid/deleteComment` | Delete a comment                                                |
+| `/rescue/`                          | View all requests                                                     |
+| `/rescue/viewMyRequests`            | View all submitted requests                                           |
+| `/rescue/:user/viewAllRequests`     | View all rescue requests from a user                                  |
+| `/rescue/:rescue_uuid/deleteRequest`| Delete a rescue request                                               |
+| `/rescue/deleteAllMyRequests`       | Delete all rescue requests                                            |
+| `/rescue/:rescue_uuid/viewRescueRequest`| View a rescue request                                             |
+| `/rescue/submit_a_rescue_request`   | Submit a request for rescue                                           |
 | `/*`                                | Redirects to `/feed` if logged in, otherwise redirect to `/`          |
 
 ### Installing and Starting
