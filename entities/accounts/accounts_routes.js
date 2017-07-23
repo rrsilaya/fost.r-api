@@ -33,6 +33,13 @@ router.get('/viewUsers', function(req, res){
     });
 });
 
+router.get('/viewOwnInfoUser', function (req, res){
+    controller.ViewUserInfo(req.session.body.Username, function(err, info){
+        if (err) return res.status(500).json(err); // server error
+        res.json(info);
+    });
+});
+
 /* update certain info of accounts (only if logged in) */
 router.put('/updateShelterInfo', function(req, res){
     if (req.session.body){

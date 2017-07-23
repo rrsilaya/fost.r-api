@@ -44,31 +44,27 @@ router.post('/user',function(req,res,next) {
 });
 
 router.post('/shelter',function(req,res,next) {
-  if (!req.session.body){
-    console.log("Enter key-value pairs necessary in body");
-    if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
-      var credentials=req.body;
-      controller.loginShelter(credentials,function(err,isMatch){
-        if(err){
-          console.log(err);
-          res.status(404).send(err);
-        }else if (isMatch){
-          req.session.body=credentials;
-          console.log('Successfully logged in');
-          res.status(200).redirect('/api/feed');
-        }else{
-          console.log('Something went wrong.');
-        }
-      });
-    }
-  }else if(req.session.body){
-    console.log('already logged in');
-    res.redirect('/api/feed');
+  console.log("Enter key-value pairs necessary in body");
+  if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
+    var credentials=req.body;
+    controller.loginShelter(credentials,function(err,isMatch){
+      if(err){
+        console.log(err);
+        res.status(500).send(err);
+      }else if (isMatch){
+        req.session.body=credentials;
+        console.log('Successfully logged in');
+        res.status(200).redirect('/api/feed');
+      }else{
+        console.log('Invalid credentials.');
+        res.status(404).json({message:'Invalid credentials.'});
+      }
+    });
   }
 });
 
 router.get('*', function(req, res, next) {
-  if(req.session.body) res.redirect('/api/feed');
-  else res.redirect('/api/login');
+  res.redirect('/api/feed');
 });
+
 module.exports = router;

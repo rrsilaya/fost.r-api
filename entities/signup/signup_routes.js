@@ -40,8 +40,7 @@ router.post('/shelter', function(req,res,next){
     typeof req.body.contactnum!=='undefined' &&
     typeof req.body.email!=='undefined' &&
     typeof req.body.password!=='undefined' && 
-    typeof req.files.file!=='undefined' &&
-    typeof req.files.icon!=='undefined'
+    typeof req.files.file!=='undefined' 
     ){
     
       // checks req.<field>; the following messages can be sent to the views
@@ -146,8 +145,7 @@ router.post('/user', function(req,res,next){
     typeof req.body.address!=='undefined' &&
     typeof req.body.contactnum!=='undefined' &&
     typeof req.body.email!=='undefined' &&
-    typeof req.body.password!=='undefined' &&
-    typeof req.files.icon!=='undefined'
+    typeof req.body.password!=='undefined' 
     ){
       // checks req.<field>; the following messages can be sent to the views
       // https://github.com/ctavan/express-validator
@@ -178,7 +176,7 @@ router.post('/user', function(req,res,next){
           "created_at": today,
           "updated_at":today
         }
-        if (req.files.icon){
+        if (req.files){
         const icon = req.files.icon;  //use later for file-upload
         var mime = req.files.icon.mimetype;
         var name = newUser.Username + '-' + icon.name;
