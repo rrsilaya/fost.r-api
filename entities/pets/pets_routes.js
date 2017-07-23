@@ -77,7 +77,6 @@ router.delete('/:owner/deleteAllShelterPets', function(req, res){
 
 /* add pets to database (only if logged in) */
 router.post('/addShelterPet', function(req, res){
-    if (req.session.body){
         var owner = req.session.body.Username;
         var uuid = shortid.generate();
         var today = new Date();
@@ -131,11 +130,9 @@ router.post('/addShelterPet', function(req, res){
                 res.status(201).json(results); // returns info of newly added pet
             });
         }
-    }else res.status(403).json({message: 'login first before adding'});
 });
 
 router.post('/addUserPet', function(req, res){
-    if (req.session.body){
         var owner = req.session.body.Username;
         var uuid = shortid.generate();
         var today = new Date();
@@ -191,58 +188,48 @@ router.post('/addUserPet', function(req, res){
                 res.status(201).json(results); // returns info of newly added pet
             });
         }
-    }else res.status(403).json({message: 'login first before adding'});
 });
 
 /* returns specific pet of logged in user/shelter */ 
 router.get('/:pet_uuid/viewSpecificPetUser', function(req, res){
-    if (req.session.body){
         var pet_uuid = req.params.pet_uuid;
         var Username = req.session.body.Username;
         controller.viewSpecificPetUser(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns results
         }); 
-    }else res.status(403).json({message: 'login first before retrieving info'});
 });
 
 router.get('/:pet_uuid/viewSpecificPetShelter', function(req, res){
-    if (req.session.body){
         var pet_uuid = req.params.pet_uuid;
         var Username = req.session.body.Username;
         controller.viewSpecificPetShelter(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns results
         }); 
-    }else res.status(403).json({message: 'login first before retrieving info'});
 });
 
 /* update certain info of pets (only if logged in && pet exists) */
 router.put('/:pet_uuid/updateShelterPets', function(req, res){
-    if (req.session.body){
         var pet_uuid = req.params.pet_uuid; 
         var changes = req.body;
         controller.updateShelterPet(pet_uuid, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns results
         }); 
-    }else res.status(403).json({message: 'login first before updating'});
 });
 
 router.put('/:pet_uuid/updateUserPets', function(req, res){
-    if(req.session.body){
         var pet_uuid = req.params.pet_uuid;
         var changes = req.body;
         controller.updateUserPet(pet_uuid, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns pets of specified user
         }); 
-    }else res.status(403).json({message: 'login first before updating'});
 });
 
 /* deletes a single pet given the pet's uuid */
 router.delete('/:pet_uuid/deleteUserPet', function(req, res){
-    if(req.session.body){
         var pet_uuid = req.params.pet_uuid;
         var Username = req.session.body.Username;
         controller.deleteUserPet(Username, pet_uuid, function(err, results){
@@ -250,11 +237,9 @@ router.delete('/:pet_uuid/deleteUserPet', function(req, res){
             if (!results) return res.status(500).json({message: 'unable to delete?'});
             res.status(204).json(null);
         }); 
-    }else res.status(403).json({message: 'login first before deleting'});
 });
 
 router.delete('/:pet_uuid/deleteShelterPet', function(req, res){
-    if(req.session.body){
         var pet_uuid = req.params.pet_uuid;
         var Username = req.session.body.Username;
         controller.deleteShelterPet(Username, pet_uuid, function(err, results){
@@ -262,12 +247,10 @@ router.delete('/:pet_uuid/deleteShelterPet', function(req, res){
             if (!results) return res.status(500).json({message: 'unable to delete?'});
             res.status(204).json(null);
         }); 
-    }else res.status(403).json({message: 'login first before deleting'});
 });
 
 router.get('*', function(req, res, next) {
-  if(req.session.body) res.redirect('/api/feed');
-  else res.redirect('/api/pet/');
+  res.status(302).redirect('/api/feed');
 });
 
 module.exports = router;

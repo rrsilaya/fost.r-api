@@ -13,6 +13,7 @@ var rescue = require('./entities/rescue/rescue_routes');
 var account = require('./entities/accounts/accounts_routes');
 
 router.use(validator());
+
 /* for express-session */
 router.use(session({
     secret:"fost.r_jpad",
@@ -21,15 +22,18 @@ router.use(session({
 })); 
 
 //https://scotch.io/tutorials/build-a-restful-api-using-node-and-express-4
-// middleware to use for all requests
-router.use(function(req, res, next) {
-    // do logging
-    console.log('Sending request...');
-    next(); // make sure we go to the next routes and don't stop here
-});
-
+// middleware to use for all requests; check if logged in
 router.use('/signup', signup);
 router.use('/login', login);
+
+router.use(function(req, res, next) {
+    if (req.session.body){
+      next();
+      var isAuth = true; 
+    } 
+    else res.status(403).send(null);
+});
+
 router.use('/pets', pets);
 router.use('/community',community);
 router.use('/rescue',rescue);
@@ -41,25 +45,17 @@ router.get('/', function(req, res) {
 
 
 router.get('/feed',function(req,res,next){
-  if(req.session.body) res.json('This is the feed');
-  else res.status(403).json({message: 'Sign in or Sign up to access feed'})
+  res.json('This is the feed');
 });
 
 router.get('/logout',function(req,res,next){
-  if(req.session.body){
-    req.session.destroy();
-    prompt="User logged out"
-    res.status(200).redirect('/api/');
-    console.log(prompt);
-  }else{
-    console.log('cannot perform function');
-    res.redirect('/api/');
-  }
-  
+  req.session.destroy();
+  prompt="User logged out"
+  res.status(200).return(null);
+  console.log(prompt);
 });
 router.get('*', function(req, res, next) {
-  if(req.session.body) res.redirect('/api/feed');
-  else res.redirect('/api/');
+  res.redirect('/api/');
 });
 
 module.exports=router;
