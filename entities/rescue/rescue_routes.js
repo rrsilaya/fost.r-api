@@ -11,14 +11,9 @@ var controller = require('./rescue_controllers');
 router.use(validator());      // express-validator
 router.use(fileUpload());     // express-fileupload
 
-router.use(function(req, res, next) {
-    // do logging
-    if(req.session.body)next(); // make sure we go to the next routes and don't stop here
-    else res.status(403).send("Please log in or sign up first");   
-});
 //display all requests for rescue 
 router.get('/',function(req,res,next){
-  if(req.session.body.accountType ='shelter'){
+  if(req.session.body.accountType === 'shelter'){
     controller.viewAllRequests(function(err,requests){
       if (err) return res.status(500).json(err);  // server error
       else res.json(requests); // returns all posts
@@ -27,7 +22,7 @@ router.get('/',function(req,res,next){
 });
 
 router.get('/:rescue_uuid/viewRescueRequest', function (req, res, next){
-  if( req.session.body.accountType = 'shelter'){
+  if( req.session.body.accountType === 'shelter'){
     // since shelters are the only one who can view the rescue requests; the account also has to be checked (added the accountType variable to login as well)
     var rescue_uuid = req.params.rescue_uuid;
     controller.viewRequest(rescue_uuid, function (err, request){
@@ -38,7 +33,6 @@ router.get('/:rescue_uuid/viewRescueRequest', function (req, res, next){
 });
 
 router.get('/:rescue_uuid/viewMyRequest', function (req, res, next){
- 
     var rescue_uuid = req.params.rescue_uuid;
     controller.viewMyRequest(rescue_uuid,req.session.body.Username,function (err, request){
       if (err) return res.status(500).json(err); // server error
@@ -49,7 +43,7 @@ router.get('/:rescue_uuid/viewMyRequest', function (req, res, next){
 
 //view all request a user has submitted 
 router.get('/viewMyRequests',function(req,res,next){
-  if(req.session.body.accountType = 'user'){
+  if(req.session.body.accountType === 'user'){
     controller.viewUserRequests(req.session.body.Username,function(err,requests){
       if (err) return res.status(500).json(err);  // server error
       else res.json(requests); // returns request
@@ -59,7 +53,7 @@ router.get('/viewMyRequests',function(req,res,next){
 
 //view all request of a user
 router.get('/:user/viewAllRequests',function(req,res,next){
-  if(req.session.body.accountType ='shelter'){
+  if(req.session.body.accountType === 'shelter'){
     var user = req.params.user;
     controller.viewUserRequests(user,function(err,requests){
       if (err) return res.status(500).json(err);  // server error
@@ -69,7 +63,7 @@ router.get('/:user/viewAllRequests',function(req,res,next){
 });
 //delete a request 
 router.delete('/:rescue_uuid/deleteRequest',function(req,res,next){
-  if(req.session.body.accountType='user'){
+  if(req.session.body.accountType === 'user'){
     var rescue_uuid= req.params.rescue_uuid;
     controller.deleteRequest(rescue_uuid,req.session.body.Username,function(err,results){
       if (err) return res.status(500).json(err);  // server error
@@ -81,7 +75,7 @@ router.delete('/:rescue_uuid/deleteRequest',function(req,res,next){
 
 //delete all my requests 
 router.delete('/deleteAllMyRequests',function(req,res,next){
-  if(req.session.body.accountType= 'user'){
+  if(req.session.body.accountType === 'user'){
     controller.deleteAllMyRequests(req.session.body.Username,function(err,results){
       if (err) return res.status(500).json(err);  // server error
       else if(results.affectedRows==0) return res.status(403).send("unable to delete all request");
@@ -93,8 +87,8 @@ router.delete('/deleteAllMyRequests',function(req,res,next){
 
 //add a rescue request to db
 router.post('/submit_a_rescue_request',function(req,res,next){
-  if(req.body.rescue_body && (req.session.body.accountType= 'user')){
-    var today=new Date();
+  if(req.body.rescue_body && (req.session.body.accountType === 'user')){
+    var today = new Date();
     var rescue_uuid=shortid.generate();
     var rescue_imgurl;
 
@@ -153,8 +147,7 @@ router.post('/submit_a_rescue_request',function(req,res,next){
 });
 
 router.get('*', function(req, res, next) {
-  if(req.session.body) res.redirect('/api/rescue/');
-  else res.status(403).json("Please log in or sign up first .");
+  res.redirect('/api/rescue/');
 });
 
 module.exports=router;

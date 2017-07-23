@@ -6,8 +6,8 @@ const connection = require('./../../database/connection');
 const controller = require('./login_controller');
 
 router.use(function(req, res, next){
-    if(!req.session.body)next(); // make sure we go to the next routes and don't stop here
-    else res.redirect('/api/feed');
+  console.log('Getting request...');
+  next();
 });
 
 router.get('/', function(req, res) {
@@ -34,6 +34,7 @@ router.post('/user',function(req,res,next) {
       }else if (isMatch){
         req.session.body=credentials;
         //res.status(200).send(credentials);
+        req.session.body.accountType = 'user';
         console.log(credentials);
         res.redirect('/api/feed');
       }else{
@@ -55,6 +56,7 @@ router.post('/shelter',function(req,res,next) {
         res.status(500).send(err);
       }else if (isMatch){
         req.session.body=credentials;
+        req.session.body.accountType = 'shelter';
         console.log('Successfully logged in');
         res.status(200).redirect('/api/feed');
       }else{
