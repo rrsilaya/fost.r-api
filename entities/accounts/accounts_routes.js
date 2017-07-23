@@ -38,60 +38,54 @@ router.get('/viewUsers', function(req, res){
 
 /*view basic info */
 router.get('/viewMyInfo',function(req,res){
-    if(req.session.accountType == 'shelter'){
-        controller.viewUserInfo(req.session.body.Username,function(err,results){
+    var Username = req.session.body.Username;
+    if(req.session.accountType == 'user'){
+        controller.viewUserInfo(Username, function(err,results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns accounts of users
         });
 
-    }else if(req.session.accountType == 'user'){
-        controller.viewShelterInfo(req.session.body.Username,function(err,results){
+    }else if(req.session.accountType == 'shelter'){
+        controller.viewShelterInfo(Username, function(err,results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns accounts of users
         })
     }
-
-
 });
 
 /* update certain info of accounts (only if logged in) */
-router.put('/updateShelterInfo', function(req, res){
-
-        var Username = req.session.body.Username;
-        var changes = req.body;
-        controller.updateShelterInfo(Username, changes, function(err, results){
-            if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns results
-        }); 
-   
-});
-
-router.put('/updateUserInfo', function(req, res){
-        var Username = req.session.body.Username;
-        var changes = req.body;
+router.put('/updateInfo', function(req, res){
+    var Username = req.session.body.Username;
+    var changes = req.body;
+    if(req.session.accountType == 'user'){
         controller.updateUserInfo(Username, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns pets of specified user
         }); 
+    }else if(req.session.accountType == 'shelter'){
+        controller.updateShelterInfo(Username, changes, function(err, results){
+            if (err) return res.status(500).json(err);  // server error
+            res.json(results); // returns results
+        }); 
+    }
 });
 
 /* deletion of accounts (only if logged in) */
-router.delete('/deleteShelterAccount', function(req, res){
-        var Username = req.session.body.Username;
-        controller.deleteShelterAccount(Username, function(err, results){
-            if (err) return res.status(500).json(err);  // server error
-            if (!results) return res.status(500).json({message: 'unable to delete'});
-            res.status(204).json(null);
-        }); 
-});
-
-router.delete('/deleteUserAccount', function(req, res){
-        var Username = req.session.body.Username;
+router.delete('/deleteAccount', function(req, res){
+    var Username = req.session.body.Username;
+    if(req.session.accountType == 'user'){
         controller.deleteUserAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            if (!results) return res.status(500).json({message: 'unable to delete'});
+            if (!results) return res.status(500);
             res.status(204).json(null);
         }); 
+    }else if(req.session.accountType == 'shelter'){
+        controller.deleteShelterAccount(Username, function(err, results){
+            if (err) return res.status(500).json(err);  // server error
+            if (!results) return res.status(500);
+            res.status(204).json(null);
+        }); 
+    }
 });
 
 module.exports = router;

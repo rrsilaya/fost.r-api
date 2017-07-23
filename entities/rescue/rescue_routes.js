@@ -67,8 +67,10 @@ router.delete('/:rescue_uuid/deleteRequest',function(req,res,next){
     var rescue_uuid= req.params.rescue_uuid;
     controller.deleteRequest(rescue_uuid,req.session.body.Username,function(err,results){
       if (err) return res.status(500).json(err);  // server error
-      else if(results.affectedRows==0) return res.status(403).send("unable to delete request");
-      else res.json(results); // returns request
+      else if(results.affectedRows==0){
+        return res.status(500);
+        console.log('unable to delete request');
+      }else res.json(results); // returns request
     });
   }
 });
@@ -78,8 +80,10 @@ router.delete('/deleteAllMyRequests',function(req,res,next){
   if(req.session.body.accountType === 'user'){
     controller.deleteAllMyRequests(req.session.body.Username,function(err,results){
       if (err) return res.status(500).json(err);  // server error
-      else if(results.affectedRows==0) return res.status(403).send("unable to delete all request");
-      else res.json(results); // returns request
+      else if(results.affectedRows==0){
+        return res.status(500);
+        console.log('unable to delete all requests');
+      }else res.json(results); // returns request
     });
   }
 });

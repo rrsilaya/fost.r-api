@@ -17,18 +17,6 @@ router.use(function(req, res, next){
     else res.redirect('/api/feed');
 });
 
-router.get('/', (req, res)=>{
-  res.json({message: 'SIGNUP_AS_USER_OR_SHELTER'});
-});
-
-router.get('/user', (req, res)=>{
-  res.json({message: 'get api/signup/user'});
-});
-
-router.get('/shelter', (req, res)=>{
-  res.json({message: 'get api/signup/shelter'});
-});
-
 router.post('/shelter', function(req,res,next){
     // console.log(req.files);
   if( typeof req.body.Username!== 'undefined' &&
@@ -45,7 +33,7 @@ router.post('/shelter', function(req,res,next){
     req.checkBody('Username', 'Username is required').notEmpty();
     req.checkBody('shelter_name', 'Shelter name is required').notEmpty();
     req.checkBody('address', 'Address is required').notEmpty();
-    req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty().isInt();
+    req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty();
     req.checkBody('email', 'Email is required').isEmail();
     req.checkBody('password', 'password is required').notEmpty();
     // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 
@@ -150,7 +138,7 @@ router.post('/user', function(req,res,next){
     req.checkBody('lastname', 'Last name is required').notEmpty();
     req.checkBody('birthday', 'Birthday is required').notEmpty(); 
     req.checkBody('address', 'Address is required').notEmpty();
-    req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty().isInt();
+    req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty();
     req.checkBody('email', 'Email is required').isEmail();
     req.checkBody('password', 'password is required').notEmpty();
     // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 

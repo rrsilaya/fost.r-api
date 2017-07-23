@@ -19,7 +19,7 @@ CREATE TABLE users (\
     `lastname` varchar(36) NOT NULL,\
     `birthday` varchar(36) NOT NULL,\
     `address` varchar(236) NOT NULL,\
-    `contactnum` int(11) NOT NULL,\
+    `contactnum` varchar(20) NOT NULL,\
     `email` varchar(36) NOT NULL UNIQUE,\
     `password` varchar(255) NOT NULL,\
     `icon_url` varchar(255) DEFAULT NULL,\
@@ -36,7 +36,7 @@ CREATE TABLE shelters (\
     `Username` varchar(52) NOT NULL UNIQUE,\
     `shelter_name` varchar(52) NOT NULL,\
     `address` varchar(236) NOT NULL,\
-    `contactnum` int(11) NOT NULL,\
+    `contactnum` varchar(20) NOT NULL,\
     `email` varchar(36) NOT NULL UNIQUE,\
     `password` varchar(255) NOT NULL,\
     `icon_url` varchar(255) DEFAULT NULL,\

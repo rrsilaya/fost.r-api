@@ -6,25 +6,11 @@ const connection = require('./../../database/connection');
 const controller = require('./login_controller');
 
 router.use(function(req, res, next){
-  console.log('Getting request...');
+  console.log("Enter key-value pairs necessary in body");
   next();
 });
 
-router.get('/', function(req, res) {
-  res.json({message: 'get /api/login'});
-});
-
-router.get('/user', function(req, res) {
-  res.json({message: 'get /api/login/user'});
-});
-
-router.get('/user', function(req, res) {
-  res.json({message: 'get /api/login/shelter'});
-});
-
 router.post('/user',function(req,res,next) {
-
-  console.log("Enter key-value pairs necessary in body");
   if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
     var credentials=req.body;
     controller.loginUser(credentials,function(err,isMatch){
@@ -35,22 +21,19 @@ router.post('/user',function(req,res,next) {
         req.session.body=credentials;
         //res.status(200).send(credentials);
         req.session.body.accountType = 'user';
-        console.log(credentials);
-        res.redirect('/api/feed');
+        res.status(200).redirect('/api/feed');
       }else{
         console.log('Invalid credentials.');
-        res.status(404).json({message:'Invalid credentials.'});
+        res.status(404);
       }
     });
   }
 });
 
 router.post('/shelter',function(req,res,next) {
-
-  console.log("Enter key-value pairs necessary in body");
   if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
     var credentials=req.body;
-    controller.loginShelter(credentials,function(err,isMatch){
+    controller.loginShelter(credentials, function(err,isMatch){
       if(err){
         console.log(err);
         res.status(500).send(err);
@@ -61,7 +44,7 @@ router.post('/shelter',function(req,res,next) {
         res.status(200).redirect('/api/feed');
       }else{
         console.log('Invalid credentials.');
-        res.status(404).json({message:'Invalid credentials.'});
+        res.status(404);
       }
     });
   }
