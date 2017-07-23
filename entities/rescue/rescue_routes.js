@@ -18,12 +18,13 @@ router.use(function(req, res, next) {
 });
 //display all requests for rescue 
 router.get('/',function(req,res,next){
-  if(req.session.body){
+  if(req.session.body && req.session.body.accountType === 'shelter'){
     controller.viewAllRequests(function(err,requests){
       if (err) return res.status(500).json(err);  // server error
       else res.json(requests); // returns all posts
     });
-  }else res.status(403).json("Please log in or sign up first .");
+  }else if(req.session.body && req.session.body.accountType === 'user') res.redirect('/viewMyRequests');
+  else res.status(403).json("Please log in or sign up first .");
 });
 
 router.get('/:rescue_uuid/viewRescueRequest', function (req, res, next){
@@ -37,10 +38,10 @@ router.get('/:rescue_uuid/viewRescueRequest', function (req, res, next){
   }
 });
 
-router.get('/:rescue_uuid/viewRequest', function (req, res, next){
+router.get('/:rescue_uuid/viewMyRequest', function (req, res, next){
   if(req.session.body){
     var rescue_uuid = req.params.rescue_uuid;
-    controller.viewRequest(rescue_uuid, function (err, request){
+    controller.viewMyRequest(rescue_uuid,req.session.body.Username,function (err, request){
       if (err) return res.status(500).json(err); // server error
       res.json(request); // returns specific post
     })
@@ -60,7 +61,7 @@ router.get('/viewMyRequests',function(req,res,next){
 
 //view all request of a user
 router.get('/:user/viewAllRequests',function(req,res,next){
-  if(req.session.body){
+  if(req.session.body && req.session.body.accountType== 'shelter'){
     var user = req.params.user;
     controller.viewUserRequests(user,function(err,requests){
       if (err) return res.status(500).json(err);  // server error
