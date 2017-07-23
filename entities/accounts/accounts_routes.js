@@ -42,48 +42,42 @@ router.get('/viewOwnInfoUser', function (req, res){
 
 /* update certain info of accounts (only if logged in) */
 router.put('/updateShelterInfo', function(req, res){
-    if (req.session.body){
+
         var Username = req.session.body.Username;
         var changes = req.body;
         controller.updateShelterInfo(Username, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns results
         }); 
-    }else res.status(403).json({message: 'login first before updating'});
+   
 });
 
 router.put('/updateUserInfo', function(req, res){
-    if(req.session.body){
         var Username = req.session.body.Username;
         var changes = req.body;
         controller.updateUserInfo(Username, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns pets of specified user
         }); 
-    }else res.status(403).json({message: 'login first before updating'});
 });
 
 /* deletion of accounts (only if logged in) */
 router.delete('/deleteShelterAccount', function(req, res){
-    if (req.session.body){
         var Username = req.session.body.Username;
         controller.deleteShelterAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500).json({message: 'unable to delete'});
             res.status(204).json(null);
         }); 
-    }else res.status(403).json({message: 'login first before updating'});
 });
 
 router.delete('/deleteUserAccount', function(req, res){
-    if(req.session.body){
         var Username = req.session.body.Username;
         controller.deleteUserAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500).json({message: 'unable to delete'});
             res.status(204).json(null);
         }); 
-    }else res.status(403).json({message: 'login first before updating'});
 });
 
 module.exports = router;
