@@ -23,21 +23,24 @@ $ npm install && npm start
 ### Database
 
 #### users
-  Field      | Type         |Null| Key | Default | Extra  
-  ---------- | ------------ |--- | --- | ------- | -----  
-  Username   | varchar(36)  | NO | PRI |         |        
-  firstname  | varchar(36)  | NO |     | NULL    |        
-  lastname 	 | varchar(36)  | NO |     | NULL    |        
-  birthday   | date         | NO |     | NULL    |        
-  address    | varchar(236) | NO |     | NULL    |        
-  contactnum | int(11)      | NO |     | NULL    |        
-  email      | varchar(36)  | NO | UNI | NULL    |        
-  password   | varchar(255) | NO |     | NULL    |
-  icon_url   | varchar(255) | YES|     | NULL    |
-  icon_width | varchar(36)  | YES|     | NULL    |
-  icon_height| varchar(36)  | YES|     | NULL    |   
-  created_at | datetime     | NO |     | NULL    |        
-  updated_at | datetime     | NO |     | NULL    |        
+
+  Field       | Type         | Null | Key | Default | Extra |
+ -------------|--------------|------|-----|---------|-------|
+  Username    | varchar(36)  | NO   | PRI | NULL    |       |
+  firstname   | varchar(36)  | NO   |     | NULL    |       |
+  lastname    | varchar(36)  | NO   |     | NULL    |       |
+  birthday    | varchar(36)  | NO   |     | NULL    |       |
+  address     | varchar(236) | NO   |     | NULL    |       |
+  contactnum  | int(11)      | NO   |     | NULL    |       |
+  email       | varchar(36)  | NO   | PRI | NULL    |       |
+  password    | varchar(255) | NO   |     | NULL    |       |
+  icon_url    | varchar(255) | YES  |     | NULL    |       |
+  icon_width  | varchar(36)  | YES  |     | NULL    |       |
+  icon_height | varchar(36)  | YES  |     | NULL    |       |
+  created_at  | datetime     | NO   |     | NULL    |       |
+  updated_at  | datetime     | NO   |     | NULL    |       |
+
+
 
 #### shelters
   Field      | Type         |Null| Key | Default | Extra  
@@ -53,7 +56,9 @@ $ npm install && npm start
   icon_height| varchar(36)  | YES|     | NULL    | 
   file_path  |varchar(255)  | NO |     | NULL    |       
   created_at | datetime     | NO |     | NULL    |        
-  updated_at | datetime     | NO |     | NULL    |        
+  updated_at | datetime     | NO |     | NULL    |   
+
+                  
 
 #### pets_of_users
   Field      | Type                                  |Null| Key | Default | Extra                
@@ -72,6 +77,7 @@ $ npm install && npm start
   height     | varchar(36)                           | YES|     | NULL    |                        
 
 #### pets_of_shelters
+
   Field      | Type                                  |Null| Key | Default | Extra                
   ---------- | ------------------------------------- | ---| --- | ------- | -------------------
   name       | varchar(52)                           | NO |     | NULL    |                      
@@ -110,6 +116,20 @@ $ npm install && npm start
   created_at    | datetime     | NO   |     | NULL    |       |
   updated_at    | datetime     | NO   |     | NULL    |       |
   post_uuid     | varchar(36)  | NO   | MUL | NULL    |       |
+
+
+### rescue
+  Field             | Type         | Null | Key | Default | Extra |
+ -------------------|--------------|------|-----|---------|-------|
+  rescue_uuid       | varchar(36)  | NO   | PRI | NULL    |       |
+  rescue_body       | varchar(255) | NO   |     | NULL    |       |
+  rescue_imgurl     | varchar(255) | YES  | UNI | NULL    |       |
+  date_submitted    | datetime     | NO   |     | NULL    |       |
+  updated_on        | datetime     | NO   |     | NULL    |       |
+  contactnum_sender | int(11)      | NO   |     | NULL    |       |
+  email_sender      | varchar(36)  | NO   |     | NULL    |       |
+  address_sender    | varchar(236) | NO   |     | NULL    |       |
+  sender_Username   | varchar(52)  | NO   | MUL | NULL    |       |
 
 ##### Access API through localhost:3000/api/replace-with-route
 
@@ -150,6 +170,16 @@ $ npm install && npm start
 | `/community/:post_uuid/deletePost ` | Delete a post given its uuid (iff post is posted by the user itself)  |
 | `/community/deleteAllMyPosts`       | Delete all posts of user                                              |
 | `/community/addPost`                | Add post                                                              |
+| `/community/:post_uuid/addComment`   | Add a comment                                                         |
+| `/community/:post_uuid/viewAllComments`| View all comments in the post                                      |
+| `/community/:post_uuid/:comment_uuid/deleteComment` | Delete a comment                                                |
+| `/rescue/`                          | View all requests                                                     |
+| `/rescue/viewMyRequests`            | View all submitted requests                                           |
+| `/rescue/:user/viewAllRequests`     | View all rescue requests from a user                                  |
+| `/rescue/:rescue_uuid/deleteRequest`| Delete a rescue request                                               |
+| `/rescue/deleteAllMyRequests`       | Delete all rescue requests                                            |
+| `/rescue/:rescue_uuid/viewRescueRequest`| View a rescue request                                             |
+| `/rescue/submit_a_rescue_request`   | Submit a request for rescue                                           |
 | `/*`                                | Redirects to `/feed` if logged in, otherwise redirect to `/`          |
 
 ### Installing and Starting
@@ -161,6 +191,7 @@ $ npm install && npm start
 
 
 ### Developers
+
 ##### Backend
 * Evangelista, Erlen Mae
 * Somabes, Kia Mei

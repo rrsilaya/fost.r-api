@@ -23,6 +23,7 @@ router.get('/user', function(req, res) {
 });
 
 router.post('/user',function(req,res,next) {
+
   console.log("Enter key-value pairs necessary in body");
   if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
     var credentials=req.body;
@@ -44,6 +45,7 @@ router.post('/user',function(req,res,next) {
 });
 
 router.post('/shelter',function(req,res,next) {
+
   console.log("Enter key-value pairs necessary in body");
   if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
     var credentials=req.body;
