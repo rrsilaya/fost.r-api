@@ -67,9 +67,9 @@ $ npm install && npm start
   created_at | datetime                              | NO |     | NULL    |                      
   updated_at | datetime                              | NO |     | NULL    |
   uuid       | varchar(36)                           | NO | PRI | NULL    |
-  url        | varchar(255)                          | NO |     | NULL    |
-  width      | varchar(36)                           | NO |     | NULL    | 
-  height     | varchar(36)                           | NO |     | NULL    |                        
+  url        | varchar(255)                          | YES|     | NULL    |
+  width      | varchar(36)                           | YES|     | NULL    | 
+  height     | varchar(36)                           | YES|     | NULL    |                        
 
 #### pets_of_shelters
   Field      | Type                                  |Null| Key | Default | Extra                
@@ -84,9 +84,9 @@ $ npm install && npm start
   created_at | datetime                              | NO |     | NULL    |                      
   updated_at | datetime                              | NO |     | NULL    |                      
   uuid       | varchar(36)                           | NO | PRI | NULL    |
-  url        | varchar(255)                          | NO |     | NULL    |
-  width      | varchar(36)                           | NO |     | NULL    | 
-  height     | varchar(36)                           | NO |     | NULL    |
+  url        | varchar(255)                          | YES|     | NULL    |
+  width      | varchar(36)                           | YES|     | NULL    | 
+  height     | varchar(36)                           | YES|     | NULL    |
 
 ### posts
 
