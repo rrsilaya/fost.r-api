@@ -33,6 +33,23 @@ router.get('/viewUsers', function(req, res){
     });
 });
 
+/*view basic info */
+router.get('/viewMyInfo',function(req,res){
+    if(req.session.accountType == 'shelter'){
+        controller.viewUserInfo(req.session.body.Username,function(err,results){
+            if (err) return res.status(500).json(err);  // server error
+            res.json(results); // returns accounts of users
+        });
+
+    }else if(req.session.accountType == 'user'){
+        controller.viewShelterInfo(req.session.body.Username,function(err,results){
+            if (err) return res.status(500).json(err);  // server error
+            res.json(results); // returns accounts of users
+        })
+    }
+
+
+});
 /* update certain info of accounts (only if logged in) */
 router.put('/updateShelterInfo', function(req, res){
     if (req.session.body){

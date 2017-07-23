@@ -10,6 +10,7 @@ var login = require('./entities/login/login_routes');
 var pets = require('./entities/pets/pets_routes');
 var community = require('./entities/community/community_routes');
 var rescue = require('./entities/rescue/rescue_routes');
+var account = require('./entities/accounts/accounts_routes');
 
 router.use(validator());
 /* for express-session */
@@ -32,6 +33,7 @@ router.use('/login', login);
 router.use('/pets', pets);
 router.use('/community',community);
 router.use('/rescue',rescue);
+router.use('/MyProfile',account);
 
 router.get('/', function(req, res) {
   res.json({ message: 'to access api: localhost:3000/api/<route>' });   
