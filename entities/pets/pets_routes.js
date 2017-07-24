@@ -31,10 +31,12 @@ router.get('/viewAllPets', function(req, res){
         if (err) return res.status(500).json(err);  // server error
         res.json(pets); // returns pets
     });
-    }else console.log('some error');
+    }
 });
 
-/* returns pets of <name> */
+/*  returns pets of <name> 
+    ideally used during development
+*/
 router.get('/:owner/viewShelterPets', function(req, res){
     var owner = req.params.owner; 
     controller.viewShelterPetsOf(owner, function(err, pets){
@@ -51,12 +53,14 @@ router.get('/:owner/viewUserPets', function(req, res){
     }); 
 });
 
-/* deletes all pets of <name> */
+/*  deletes all pets of <name> 
+    ideally used during development
+*/
 router.delete('/:owner/deleteAllUserPets', function(req, res){
     var owner = req.params.owner;
     controller.deleteAllUserPets(owner, function(err, results){
         if (err) return res.status(500).json(err);  // server error
-        if (!results) return res.status(500).json({message: 'unable to delete?'});
+        if (!results) return res.status(500);
         res.status(204).json(null);
     });
 });
@@ -65,16 +69,17 @@ router.delete('/:owner/deleteAllShelterPets', function(req, res){
     var owner = req.params.owner;
     controller.deleteAllShelterPets(owner, function(err, results){
         if (err) return res.status(500).json(err);  // server error
-        if (!results) return res.status(500).json({message: 'unable to delete?'});
+        if (!results) return res.status(500);
         res.status(204).json(null);
     });
 });
 
 /* add pets to database (only if logged in) */
-router.post('/addShelterPet', function(req, res){
-        var owner = req.session.body.Username;
-        var uuid = shortid.generate();
-        var today = new Date();
+router.post('/addPet', function(req, res){
+    var owner = req.session.body.Username;
+    var uuid = shortid.generate();
+    var today = new Date();
+    if(req.session.body.accountType === 'shelter'){
         var petInfo = {
             "name": req.body.name,
             "kind": req.body.kind,
@@ -125,13 +130,7 @@ router.post('/addShelterPet', function(req, res){
                 res.status(201).json(results); // returns info of newly added pet
             });
         }
-});
-
-router.post('/addUserPet', function(req, res){
-        var owner = req.session.body.Username;
-        var uuid = shortid.generate();
-        var today = new Date();
-        console.log(req.body.name);
+    }else if (req.session.body.accountType === 'user'){
         var petInfo = {
             "name": req.body.name,
             "kind": req.body.kind,
@@ -143,7 +142,6 @@ router.post('/addUserPet', function(req, res){
             "uuid": uuid,
             "user_Username": owner
         }
-        console.log(req.files);
         if (typeof(req.files) !== 'undefined'){
             var petDP = req.files.photo;
             var name = petInfo.uuid + '-dp-' + petDP.name;
@@ -183,7 +181,10 @@ router.post('/addUserPet', function(req, res){
                 res.status(201).json(results); // returns info of newly added pet
             });
         }
+    }    
+        
 });
+
 
 /* returns specific pet of logged in user/shelter */ 
 router.get('/:pet_uuid', function(req, res){
@@ -231,7 +232,7 @@ router.delete('/:pet_uuid', function(req, res){
         var Username = req.session.body.Username;
         controller.deleteUserPet(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            if (!results) return res.status(500).json({message: 'unable to delete?'});
+            if (!results) return res.status(500);
             res.status(204).json(null);
         }); 
     }else if(req.session.body.accountType === 'shelter'){
@@ -239,7 +240,7 @@ router.delete('/:pet_uuid', function(req, res){
         var Username = req.session.body.Username;
         controller.deleteShelterPet(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            if (!results) return res.status(500).json({message: 'unable to delete?'});
+            if (!results) return res.status(500);
             res.status(204).json(null);
         }); 
     }    
