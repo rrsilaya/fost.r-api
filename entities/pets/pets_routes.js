@@ -77,7 +77,7 @@ router.delete('/:owner/deleteAllShelterPets', function(req, res){
 });
 
 /* add pets to database (only if logged in) */
-router.post('/addPet', function(req, res){
+router.post('/myPets', function(req, res){
     var owner = req.session.body.Username;
     var uuid = shortid.generate();
     var today = new Date();
@@ -186,6 +186,39 @@ router.post('/addPet', function(req, res){
     }    
 });
 
+router.get('/myPets', function(req, res){
+    var Username = req.session.body.Username;    
+    if(req.session.body.accountType === 'user'){
+        controller.viewUserPetsOf(Username, function(err, results){
+            if (err) return res.status(500).json(err);
+            if (!results) return res.status(500);
+            res.status(200).json(results);
+        });
+    }else if(req.session.body.accountType === 'shelter'){
+        controller.viewShelterPetsOf(Username, function(err, results){
+            if (err) return res.status(500).json(err);
+            if (!results) return res.status(500);
+            res.status(200).json(results);
+        });
+    }
+});
+
+router.delete('/myPets', function(req, res){
+    var Username = req.session.body.Username;
+    if(req.session.body.accountType === 'user'){
+        controller.deleteAllUserPets(Username, function(err, results){
+            if (err) return res.status(500).json(err);
+            if (!results) return res.status(500);
+            res.status(204).end();
+        });
+    }else if(req.session.body.accountType === 'shelter'){
+        controller.deleteAllShelterPets(Username, function(err, results){
+            if (err) return res.status(500).json(err);
+            if (!results) return res.status(500);
+            res.status(204).end();
+        });
+    }
+});
 
 /* returns specific pet of logged in user/shelter */ 
 router.get('/:pet_uuid', function(req, res){
@@ -204,7 +237,6 @@ router.get('/:pet_uuid', function(req, res){
             res.json(results); // returns results
         }); 
     }    
-        
 });
 
 /* update certain info of a pet (only if logged in && pet exists) */

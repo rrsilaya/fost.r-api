@@ -16,10 +16,6 @@ router.use(function(req, res, next) {
     next();
 });
 
-router.get('/', function(req, res, next){
-    res.json({message:'get /api/accounts'});
-}); 
-
 /*  view all accounts (users or shelters) 
     ideally only used during development
 */
@@ -39,7 +35,7 @@ router.get('/viewUsers', function(req, res){
 
 
 /*view basic info */
-router.get('/viewMyInfo',function(req,res){
+router.get('/MyAccount',function(req,res){
     var Username = req.session.body.Username;
     if(req.session.accountType == 'user'){
         controller.viewUserInfo(Username, function(err,results){
@@ -56,7 +52,7 @@ router.get('/viewMyInfo',function(req,res){
 });
 
 /* update certain info of accounts (only if logged in) */
-router.put('/updateInfo', function(req, res){
+router.put('/MyAccount', function(req, res){
     var Username = req.session.body.Username;
     var changes = req.body;
     if(req.session.accountType == 'user'){
@@ -73,19 +69,19 @@ router.put('/updateInfo', function(req, res){
 });
 
 /* deletion of accounts (only if logged in) */
-router.delete('/deleteAccount', function(req, res){
+router.delete('/MyAccount', function(req, res){
     var Username = req.session.body.Username;
     if(req.session.accountType == 'user'){
         controller.deleteUserAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            if (!results) return res.status(500);
-            res.status(204).json(null);
+            if (!results) return res.status(500); // unable to delete
+            res.status(204).json(null); // call logout after
         }); 
     }else if(req.session.accountType == 'shelter'){
         controller.deleteShelterAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            if (!results) return res.status(500);
-            res.status(204).json(null);
+            if (!results) return res.status(500); //unable to delete
+            res.status(204).json(null); // call logout after
         }); 
     }
 });

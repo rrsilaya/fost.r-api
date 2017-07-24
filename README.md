@@ -134,22 +134,22 @@ fost.r aims to raise awareness about the animals that are not able to have a hom
 | `/signup/user`                      | Redirects to `/feed` if logged in                                     |
 | `/signup/shelter`                   | Redirects to `/feed` if logged in                                     |
 | `/feed `                            | Displays message (temp)                                               |
-| `/accounts/viewShelters`            | View all shelter accounts                                             |
-| `/accounts/viewUsers`               | View all user accounts                                                |
-| `/accounts/updateShelterInfo`       | Update info (shelter)                                                 |
-| `/accounts/updateUserInfo`          | Update info (user)                                                    |
-| `/accounts/deleteShelterAccount`    | Delete account (shelter)                                              |
-| `/accounts/deleteUserAccount`       | Delete account (user)                                                 |
-| `/pets/viewAllPets `            | View pets owned by either users or shelters(depending on the accountType logged in)|
-| `/pets/:owner/viewShelterPets`      | View pets of owner                                                    |
-| `/pets/:owner/viewUserPets`         | View pets of owner                                                    |
-| `/pets/:owner/deleteAllUserPets`    | Delete all pets of a given user                                       |
-| `/pets/:owner/deleteAllShelter`     | Delete all pets of a given shelter                                    |
-| `/pets/addPet [POST]`               | Add a pet to db (for shelters)                                        |
+| `/accounts/viewShelters [GET]`      | View all shelter accounts                                             |
+| `/accounts/viewUsers [GET]`         | View all user accounts                                                |
+| `/accounts/MyAccount [GET]`         | View own info                                                         |
+| `/accounts/MyAccount [PUT]`         | Update own info                                                       |
+| `/accounts/MyAccount [DELETE]`      | Delete own account                                                    |
+| `/pets/viewAllPets [GET]`            | View pets owned by either users or shelters(depending on the accountType logged in)|
+| `/pets/:owner/viewShelterPets [GET]`      | View pets of owner                                                    |
+| `/pets/:owner/viewUserPets [GET]`         | View pets of owner                                                    |
+| `/pets/:owner/deleteAllUserPets [DELETE]`    | Delete all pets of a given user                                       |
+| `/pets/:owner/deleteAllShelter [DELETE]`     | Delete all pets of a given shelter                                    |
+| `/pets/myPets [POST]`               | Add a pet to db (for shelters)                                        |
+| `/pets/myPets [GET]                 | View own pets                                                         |
+| `/pets/myPets [DELETE]              | Delete all owned pets                                                 |
 | `/pets/:pet_uuid [GET]`             | View specific pet                                                     | 
 | `/pets/:pet_uuid [PUT]`             | Update info of a pet  (could be used for ADOPT and DATES, set status to ADOPT, DATES, OR BOTH)|
-| `/pets/:pet_uuid [DELETE]`     | Delete a single pet given the pet_uuid (for users)                    |
-| `/pets/:pet_uuid/deleteShelterPet`  | Delete a single pet given the pet_uuid (for shelters)                 |
+| `/pets/:pet_uuid [DELETE]`          | Delete a single pet given the pet_uuid                                |
 | `/community/ `                      | Displays all posts sorted by date                                     |
 | `/community/:post_uuid/viewPost`    | View a post given its uuid                                            |  
 | `/community/:user/viewPosts`        | View all posts of a user                                              |
