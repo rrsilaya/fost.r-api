@@ -28,8 +28,8 @@ router.use('/login', login);
 
 router.use(function(req, res, next){
   if (req.session.body){
+    var isAuth = true;
     next();
-    var isAuth = true; 
   }else res.status(403).send(null);
 });
 
@@ -44,7 +44,8 @@ router.get('/', function(req, res) {
 
 
 router.get('/feed',function(req,res,next){
-  res.status(200);
+  console.log('Feed');
+  res.status(200).end();
 });
 
 router.get('/logout',function(req,res,next){
@@ -52,9 +53,6 @@ router.get('/logout',function(req,res,next){
   prompt="User logged out"
   res.status(200).send(null);
   console.log(prompt);
-});
-router.get('*', function(req, res, next) {
-  res.redirect('/api/');
 });
 
 module.exports=router;

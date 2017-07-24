@@ -32,7 +32,7 @@ router.get('/:rescue_uuid/viewRescueRequest', function (req, res, next){
   }
 });
 
-router.get('/:rescue_uuid/viewMyRequest', function (req, res, next){
+router.get('/:rescue_uuid', function (req, res, next){
     var rescue_uuid = req.params.rescue_uuid;
     controller.viewMyRequest(rescue_uuid,req.session.body.Username,function (err, request){
       if (err) return res.status(500).json(err); // server error
@@ -40,6 +40,19 @@ router.get('/:rescue_uuid/viewMyRequest', function (req, res, next){
     })
 });
 
+//delete a request 
+router.delete('/:rescue_uuid',function(req,res,next){
+  if(req.session.body.accountType === 'user'){
+    var rescue_uuid= req.params.rescue_uuid;
+    controller.deleteRequest(rescue_uuid,req.session.body.Username,function(err,results){
+      if (err) return res.status(500).json(err);  // server error
+      else if(results.affectedRows==0){
+        return res.status(500);
+        console.log('unable to delete request');
+      }else res.json(results); // returns request
+    });
+  }
+});
 
 //view all request a user has submitted 
 router.get('/viewMyRequests',function(req,res,next){
@@ -61,19 +74,6 @@ router.get('/:user/viewAllRequests',function(req,res,next){
     });
   }
 });
-//delete a request 
-router.delete('/:rescue_uuid/deleteRequest',function(req,res,next){
-  if(req.session.body.accountType === 'user'){
-    var rescue_uuid= req.params.rescue_uuid;
-    controller.deleteRequest(rescue_uuid,req.session.body.Username,function(err,results){
-      if (err) return res.status(500).json(err);  // server error
-      else if(results.affectedRows==0){
-        return res.status(500);
-        console.log('unable to delete request');
-      }else res.json(results); // returns request
-    });
-  }
-});
 
 //delete all my requests 
 router.delete('/deleteAllMyRequests',function(req,res,next){
@@ -87,7 +87,6 @@ router.delete('/deleteAllMyRequests',function(req,res,next){
     });
   }
 });
-
 
 //add a rescue request to db
 router.post('/submit_a_rescue_request',function(req,res,next){
