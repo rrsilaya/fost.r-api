@@ -153,14 +153,17 @@ fost.r aims to raise awareness about the animals that are not able to have a hom
 | `/pets/:pet_uuid [PUT]`             | Update info of a pet  (could be used for ADOPT and DATES, set status to ADOPT, DATES, OR BOTH)|
 | `/pets/:pet_uuid [DELETE]`          | Delete a single pet given the pet_uuid                                |
 | `/community/ `                      | Displays all posts sorted by date                                     |
-| `/community/:post_uuid/viewPost`    | View a post given its uuid                                            |  
-| `/community/:user/viewPosts`        | View all posts of a user                                              |
-| `/community/:post_uuid/deletePost ` | Delete a post given its uuid (iff post is posted by the user itself)  |
-| `/community/deleteAllMyPosts`       | Delete all posts of user                                              |
 | `/community/addPost`                | Add post                                                              |
-| `/community/:post_uuid/addComment`   | Add a comment                                                         |
+| `/community/:post_uuid [GET]`       | View a post given its uuid                                            |
+| `/community/:post_uuid [PUT]`       | Vote a post given its uuid                                            |  
+| `/community/:post_uuid [DELETE] `   | Delete a post given its uuid (iff post is posted by the user itself)  |
+| `/community/:post_uuid [POST]`      | Add a comment                                                         |
+| `/community/:user/viewPosts [GET]`  | View all posts of a user                                              |
+| `/community/deleteAllMyPosts [DELETE]`| Delete all posts of user                                            |
 | `/community/:post_uuid/viewAllComments`| View all comments in the post                                      |
-| `/community/:post_uuid/:comment_uuid/deleteComment` | Delete a comment                                                |
+| `/community/:post_uuid/:comment_uuid [GET]` | View a comment                                           |
+| `/community/:post_uuid/:comment_uuid [DELETE]` | Delete a comment                                           |
+| `/community/:post_uuid/:comment_uuid [PUT]` | Vote a comment                                                |
 | `/rescue/`                          | View all requests                                                     |
 | `/rescue/viewMyRequests`            | View all submitted requests                                           |
 | `/rescue/:user/viewAllRequests`     | View all rescue requests from a user                                  |
