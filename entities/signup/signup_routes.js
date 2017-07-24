@@ -13,8 +13,8 @@ router.use(fileUpload());     // express-fileupload
 
 
 router.use(function(req, res, next){
-    if(!req.session.body)next(); // make sure we go to the next routes and don't stop here
-    else res.redirect('/api/feed');
+  console.log('signup routes getting request...');
+  next();
 });
 
 router.post('/shelter', function(req,res,next){

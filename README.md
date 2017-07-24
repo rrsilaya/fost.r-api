@@ -139,21 +139,16 @@ fost.r aims to raise awareness about the animals that are not able to have a hom
 | `/accounts/updateShelterInfo`       | Update info (shelter)                                                 |
 | `/accounts/updateUserInfo`          | Update info (user)                                                    |
 | `/accounts/deleteShelterAccount`    | Delete account (shelter)                                              |
-| `/accounts/deleteUserAccount`       | Delete account (user)                                                 |   
-| `/pets/`                            | Display message                                                       |
-| `/pets/viewShelterPets `            | View pets owned by the shelter                                        |
-| `/pets/viewUserPets`                | View pets owned by the user                                           |
+| `/accounts/deleteUserAccount`       | Delete account (user)                                                 |
+| `/pets/viewAllPets `            | View pets owned by either users or shelters(depending on the accountType logged in)|
 | `/pets/:owner/viewShelterPets`      | View pets of owner                                                    |
 | `/pets/:owner/viewUserPets`         | View pets of owner                                                    |
 | `/pets/:owner/deleteAllUserPets`    | Delete all pets of a given user                                       |
 | `/pets/:owner/deleteAllShelter`     | Delete all pets of a given shelter                                    |
-| `/pets/addShelterPet`               | Add a pet to db (for shelters)                                        |
-| `/pets/addUserPet`                  | Add a pet to db (for users)                                           |
-| `/pets/:pet_uuid/viewSpecificPetUser`| View a pet of user                                                   |
-| `/pets/:pet_uuid/viewSpecificPetShelter`| View a pet of shelter                                             |
-| `/pets/:pet_uuid/updateUserPets`    | Update info of a pet (for users)                                      |
-| `/pets/:pet_uuid/updateShelterPets` | Update info of a pet (for shelters; could be used for ADOPT and DATES, set status to ADOPT, DATES, OR BOTH)                                   |
-| `/pets/:pet_uuid/deleteUserPet`     | Delete a single pet given the pet_uuid (for users)                    |
+| `/pets/addPet [POST]`               | Add a pet to db (for shelters)                                        |
+| `/pets/:pet_uuid [GET]`             | View specific pet                                                     | 
+| `/pets/:pet_uuid [PUT]`             | Update info of a pet  (could be used for ADOPT and DATES, set status to ADOPT, DATES, OR BOTH)|
+| `/pets/:pet_uuid [DELETE]`     | Delete a single pet given the pet_uuid (for users)                    |
 | `/pets/:pet_uuid/deleteShelterPet`  | Delete a single pet given the pet_uuid (for shelters)                 |
 | `/community/ `                      | Displays all posts sorted by date                                     |
 | `/community/:post_uuid/viewPost`    | View a post given its uuid                                            |  

@@ -10,16 +10,18 @@ shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 
 var controller = require('./pets_controller');
 
-
 router.use(validator());      // express-validator
 router.use(fileUpload());     // express-fileupload
 
 
-router.get('/', function(req, res, next){
-    console.log(isAuth);
+router.use(function(req, res, next){
+    console.log('pets routes. getting requests..');
+    next();
 });
 
-/* views pets owned by all shelters or users */
+/*  views pets owned by all shelters or users 
+    ideally used during development
+*/
 router.get('/viewAllPets', function(req, res){
     if(req.session.body.accountType === 'user'){
         controller.viewAllUserPets(function(err, pets){
@@ -182,7 +184,6 @@ router.post('/addPet', function(req, res){
             });
         }
     }    
-        
 });
 
 
