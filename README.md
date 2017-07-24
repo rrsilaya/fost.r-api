@@ -11,8 +11,8 @@
 </h1>
 <h4 align="center">Raise the awareness on homeless animals because of neglect or abuse</h4>
 
-<details><summary><h3>Table of Contents</h3></summary>
-  <p>
+<details><summary><h3>Table of Contents</h3></summary><p>
+
     - [Installation](#installation)
     - [Routes](#routes)
     - [Tables](#tables)
@@ -25,8 +25,7 @@
       * `[rescue](#rescue)`
     - [Responses](#responses)
     - [Developers](#developers)
-  </p>
-</details>
+</p></details>
 
 ### Installation
 1. Install [NodeJS](https://nodejs.org/en/download/) and [MySQL](https://dev.mysql.com/downloads/installer/).
