@@ -44,7 +44,7 @@ router.get('/', function(req, res) {
 
 
 router.get('/feed',function(req,res,next){
-  res.json('This is the feed');
+  res.status(200);
 });
 
 router.get('/logout',function(req,res,next){

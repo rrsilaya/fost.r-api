@@ -97,6 +97,7 @@ connection.query('\
     `Posted_by` varchar(52) NOT NULL,\
     `post_title` varchar(255) NOT NULL,\
     `text_post` TEXT NOT NULL,\
+    `votes` int (5) NOT NULL,\
     `image_urlpath` varchar(255) UNIQUE  DEFAULT NULL ,\
     `post_uuid` varchar(36) UNIQUE PRIMARY KEY NOT NULL,\
     `created_at` datetime NOT NULL,\
@@ -109,6 +110,7 @@ connection.query('\
     `comment_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `commented_by` varchar(52) NOT NULL,\
     `comment_body` varchar(255) NOT NULL,\
+    `votes` int (5) NOT NULL,\
     `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
@@ -137,8 +139,6 @@ connection.query('\
     ON UPDATE CASCADE\
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
     );
-
-
 
 connection.end();
 

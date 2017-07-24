@@ -145,8 +145,8 @@ fost.r aims to raise awareness about the animals that are not able to have a hom
 | `/pets/:owner/deleteAllUserPets [DELETE]`    | Delete all pets of a given user                                       |
 | `/pets/:owner/deleteAllShelter [DELETE]`     | Delete all pets of a given shelter                                    |
 | `/pets/myPets [POST]`               | Add a pet to db (for shelters)                                        |
-| `/pets/myPets [GET]                 | View own pets                                                         |
-| `/pets/myPets [DELETE]              | Delete all owned pets                                                 |
+| `/pets/myPets [GET]`                | View own pets                                                         |
+| `/pets/myPets [DELETE]`             | Delete all owned pets                                                 |
 | `/pets/:pet_uuid [GET]`             | View specific pet                                                     | 
 | `/pets/:pet_uuid [PUT]`             | Update info of a pet  (could be used for ADOPT and DATES, set status to ADOPT, DATES, OR BOTH)|
 | `/pets/:pet_uuid [DELETE]`          | Delete a single pet given the pet_uuid                                |

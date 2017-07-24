@@ -8,7 +8,6 @@ module.exports.registerUser = function(newUser, callback){
         newUser.password = hash;
         // console.log('hashed password: ' + hash);
     connection.query('SELECT * FROM users where Username = ? OR email = ?', [newUser.Username, newUser.email], function(err, results, fields){
-        console.log('first querry!');
         if(results.length == 2){
             callback(null, 'TAKEN_BOTH_ERR');
         }else if(results.length == 1){
@@ -17,7 +16,6 @@ module.exports.registerUser = function(newUser, callback){
             else if(newUser.email == results[0].email) callback(null, 'TAKEN_EA');
         }else{
             connection.query('INSERT INTO users SET ?', newUser, function (err){
-                console.log('second query!');
                 console.log(err);
             if (err) callback(null, "QUERY_ERR");
             else callback(null, 'SIGNUP_SUCCESS');
