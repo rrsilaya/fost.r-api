@@ -11,9 +11,8 @@ var controller = require('./community_controller');
 router.use(validator());      // express-validator
 router.use(fileUpload());     // express-fileupload
 router.use(function(req, res, next) {
-    // do logging
-    if(req.session.body)next(); // make sure we go to the next routes and don't stop here
-    else res.status(403).send("Please log in or sign up first");   
+  console.log('getting request...');
+  next();
 });
 
 /************************* POSTS *******************************/
@@ -68,8 +67,8 @@ router.delete('/:post_uuid/deletePost',function(req,res,next){
     //delete post on db
     controller.deletePost(post_uuid,user,function(err,results){
       if (err) return res.status(500).json(err);  // server error
-      else if (results.affectedRows==0) return res.status(500).json({message: 'unable to delete post'});
-      else return res.status(200).json(results);
+      else if (results.affectedRows==0) return res.status(500);
+      else return res.status(204).end();
     });
 });
 
@@ -78,8 +77,8 @@ router.delete('/deleteAllMyPosts',function(req,res,next){
     var user=req.session.body.Username;
     controller.deleteAllPosts(user, function(err, results){
         if (err) return res.status(500).json(err);  // server error
-        else if (results.affectedRow==0) return res.status(500).json({message: 'unable to delete'});
-        else return res.status(200).end("All Your Posts were DELETED");    
+        else if (results.affectedRow==0) return res.status(500);
+        else return res.status(204).end();    
     });
 });
 
@@ -193,9 +192,10 @@ router.post('/:post_uuid/addComment',function(req,res,next){
       }
     });
 
-  }else res.status(401).json("Please log in or sign up first .");
-    
-    
+  }else{
+    res.status(403);
+    console.log('Login or signup first.');
+  }
 });
 
 /* view a comment (required : post_uuid && comment_uuid */
@@ -224,7 +224,7 @@ router.delete('/:post_uuid/:comment_uuid/deleteComment',function(req,res,next){
     var user=req.session.body.Username;
     controller.deleteComment(post_uuid,comment_uuid,user,function(err,results){
       if(err) return res.status(500).json(err);
-      else if(results.affectedRows==0) return res.status(500).json("unable to delete comment");
+      else if(results.affectedRows==0) return res.status(500);
       else res.json(results);
     });
 });
