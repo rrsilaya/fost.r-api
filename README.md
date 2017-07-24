@@ -1,7 +1,7 @@
 <h1 align="center">
   <img alt="fost.r" src="./assets/images/logo2-dblue.png" height="256px" />
   <br />
-  fost.r Client
+  fost.r API
   <br />
   <img src="https://img.shields.io/badge/status-development-yellow.svg" />
   <img src="https://img.shields.io/badge/node-v7.8.0-green.svg" />
@@ -11,21 +11,21 @@
 </h1>
 <h4 align="center">Raise the awareness on homeless animals because of neglect or abuse</h4>
 
-<details><summary><h3>Table of Contents</h3></summary><p>
-
-    - [Installation](#installation)
-    - [Routes](#routes)
-    - [Tables](#tables)
-      * `[users](#users)`
-      * `[shelters](#shelters)`
-      * `[pets_of_users](#pets_of_users)`
-      * `[pets_of_shelters](#pets_of_shelters)`
-      * `[posts](#posts)`
-      * `[comments_on_posts](#comments_on_posts)`
-      * `[rescue](#rescue)`
-    - [Responses](#responses)
-    - [Developers](#developers)
-</p></details>
+### Table of Contents
+- [Installation](#installation)
+- [Routes](#routes)
+- [Tables](#tables)
+  * [`users`](#users)
+  * [`shelters`](#shelters)
+  * [`pets_of_users`](#pets_of_users)
+  * [`pets_of_shelters`](#pets_of_shelters)
+  * [`posts`](#posts)
+  * [`comments_on_posts`](#comments_on_posts)
+  * [`rescue`](#rescue)
+- [Responses](#responses)
+- [Developers](#developers)
+  * [API](#api)
+  * [Client](#client)
 
 ### Installation
 1. Install [NodeJS](https://nodejs.org/en/download/) and [MySQL](https://dev.mysql.com/downloads/installer/).
@@ -191,10 +191,10 @@
   `sender_Username`   | varchar(52)  | NO   | MUL | NULL    |       |
 
 ### Developers
-##### Backend
+##### API
 * Evangelista, Erlen Mae
 * Somabes, Kia Mei
 
-##### Frontend
+##### Client
 * Gotis, Ciara Mae
 * Silaya, Ralph Lawrence
