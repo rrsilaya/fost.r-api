@@ -92,7 +92,8 @@ fost.r aims to raise awareness about the animals that are not able to have a hom
   --------------| ------------------------------------- | ---| --- | ------- | -------------------
   Posted_by     | varchar(52)                           | NO | MUL | NULL    |                      
   post_title    | varchar(255)                          | NO |     | NULL    |                      
-  text_post     | TEXT                                  | NO |     | NULL    |                      
+  text_post     | TEXT                                  | NO |     | NULL    |
+  votes         | int(5)                                | NO |     | NULL    |                      
   image_urlpath | varchar(255)                          | YES| UNI | NULL    |                      
   post_uuid     | varchar(36)                           | NO | PRI | NULL    |                      
   created_at    | datetime                              | NO |     | NULL    |                      
@@ -104,6 +105,7 @@ fost.r aims to raise awareness about the animals that are not able to have a hom
   comment_uuid  | varchar(36)  | NO   | PRI | NULL    |       |
   commented_by  | varchar(52)  | NO   |     | NULL    |       |
   comment_body  | varchar(255) | NO   |     | NULL    |       |
+  votes         | int(5)                                | NO |     | NULL    |
   image_urlpath | varchar(255) | YES  | UNI | NULL    |       |
   created_at    | datetime     | NO   |     | NULL    |       |
   updated_at    | datetime     | NO   |     | NULL    |       |
