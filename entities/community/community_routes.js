@@ -25,7 +25,7 @@ router.use(function(req, res, next) {
 router.get('/', function(req,res,next){
     controller.viewAllPosts(function(err,posts){
       if (err) return res.status(500).json(err);  // server error
-      else res.json(posts); // returns all posts
+      else res.status(200).json(posts); // returns all posts
     });  
 });
 
@@ -125,9 +125,9 @@ router.post('/addPost',function(req,res,next){
       "Posted_by": req.session.body.Username,
       "post_title": req.body.post_title,
       "text_post": req.body.text_post,
-      "votes": 0,
       "post_uuid": post_uuid,
       "image_urlpath":image_urlpath,
+      "votes":0,
       "created_at": today,
       "updated_at":today
     }
@@ -184,8 +184,8 @@ router.post('/:post_uuid', function(req,res,next){
       "comment_uuid":comment_uuid,
       "commented_by": user,
       "comment_body" :comment_body,
-      "votes": 0,
       "image_urlpath":image_urlpath,
+      "votes":0,
       "created_at": today,
       "updated_at":today,
       "post_uuid":post_uuid
@@ -233,7 +233,7 @@ router.get('/:post_uuid/:comment_uuid',function(req,res,next){
     var comment_uuid=req.params.uuid;
     controller.viewComment(post_uuid,comment_uuid,function(err,comment){
       if(err) return res.status(500).json(err);  // server error
-      else res.json(comment);
+      else res.status(200).json(comment);
     });
 });
 
@@ -242,12 +242,10 @@ router.put('/:post_uuid/:comment_uuid', function(req, res){
   // will only be used for votes
   var post_uuid = req.params.post_uuid;
   var comment_uuid = req.params.comment_uuid;
-  controller.votePost(post_uuid, comment_uuid, function(err, post){
+  controller.voteComment(post_uuid, comment_uuid, function(err, results){
     if(err) return res.status(500).json(err);
-    else if(post.affectedRows!==0){
-            
-      res.status(201).json(post);
-    }
+
+    res.status(201).json(results);
   });
 });
 
@@ -259,7 +257,7 @@ router.delete('/:post_uuid/:comment_uuid',function(req,res,next){
     controller.deleteComment(post_uuid,comment_uuid,user,function(err,results){
       if(err) return res.status(500).json(err);
       else if(results.affectedRows==0) return res.status(500);
-      else res.json(results);
+      else res.status(204).end();
     });
 });
 

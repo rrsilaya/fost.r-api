@@ -16,7 +16,7 @@ router.get('/',function(req,res,next){
   if(req.session.body.accountType === 'shelter'){
     controller.viewAllRequests(function(err,requests){
       if (err) return res.status(500).json(err);  // server error
-      else res.json(requests); // returns all posts
+      else res.status(200).json(requests); // returns all posts
     });
   }else if(req.session.body.accountType === 'user') res.redirect('/viewMyRequests');
 });
@@ -27,7 +27,7 @@ router.get('/:rescue_uuid/viewRescueRequest', function (req, res, next){
     var rescue_uuid = req.params.rescue_uuid;
     controller.viewRequest(rescue_uuid, function (err, request){
       if (err) return res.status(500).json(err); // server error
-      res.json(request); // returns specific post
+      res.status(200).json(request); // returns specific post
     })
   }
 });
@@ -36,7 +36,7 @@ router.get('/:rescue_uuid', function (req, res, next){
     var rescue_uuid = req.params.rescue_uuid;
     controller.viewMyRequest(rescue_uuid,req.session.body.Username,function (err, request){
       if (err) return res.status(500).json(err); // server error
-      res.json(request); // returns specific post
+      res.status(200).json(request); // returns specific post
     })
 });
 
@@ -49,7 +49,7 @@ router.delete('/:rescue_uuid',function(req,res,next){
       else if(results.affectedRows==0){
         return res.status(500);
         console.log('unable to delete request');
-      }else res.json(results); // returns request
+      }else res.status(204).end(); // deleted request
     });
   }
 });
@@ -59,7 +59,7 @@ router.get('/viewMyRequests',function(req,res,next){
   if(req.session.body.accountType === 'user'){
     controller.viewUserRequests(req.session.body.Username,function(err,requests){
       if (err) return res.status(500).json(err);  // server error
-      else res.json(requests); // returns request
+      else res.status(200).json(requests); // returns request
     });
   }
 });
@@ -70,7 +70,7 @@ router.get('/:user/viewAllRequests',function(req,res,next){
     var user = req.params.user;
     controller.viewUserRequests(user,function(err,requests){
       if (err) return res.status(500).json(err);  // server error
-      else res.json(requests); // returns request
+      else res.status(200).json(requests); // returns request
     });
   }
 });
@@ -83,7 +83,7 @@ router.delete('/deleteAllMyRequests',function(req,res,next){
       else if(results.affectedRows==0){
         return res.status(500);
         console.log('unable to delete all requests');
-      }else res.json(results); // returns request
+      }else res.status(204).end(); //deleted all requests
     });
   }
 });
@@ -142,8 +142,8 @@ router.post('/submit_a_rescue_request',function(req,res,next){
       }
       controller.addRescue(newRescue,function(err,results){
         if(err) res.status(500).send(err);
-        else if (results.affectedRows==1) res.json(newRescue);
-        else res.status(403).send("unable to submit request");
+        else if (results.affectedRows==1) res.status(201).json(newRescue);
+        else res.status(400);
       });
       
     });
