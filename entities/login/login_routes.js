@@ -13,9 +13,7 @@ router.use(function(req, res, next){
 router.post('/user',function(req,res,next) {
   if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
     var credentials=req.body;
-    console.log('here');
     controller.loginUser(credentials,function(err,isMatch){
-      console.log('here 2');
       if(err){
         console.log(err);
         res.status(500).send(err);

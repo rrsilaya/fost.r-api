@@ -38,7 +38,7 @@ router.post('/shelter', function(req,res,next){
     // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 
 
     var errors = req.validationErrors();
-    if(errors || !req.files.file) res.status(400).json({message: 'please enter correct inputs in fields'});
+    if(errors || !req.files.file) res.status(400).json(errors);
     else{
       const file=req.files.file;    //use later for file-upload
       var name = req.body.Username + '-proof-' + file.name;

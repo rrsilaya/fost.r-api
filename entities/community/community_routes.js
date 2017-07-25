@@ -24,7 +24,7 @@ router.use(function(req, res, next) {
 router.get('/', function(req,res,next){
     controller.viewAllPosts(function(err,posts){
       if (err) return res.status(500).json(err);  // server error
-      else res.json(posts); // returns all posts
+      else res.status(200).json(posts); // returns all posts
     });  
 });
 
@@ -92,12 +92,8 @@ router.delete('/deleteAllMyPosts',function(req,res,next){
 
 
 router.post('/addPost',function(req,res,next){
-    console.log(req.body);
     var post_uuid=shortid.generate();
     var today=new Date();
-    var image_urlpath;
-
-    console.log(req.files);
     if(typeof req.files!=='undefined'){
       if(req.files.photo){
         var image=req.files.photo;
@@ -117,16 +113,16 @@ router.post('/addPost',function(req,res,next){
         image_urlpath = null;
       }
     }else{
-      image_urlpath = null;
+      var image_urlpath = null;
       console.log('file is undefined');
     }
     var newPost={
       "Posted_by": req.session.body.Username,
       "post_title": req.body.post_title,
       "text_post": req.body.text_post,
-      "votes": 0,
       "post_uuid": post_uuid,
       "image_urlpath":image_urlpath,
+      "votes":0,
       "created_at": today,
       "updated_at":today
     }
@@ -183,8 +179,8 @@ router.post('/:post_uuid', function(req,res,next){
       "comment_uuid":comment_uuid,
       "commented_by": user,
       "comment_body" :comment_body,
-      "votes": 0,
       "image_urlpath":image_urlpath,
+      "votes":0,
       "created_at": today,
       "updated_at":today,
       "post_uuid":post_uuid
@@ -212,7 +208,7 @@ router.get('/:post_uuid/:comment_uuid',function(req,res,next){
     var comment_uuid=req.params.uuid;
     controller.viewComment(post_uuid,comment_uuid,function(err,comment){
       if(err) return res.status(500).json(err);  // server error
-      else res.json(comment);
+      else res.status(200).json(comment);
     });
 });
 
@@ -221,9 +217,9 @@ router.put('/:post_uuid/:comment_uuid', function(req, res){
   // will only be used for votes
   var post_uuid = req.params.post_uuid;
   var comment_uuid = req.params.comment_uuid;
-  controller.votePost(post_uuid, comment_uuid, function(err, post){
+  controller.voteComment(post_uuid, comment_uuid, function(err, results){
     if(err) return res.status(500).json(err);
-    res.status(201).json(post);
+    res.status(201).json(results);
   });
 });
 
@@ -235,7 +231,7 @@ router.delete('/:post_uuid/:comment_uuid',function(req,res,next){
     controller.deleteComment(post_uuid,comment_uuid,user,function(err,results){
       if(err) return res.status(500).json(err);
       else if(results.affectedRows==0) return res.status(500);
-      else res.json(results);
+      else res.status(204).end();
     });
 });
 

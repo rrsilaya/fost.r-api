@@ -37,13 +37,13 @@ router.get('/viewUsers', function(req, res){
 /*view basic info */
 router.get('/MyAccount',function(req,res){
     var Username = req.session.body.Username;
-    if(req.session.accountType == 'user'){
+    if(req.session.body.accountType == 'user'){
         controller.viewUserInfo(Username, function(err,results){
             if (err) return res.status(500).json(err);  // server error
             res.status(200).json(results); // returns accounts of users
         });
 
-    }else if(req.session.accountType == 'shelter'){
+    }else if(req.session.body.accountType == 'shelter'){
         controller.viewShelterInfo(Username, function(err,results){
             if (err) return res.status(500).json(err);  // server error
             res.status(200).json(results); // returns accounts of users
@@ -55,12 +55,12 @@ router.get('/MyAccount',function(req,res){
 router.put('/MyAccount', function(req, res){
     var Username = req.session.body.Username;
     var changes = req.body;
-    if(req.session.accountType == 'user'){
+    if(req.session.body.accountType == 'user'){
         controller.updateUserInfo(Username, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.status(201).json(results); // returns pets of specified user
         }); 
-    }else if(req.session.accountType == 'shelter'){
+    }else if(req.session.body.accountType == 'shelter'){
         controller.updateShelterInfo(Username, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.status(201).json(results); // returns results
@@ -71,17 +71,17 @@ router.put('/MyAccount', function(req, res){
 /* deletion of accounts (only if logged in) */
 router.delete('/MyAccount', function(req, res){
     var Username = req.session.body.Username;
-    if(req.session.accountType == 'user'){
+    if(req.session.body.accountType == 'user'){
         controller.deleteUserAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500); // unable to delete
-            res.status(204).json(null); // call logout after
+            res.status(204).end(); // call logout after
         }); 
-    }else if(req.session.accountType == 'shelter'){
+    }else if(req.session.body.accountType == 'shelter'){
         controller.deleteShelterAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500); //unable to delete
-            res.status(204).json(null); // call logout after
+            res.status(204).end(); // call logout after
         }); 
     }
 });

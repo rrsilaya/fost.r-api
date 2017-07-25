@@ -63,7 +63,7 @@ router.delete('/:owner/deleteAllUserPets', function(req, res){
     controller.deleteAllUserPets(owner, function(err, results){
         if (err) return res.status(500).json(err);  // server error
         if (!results) return res.status(500);
-        res.status(204).json(null);
+        res.status(204).end();
     });
 });
 
@@ -72,7 +72,7 @@ router.delete('/:owner/deleteAllShelterPets', function(req, res){
     controller.deleteAllShelterPets(owner, function(err, results){
         if (err) return res.status(500).json(err);  // server error
         if (!results) return res.status(500);
-        res.status(204).json(null);
+        res.status(204).end();
     });
 });
 
@@ -227,14 +227,14 @@ router.get('/:pet_uuid', function(req, res){
         var Username = req.session.body.Username;
         controller.viewSpecificPetUser(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns results
+            res.status(200).json(results); // returns results
         }); 
     }else if(req.session.body.accountType === 'shelter'){
         var pet_uuid = req.params.pet_uuid;
         var Username = req.session.body.Username;
         controller.viewSpecificPetShelter(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns results
+            res.status(200).json(results); // returns results
         }); 
     }    
 });
@@ -246,14 +246,14 @@ router.put('/:pet_uuid', function(req, res){
         var changes = req.body;
         controller.updateUserPet(pet_uuid, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns pets of specified user
+            res.status(201).json(results); // returns pets of specified user
         }); 
     }else if(req.session.body.accountType === 'shelter'){    
         var pet_uuid = req.params.pet_uuid; 
         var changes = req.body;
         controller.updateShelterPet(pet_uuid, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns results
+            res.status(201).json(results); // returns results
         });
     } 
 });
@@ -266,7 +266,7 @@ router.delete('/:pet_uuid', function(req, res){
         controller.deleteUserPet(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500);
-            res.status(204).json(null);
+            res.status(204).end();
         }); 
     }else if(req.session.body.accountType === 'shelter'){
         var pet_uuid = req.params.pet_uuid;
@@ -274,7 +274,7 @@ router.delete('/:pet_uuid', function(req, res){
         controller.deleteShelterPet(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500);
-            res.status(204).json(null);
+            res.status(204).end();
         }); 
     }    
 });
