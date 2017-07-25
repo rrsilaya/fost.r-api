@@ -192,7 +192,7 @@ Please take note of the capitalization. * is placed if it is **required**.
   `kind`   	   | enum("DOG", "CAT", "BIRD", "OTHERS")  | NO |     | NULL    |                      
   `breed`      | varchar(36)                           | NO |     | NULL    |                      
   `sex`        | enum("MALE", "FEMALE")                | NO |     | NULL    |                      
-  `birthday`   | date                                  | NO |     | NULL    |                      
+  `birthday`   | varchar(36)                           | NO |     | NULL    |                      
   `user_Username`   | varchar(36)                           | NO | MUL | NULL    |                      
   `created_at` | datetime                              | NO |     | NULL    |                      
   `updated_at` | datetime                              | NO |     | NULL    |
@@ -208,7 +208,7 @@ Please take note of the capitalization. * is placed if it is **required**.
   `kind`   	   | enum("DOG", "CAT", "BIRD", "OTHERS")  | NO |     | NULL    |                      
   `breed`      | varchar(36)                           | NO |     | NULL    |                      
   `sex`        | enum("MALE", "FEMALE")                | NO |     | NULL    |                      
-  `birthday`   | date                                  | NO |     | NULL    |
+  `birthday`   | varchar(36)                           | NO |     | NULL    |
   `status`     | enum("DATES", "ADOPT", "BOTH")        | YES|     | NULL    |                      
   `shelter_Username`   | varchar(52)                           | NO | MUL | NULL    |                      
   `created_at` | datetime                              | NO |     | NULL    |                      
