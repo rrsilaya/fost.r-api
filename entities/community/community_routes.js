@@ -122,6 +122,7 @@ router.post('/addPost',function(req,res,next){
       "text_post": req.body.text_post,
       "post_uuid": post_uuid,
       "image_urlpath":image_urlpath,
+      "votes":0,
       "created_at": today,
       "updated_at":today
     }
@@ -179,6 +180,7 @@ router.post('/:post_uuid', function(req,res,next){
       "commented_by": user,
       "comment_body" :comment_body,
       "image_urlpath":image_urlpath,
+      "votes":0,
       "created_at": today,
       "updated_at":today,
       "post_uuid":post_uuid
