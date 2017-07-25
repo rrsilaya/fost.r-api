@@ -196,8 +196,11 @@ router.post('/:post_uuid', function(req,res,next){
       else if(results.affectedRows!==0){
         //res.status(201).send(newComment); // returns info of newly added post
         console.log("Comment Added!!!!");
-        //add to notifications
+
+        /*notify the user */
+        //define query
         var query = 'SELECT * FROM posts WHERE post_uuid = ?';
+        //returns Username of user who owns the post
         notify.getUser(query,post_uuid,function(err,results){
           if(err) res.status(500).send(err);//server error
           else if(results.affectedRows!==0){
@@ -208,6 +211,8 @@ router.post('/:post_uuid', function(req,res,next){
               "date_created" : new Date()
             }
             console.log(newNotif);
+            //add to notifications table
+            //when 'notif_for' is logged in,he/she will received this notification
             notify.addNotif(newNotif,function(err,results){
               if(err) res.status(500).send(err);//server error
               else if(results.affectedRows!==0) res.status(200).send(newComment);

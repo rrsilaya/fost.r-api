@@ -17,7 +17,8 @@ module.exports.viewNotif=function(user,callback){
     else return callback(null,results);
   });
 }
-//get username for notif_for (community)
+//get the Username or user details depending on the given query
+//can be used for selecting username from different tables
 module.exports.getUser=function(query,uuid,callback){
   connection.query(query ,uuid,function(err, results){
     if (err) return callback(err);   // some error with query
