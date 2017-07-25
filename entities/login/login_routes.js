@@ -18,7 +18,7 @@ router.get('/user', function(req, res) {
   res.json({message: 'get /api/login/user'});
 });
 
-router.get('/user', function(req, res) {
+router.get('/shelter', function(req, res) {
   res.json({message: 'get /api/login/shelter'});
 });
 
