@@ -49,6 +49,7 @@ router.get('/notifications',function(req,res,next){
     else if(results.length!==0)  res.send(results);
     else res.send("none");
   });
+
 });
 
 router.get('/feed',function(req,res,next){
