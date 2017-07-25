@@ -75,13 +75,13 @@ router.delete('/MyAccount', function(req, res){
         controller.deleteUserAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500); // unable to delete
-            res.status(204).json(null); // call logout after
+            res.status(204).end(); // call logout after
         }); 
     }else if(req.session.body.accountType == 'shelter'){
         controller.deleteShelterAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             if (!results) return res.status(500); //unable to delete
-            res.status(204).json(null); // call logout after
+            res.status(204).end(); // call logout after
         }); 
     }
 });

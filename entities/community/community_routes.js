@@ -24,7 +24,7 @@ router.use(function(req, res, next) {
 router.get('/', function(req,res,next){
     controller.viewAllPosts(function(err,posts){
       if (err) return res.status(500).json(err);  // server error
-      else res.json(posts); // returns all posts
+      else res.status(200).json(posts); // returns all posts
     });  
 });
 
@@ -208,7 +208,7 @@ router.get('/:post_uuid/:comment_uuid',function(req,res,next){
     var comment_uuid=req.params.uuid;
     controller.viewComment(post_uuid,comment_uuid,function(err,comment){
       if(err) return res.status(500).json(err);  // server error
-      else res.json(comment);
+      else res.status(200).json(comment);
     });
 });
 
@@ -217,9 +217,9 @@ router.put('/:post_uuid/:comment_uuid', function(req, res){
   // will only be used for votes
   var post_uuid = req.params.post_uuid;
   var comment_uuid = req.params.comment_uuid;
-  controller.voteComment(post_uuid, comment_uuid, function(err, post){
+  controller.voteComment(post_uuid, comment_uuid, function(err, results){
     if(err) return res.status(500).json(err);
-    res.status(201).json(post);
+    res.status(201).json(results);
   });
 });
 
@@ -231,7 +231,7 @@ router.delete('/:post_uuid/:comment_uuid',function(req,res,next){
     controller.deleteComment(post_uuid,comment_uuid,user,function(err,results){
       if(err) return res.status(500).json(err);
       else if(results.affectedRows==0) return res.status(500);
-      else res.json(results);
+      else res.status(204).end();
     });
 });
 
