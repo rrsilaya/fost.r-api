@@ -61,16 +61,18 @@ module.exports.addPost=function(newPost,callback){
 // vote a post
 module.exports.votePost = function(post_uuid, callback){
   var today = new Date(); // updated_at which could be useful for notifications later on 
-  console.log('voting posts!')
-  connection.query('UPDATE posts SET votes = votes+1 && updated_at = ? WHERE post_uuid = ?', [today, post_uuid], function(err, results){
+  connection.query('UPDATE posts SET votes = votes+1 WHERE post_uuid = ?', post_uuid, (err, results)=>{
     if (err){
       console.log("there is an error");
       return callback(err);  // some error with query
     }else{
-      console.log('votes now is ' + results.votes);
-      console.log(results);
+      connection.query('UPDATE posts SET updated_at = ? WHERE post_uuid =?', [today, post_uuid], (err, results)=>{
+        if (err){
+          console.log('error upon updating updated_at');
+          return callback(err);
+        }else callback(null, results); // if successful
+      });
     }   
-    callback(null, results); // if successful
   });
 }
 
@@ -120,14 +122,19 @@ module.exports.viewComment=function(post_uuid,comment_uuid,callback){
 // vote a comment
 module.exports.voteComment = function(post_uuid, comment_uuid, callback){
   var today = new Date(); // updated_at which could be useful for notifications later on
-  connection.query('UPDATE comments_on_posts SET votes = votes+1 && updated_at = ? WHERE post_uuid = ? && comment_uuid = ?', [post_uuid,comment_uuid], function(err, results){
+  connection.query('UPDATE comments_on_posts SET votes = votes+1 WHERE post_uuid = ? && comment_uuid = ?', [post_uuid, comment_uuid], (err, results)=>{
     if (err){
       console.log("there is an error");
       return callback(err);  // some error with query
     }else{
-      console.log(results);
+      connection.query('UPDATE comments_on_posts SET updated_at = ? WHERE post_uuid = ? && comment_uuid = ?', [today, post_uuid, comment_uuid], (err, results)=>{
+        if (err){
+          console.log('error updating updated_at');
+          callback(err);
+        }else callback(null, results); // if successful
+      });
     }   
-    callback(null, results); // if successful
+    
   });
 }
 

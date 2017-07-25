@@ -93,15 +93,18 @@ Please take note of the capitalization. * is placed if it is **required**.
 | --------------------------- | ------ | ---------------------------------------------------------- |
 | `/signup/user`              | `POST` | Username*, firstname*, lastname*, birthday*, address*, contactnum*, email*, password*, icon |
 | `/signup/shelter`           | `POST` | Username*, shelter_name*, address*, contactnum*, email*, password*, file*, icon |
-| `/login/user                | `POST` | Username*, password*                                |
+| `/login/user`               | `POST` | Username*, password*                                |
 | `/login/shelter`            | `POST` | Username*, password*                                |
-| `/pets/myPets`              | `POST` | name*, kind*, breed*, sex*, birthday                |
+| `/pets/myPets`              | `POST` | name*, kind*, breed*, sex*, birthday*               |
 | `/accounts/MyAccount`       | `PUT`  | refer to *signup/_ route* depending on account type |
 | `/pets/:pet_uuid`           | `PUT`  | refer to *pets/myPets route*                        |
 | `/community/addPost`        | `POST` | post_title*, text_post*, photo                      |
 | `/community/:post_uuid`     | `POST` | comment_body*, photo                                |
 | `/rescue/submit_a_rescue_request`       | `POST` | rescue_body*, photo                     |
 
+### Responses
+| Routes                      | Method | Responses | 
+| --------------------------- | ------ | ---------------------------------------------------------- |
 
 ### Tables
 #### `users`
