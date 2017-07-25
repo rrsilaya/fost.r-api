@@ -22,6 +22,7 @@
   * [`posts`](#posts)
   * [`comments_on_posts`](#comments_on_posts)
   * [`rescue`](#rescue)
+- [Requests](#requests)
 - [Responses](#responses)
 - [Developers](#developers)
   * [API](#api)
@@ -41,30 +42,30 @@
 | Routes                                  | Method       | Remarks 
 | --------------------------------------- | ------------ | ----------------------------------------------------------|
 | `/`                                     | `GET`        | Displays message(temp)                                                |
-| `/login/user`                           | `GET`        | Redirects to `/feed` if logged in                                     |
-| `/login/shelter`                        | `GET`        | Redirects to `/feed` if logged in                                     |
+| `/login/user`                           | `POST`       | Redirects to `/feed` if logged in                                     |
+| `/login/shelter`                        | `POST`       | Redirects to `/feed` if logged in                                     |
 | `/logout`                               | `GET`        | Redirects to `/` after user logged out                                |
-| `/signup/user`                          | `GET`        | Redirects to `/feed` if logged in                                     |
-| `/signup/shelter`                       | `GET`        | Redirects to `/feed` if logged in                                     |
+| `/signup/user`                          | `POST`       | Redirects to `/feed` if logged in                                     |
+| `/signup/shelter`                       | `POST`       | Redirects to `/feed` if logged in                                     |
 | `/feed `                                | `GET`        | Displays message (temp)                                               |
 | `/accounts/viewShelters`                | `GET`        | View all shelter accounts                                             |
 | `/accounts/viewUsers`                   | `GET`        | View all user accounts                                                |
 | `/accounts/MyAccount`                   | `GET`        | View own info                                                         |
-| `/accounts/MyAccount`                   | `GET`        | Update own info                                                       |
+| `/accounts/MyAccount`                   | `PUT`        | Update own info                                                       |
 | `/accounts/MyAccount`                   | `DELETE`     | Delete own account                                                    |
 | `/pets/viewAllPets`                     | `GET`        | View pets owned by either users or shelters(depending on the accountType logged in)|
 | `/pets/:owner/viewShelterPets`          | `GET`        | View pets of owner                                                    |
 | `/pets/:owner/viewUserPets`             | `GET`        | View pets of owner                                                    |
 | `/pets/:owner/deleteAllUserPets`        | `DELETE`     | Delete all pets of a given user                                       |
 | `/pets/:owner/deleteAllShelter`         | `DELETE`     | Delete all pets of a given shelter                                    |
-| `/pets/myPets`                          | `POST`       | Add a pet to db (for shelters)                                        |
+| `/pets/myPets`                          | `POST`       | Add a pet to db                                                       |
 | `/pets/myPets`                          | `GET`        | View own pets                                                         |
 | `/pets/myPets`                          | `DELETE`     | Delete all owned pets                                                 |
 | `/pets/:pet_uuid`                       | `GET`        | View specific pet                                                     |
 | `/pets/:pet_uuid`                       | `PUT`        | Update info of a pet  (could be used for ADOPT and DATES, set status to ADOPT, DATES, OR BOTH)|
 | `/pets/:pet_uuid`                       | `DELETE`     | Delete a single pet given the pet_uuid                                |
 | `/community/ `                          | `GET`        | Displays all posts sorted by date                                     |
-| `/community/addPost`                    | `GET`        | Add post                                                              |
+| `/community/addPost`                    | `POST`       | Add post                                                              |
 | `/community/:post_uuid`                 | `GET`        | View a post given its uuid                                            |
 | `/community/:post_uuid`                 | `PUT`        | Vote a post given its uuid                                            |
 | `/community/:post_uuid`                 | `DELETE`     | Delete a post given its uuid (iff post is posted by the user itself)  |
@@ -81,8 +82,23 @@
 | `/rescue/:rescue_uuid/deleteRequest`    | `GET`        | Delete a rescue request                                               |
 | `/rescue/deleteAllMyRequests`           | `GET`        | Delete all rescue requests                                            |
 | `/rescue/:rescue_uuid/viewRescueRequest`| `GET`        | View a rescue request                                             |
-| `/rescue/submit_a_rescue_request`       | `GET`        | Submit a request for rescue                                           |
+| `/rescue/submit_a_rescue_request`       | `POST`       | Submit a request for rescue                                           |
 | `/*`                                    | `GET`        | Redirects to `/feed` if logged in, otherwise redirect to `/`          |
+
+### Requests
+Please take note of the capitalization. * is placed if it is **required**.
+| Routes                      | Method | Requests |
+| `/signup/user`              | `POST` | Username*, firstname*, lastname*, birthday*, address*, contactnum*, email*, password*, icon |
+| `/signup/shelter`           | `POST` | Username*, shelter_name*, address*, contactnum*, email*, password*, file*, icon |
+| `/login/user                | `POST` | Username*, password*                 |
+| `/login/shelter`            | `POST` | Username*, password*                 |
+| `/pets/myPets`              | `POST` | name*, kind*, breed*, sex*, birthday |
+| `/accounts/MyAccount`       | `PUT`  | refer to *signup/<account_type> route* |
+| `/pets/:pet_uuid`           | `PUT`  | refer to *pets/myPets route* |
+| `/community/addPost`        | `POST` | post_title*, text_post*, photo |
+| `/community/:post_uuid`     | `POST` | comment_body*, photo |
+| `/rescue/submit_a_rescue_request`       | `POST` | rescue_body*, photo |
+
 
 ### Tables
 #### `users`
