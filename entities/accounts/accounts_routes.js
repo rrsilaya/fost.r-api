@@ -12,15 +12,13 @@ router.use(fileUpload());     // express-fileupload
 
 router.use(function(req, res, next) {
     // do logging
-    if(req.session.body)next(); // make sure we go to the next routes and don't stop here
-    else res.status(403).send("Please log in or sign up first");   
+    console.log('accounts middleware. getting request..');
+    next();
 });
 
-router.get('/', function(req, res, next){
-    res.json({message:'get /api/accounts'});
-}); 
-
-/* view all accounts (users or shelters) */
+/*  view all accounts (users or shelters) 
+    ideally only used during development
+*/
 router.get('/viewShelters', function(req, res){
     controller.viewAllShelters(function(err, shelters){
         if (err) return res.status(500).json(err);  // server error
@@ -37,61 +35,55 @@ router.get('/viewUsers', function(req, res){
 
 
 /*view basic info */
-router.get('/viewMyInfo',function(req,res){
-    if(req.session.accountType ='shelter'){
-        controller.viewUserInfo(req.session.body.Username,function(err,results){
+router.get('/MyAccount',function(req,res){
+    var Username = req.session.body.Username;
+    if(req.session.body.accountType === 'user'){
+        controller.viewUserInfo(Username, function(err,results){
             if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns accounts of users
+            res.status(200).json(results); // returns accounts of users
         });
 
-    }else if(req.session.accountType ='user'){
-        controller.viewShelterInfo(req.session.body.Username,function(err,results){
+    }else if(req.session.body.accountType === 'shelter'){
+        controller.viewShelterInfo(Username, function(err,results){
             if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns accounts of users
+            res.status(200).json(results); // returns accounts of users
         })
     }
-
-
 });
 
 /* update certain info of accounts (only if logged in) */
-router.put('/updateShelterInfo', function(req, res){
-
-        var Username = req.session.body.Username;
-        var changes = req.body;
-        controller.updateShelterInfo(Username, changes, function(err, results){
-            if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns results
-        }); 
-   
-});
-
-router.put('/updateUserInfo', function(req, res){
-        var Username = req.session.body.Username;
-        var changes = req.body;
+router.put('/MyAccount', function(req, res){
+    var Username = req.session.body.Username;
+    var changes = req.body;
+    if(req.session.body.accountType === 'user'){
         controller.updateUserInfo(Username, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns pets of specified user
+            res.status(201).json(results); // returns pets of specified user
         }); 
+    }else if(req.session.body.accountType === 'shelter'){
+        controller.updateShelterInfo(Username, changes, function(err, results){
+            if (err) return res.status(500).json(err);  // server error
+            res.status(201).json(results); // returns results
+        }); 
+    }
 });
 
 /* deletion of accounts (only if logged in) */
-router.delete('/deleteShelterAccount', function(req, res){
-        var Username = req.session.body.Username;
-        controller.deleteShelterAccount(Username, function(err, results){
-            if (err) return res.status(500).json(err);  // server error
-            if (!results) return res.status(500).json({message: 'unable to delete'});
-            res.status(204).json(null);
-        }); 
-});
-
-router.delete('/deleteUserAccount', function(req, res){
-        var Username = req.session.body.Username;
+router.delete('/MyAccount', function(req, res){
+    var Username = req.session.body.Username;
+    if(req.session.body.accountType === 'user'){
         controller.deleteUserAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            if (!results) return res.status(500).json({message: 'unable to delete'});
-            res.status(204).json(null);
+            if (!results) return res.status(500); // unable to delete
+            res.status(204).json(null); // call logout after
         }); 
+    }else if(req.session.body.accountType === 'shelter'){
+        controller.deleteShelterAccount(Username, function(err, results){
+            if (err) return res.status(500).json(err);  // server error
+            if (!results) return res.status(500); //unable to delete
+            res.status(204).json(null); // call logout after
+        }); 
+    }
 });
 
 module.exports = router;

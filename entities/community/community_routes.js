@@ -7,13 +7,13 @@ var shortid = require('shortid');
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'); 
 // default has "-"" and "_" ; this sets the characters to only the entered characters (https://www.npmjs.com/package/shortid)
 var controller = require('./community_controller');
+var notify = require('./../notifications/notifications_controllers');
 
 router.use(validator());      // express-validator
 router.use(fileUpload());     // express-fileupload
 router.use(function(req, res, next) {
-    // do logging
-    if(req.session.body)next(); // make sure we go to the next routes and don't stop here
-    else res.status(403).send("Please log in or sign up first");   
+  console.log('getting request...');
+  next();
 });
 
 /************************* POSTS *******************************/
@@ -30,7 +30,7 @@ router.get('/', function(req,res,next){
 });
 
 /* view a post given its uuid ; shows all comments on the post*/
-router.get('/:post_uuid/viewPost',function(req,res,next){
+router.get('/:post_uuid',function(req,res,next){
     var post_uuid=req.params.post_uuid;
     controller.viewPost(post_uuid,function(err,post){
       if (err) return res.status(500).json(err);  // server error
@@ -39,12 +39,24 @@ router.get('/:post_uuid/viewPost',function(req,res,next){
         controller.viewAllComments(post_uuid,function(err,comments){
           if(err) return res.status(500).json(err);  // server error
           else {
-
-            res.send([post,comments]);
+            res.status(200).send([post,comments]);
           }
         });
       }
     });
+});
+
+router.put('/:post_uuid', function(req, res){
+  // will only be used for votes
+  var post_uuid = req.params.post_uuid;
+  controller.votePost(post_uuid, function(err, post){
+    if(err) return res.status(500).json(err);
+    else if(post.affectedRows==1){
+    
+      res.status(201).json(post);
+
+    }
+  });
 });
 
 /*
@@ -62,14 +74,14 @@ router.get('/:user/viewPosts',function(req,res,next){
 });
 
 /*delete a post given its uuid*/
-router.delete('/:post_uuid/deletePost',function(req,res,next){
+router.delete('/:post_uuid',function(req,res,next){
     var post_uuid=req.params.post_uuid;
     var user=req.session.body.Username;
     //delete post on db
     controller.deletePost(post_uuid,user,function(err,results){
       if (err) return res.status(500).json(err);  // server error
-      else if (results.affectedRows==0) return res.status(500).json({message: 'unable to delete post'});
-      else return res.status(200).json(results);
+      else if (results.affectedRows==0) return res.status(500);
+      else return res.status(204).end();
     });
 });
 
@@ -78,19 +90,15 @@ router.delete('/deleteAllMyPosts',function(req,res,next){
     var user=req.session.body.Username;
     controller.deleteAllPosts(user, function(err, results){
         if (err) return res.status(500).json(err);  // server error
-        else if (results.affectedRow==0) return res.status(500).json({message: 'unable to delete'});
-        else return res.status(200).end("All Your Posts were DELETED");    
+        else if (results.affectedRow==0) return res.status(500);
+        else return res.status(204).end();    
     });
 });
 
 
 router.post('/addPost',function(req,res,next){
-    console.log(req.body);
     var post_uuid=shortid.generate();
     var today=new Date();
-    var image_urlpath;
-
-    console.log(req.files);
     if(typeof req.files!=='undefined'){
       if(req.files.photo){
         var image=req.files.photo;
@@ -108,17 +116,16 @@ router.post('/addPost',function(req,res,next){
         }
       }else if(!req.files.photo){
         image_urlpath = null;
-       
       }
     }else{
-      image_urlpath = null;
-
+      var image_urlpath = null;
       console.log('file is undefined');
     }
     var newPost={
       "Posted_by": req.session.body.Username,
       "post_title": req.body.post_title,
       "text_post": req.body.text_post,
+      "votes": 0,
       "post_uuid": post_uuid,
       "image_urlpath":image_urlpath,
       "created_at": today,
@@ -139,7 +146,7 @@ router.post('/addPost',function(req,res,next){
 /*********************** COMMENTS ON POSTS ************************/
 
 /* add comment to db if post_uuid is valid*/
-router.post('/:post_uuid/addComment',function(req,res,next){
+router.post('/:post_uuid', function(req,res,next){
   if(req.body.comment_body){
     var comment_body=req.body.comment_body;
     var post_uuid=req.params.post_uuid;
@@ -157,13 +164,11 @@ router.post('/:post_uuid/addComment',function(req,res,next){
           image.mv(image_urlpath, function(err){
             if (err){
               image_urlpath=null;
-
               console.log('api err: not able to receive image');
             }  
           });
         }else {
           image_urlpath=null;
-
           console.log('file uploaded is not image');
         }
 
@@ -179,6 +184,7 @@ router.post('/:post_uuid/addComment',function(req,res,next){
       "comment_uuid":comment_uuid,
       "commented_by": user,
       "comment_body" :comment_body,
+      "votes": 0,
       "image_urlpath":image_urlpath,
       "created_at": today,
       "updated_at":today,
@@ -188,19 +194,41 @@ router.post('/:post_uuid/addComment',function(req,res,next){
     controller.addComment(newComment,function(err,results){
       if(err) res.status(500).send(err);//server error
       else if(results.affectedRows!==0){
-        res.status(201).json(newComment); // returns info of newly added post
+        //res.status(201).send(newComment); // returns info of newly added post
         console.log("Comment Added!!!!");
+        //add to notifications
+        var query = 'SELECT * FROM posts WHERE post_uuid = ?';
+        notify.getUser(query,post_uuid,function(err,results){
+          if(err) res.status(500).send(err);//server error
+          else if(results.affectedRows!==0){
+            var newNotif = {
+              "notif_for": results[0].Posted_by,
+              "notif_message" : req.session.body.Username + " commented on your post. ",
+              "notif_url" : "/community/"+post_uuid,
+              "date_created" : new Date()
+            }
+            console.log(newNotif);
+            notify.addNotif(newNotif,function(err,results){
+              if(err) res.status(500).send(err);//server error
+              else if(results.affectedRows!==0) res.status(200).send(newComment);
+            });
+          }
+        });
       }
     });
+    
 
-  }else res.status(401).json("Please log in or sign up first .");
     
-    
+  }else{
+    res.status(403);
+    console.log('Login or signup first.');
+  }
 });
 
-/* view a comment (required : post_uuid && comment_uuid */
 
-router.get('/:post_uuid/:comment_uuid/viewComment',function(req,res,next){
+
+/* view a comment (required : post_uuid && comment_uuid */
+router.get('/:post_uuid/:comment_uuid',function(req,res,next){
     var post_uuid=req.params.post_uuid;
     var comment_uuid=req.params.uuid;
     controller.viewComment(post_uuid,comment_uuid,function(err,comment){
@@ -208,6 +236,33 @@ router.get('/:post_uuid/:comment_uuid/viewComment',function(req,res,next){
       else res.json(comment);
     });
 });
+
+// vote a comment given post uuid and comment uuid
+router.put('/:post_uuid/:comment_uuid', function(req, res){
+  // will only be used for votes
+  var post_uuid = req.params.post_uuid;
+  var comment_uuid = req.params.comment_uuid;
+  controller.votePost(post_uuid, comment_uuid, function(err, post){
+    if(err) return res.status(500).json(err);
+    else if(post.affectedRows!==0){
+            
+      res.status(201).json(post);
+    }
+  });
+});
+
+/*delete a comment in a post (iff comment is posted by user itself)*/
+router.delete('/:post_uuid/:comment_uuid',function(req,res,next){
+    var post_uuid=req.params.post_uuid;
+    var comment_uuid=req.params.comment_uuid;
+    var user=req.session.body.Username;
+    controller.deleteComment(post_uuid,comment_uuid,user,function(err,results){
+      if(err) return res.status(500).json(err);
+      else if(results.affectedRows==0) return res.status(500);
+      else res.json(results);
+    });
+});
+
 /* view all comments on a post given the post_uuid*/
 router.get('/:post_uuid/viewAllComments',function(req,res,next){
       var post_uuid=req.params.post_uuid;
@@ -217,17 +272,6 @@ router.get('/:post_uuid/viewAllComments',function(req,res,next){
       });
 });
 
-/*delete a comment in a post (iff comment is posted by user itself)*/
-router.delete('/:post_uuid/:comment_uuid/deleteComment',function(req,res,next){
-    var post_uuid=req.params.post_uuid;
-    var comment_uuid=req.params.comment_uuid;
-    var user=req.session.body.Username;
-    controller.deleteComment(post_uuid,comment_uuid,user,function(err,results){
-      if(err) return res.status(500).json(err);
-      else if(results.affectedRows==0) return res.status(500).json("unable to delete comment");
-      else res.json(results);
-    });
-});
 /*****************************************************************/
 
 router.get('*', function(req, res, next) {

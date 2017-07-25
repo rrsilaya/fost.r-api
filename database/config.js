@@ -19,7 +19,7 @@ CREATE TABLE users (\
     `lastname` varchar(36) NOT NULL,\
     `birthday` varchar(36) NOT NULL,\
     `address` varchar(236) NOT NULL,\
-    `contactnum` int(11) NOT NULL,\
+    `contactnum` varchar(20) NOT NULL,\
     `email` varchar(36) NOT NULL UNIQUE,\
     `password` varchar(255) NOT NULL,\
     `icon_url` varchar(255) DEFAULT NULL,\
@@ -36,7 +36,7 @@ CREATE TABLE shelters (\
     `Username` varchar(52) NOT NULL UNIQUE,\
     `shelter_name` varchar(52) NOT NULL,\
     `address` varchar(236) NOT NULL,\
-    `contactnum` int(11) NOT NULL,\
+    `contactnum` varchar(20) NOT NULL,\
     `email` varchar(36) NOT NULL UNIQUE,\
     `password` varchar(255) NOT NULL,\
     `icon_url` varchar(255) DEFAULT NULL,\
@@ -97,7 +97,8 @@ connection.query('\
     `Posted_by` varchar(52) NOT NULL,\
     `post_title` varchar(255) NOT NULL,\
     `text_post` TEXT NOT NULL,\
-    `image_urlpath` varchar(255) UNIQUE  DEFAULT NULL ,\
+    `votes` int (5) NOT NULL,\
+    `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,\
     `post_uuid` varchar(36) UNIQUE PRIMARY KEY NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL\
@@ -109,6 +110,7 @@ connection.query('\
     `comment_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `commented_by` varchar(52) NOT NULL,\
     `comment_body` varchar(255) NOT NULL,\
+    `votes` int (5) NOT NULL,\
     `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
@@ -138,8 +140,19 @@ connection.query('\
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
     );
 
-
-
+connection.query('\
+    CREATE TABLE notifications (\
+    `notif_id` Integer NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,\
+    `notif_for` varchar(36) NOT NULL,\
+    `notif_message` varchar(255) NOT NULL,\
+    `notif_url` varchar(255)  NOT NULL,\
+    `date_created` datetime NOT NULL,\
+    CONSTRAINT notifications_fk FOREIGN KEY(notif_for)\
+    REFERENCES users(Username)\
+    ON DELETE CASCADE\
+    ON UPDATE CASCADE\
+    ) ENGINE=InnoDB AUTO_INCREMENT=1  DEFAULT CHARSET=latin1;'
+    );
 connection.end();
 
 console.log('Database configuration done!');

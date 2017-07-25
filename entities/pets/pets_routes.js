@@ -10,36 +10,35 @@ shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 
 var controller = require('./pets_controller');
 
-
 router.use(validator());      // express-validator
 router.use(fileUpload());     // express-fileupload
-router.use(function(req, res, next) {
-    // do logging
-    if(req.session.body)next(); // make sure we go to the next routes and don't stop here
-    else res.status(403).send("Please log in or sign up first");   
+
+
+router.use(function(req, res, next){
+    console.log('pets routes. getting requests..');
+    next();
 });
 
-
-router.get('/', function(req, res, next){
-    res.json({message:'get /api/pets'});
-});
-
-/* views pets owned by all shelters or users */
-router.get('/viewShelterPets', function(req, res){
-    controller.viewAllShelterPets(function(err, pets){
+/*  views pets owned by all shelters or users 
+    ideally used during development
+*/
+router.get('/viewAllPets', function(req, res){
+    if(req.session.body.accountType === 'user'){
+        controller.viewAllUserPets(function(err, pets){
+            if (err) return res.status(500).json(err);  // server error
+            res.json(pets); // returns pets
+        });
+    }else if(req.session.body.accountType === 'shelter'){
+        controller.viewAllShelterPets(function(err, pets){
         if (err) return res.status(500).json(err);  // server error
         res.json(pets); // returns pets
     });
+    }
 });
 
-router.get('/viewUserPets', function(req, res){
-    controller.viewAllUserPets(function(err, pets){
-        if (err) return res.status(500).json(err);  // server error
-        res.json(pets); // returns pets
-    });
-});
-
-/* returns pets of <name> */
+/*  returns pets of <name> 
+    ideally used during development
+*/
 router.get('/:owner/viewShelterPets', function(req, res){
     var owner = req.params.owner; 
     controller.viewShelterPetsOf(owner, function(err, pets){
@@ -56,12 +55,14 @@ router.get('/:owner/viewUserPets', function(req, res){
     }); 
 });
 
-/* deletes all pets of <name> */
+/*  deletes all pets of <name> 
+    ideally used during development
+*/
 router.delete('/:owner/deleteAllUserPets', function(req, res){
     var owner = req.params.owner;
     controller.deleteAllUserPets(owner, function(err, results){
         if (err) return res.status(500).json(err);  // server error
-        if (!results) return res.status(500).json({message: 'unable to delete?'});
+        if (!results) return res.status(500);
         res.status(204).json(null);
     });
 });
@@ -70,16 +71,17 @@ router.delete('/:owner/deleteAllShelterPets', function(req, res){
     var owner = req.params.owner;
     controller.deleteAllShelterPets(owner, function(err, results){
         if (err) return res.status(500).json(err);  // server error
-        if (!results) return res.status(500).json({message: 'unable to delete?'});
+        if (!results) return res.status(500);
         res.status(204).json(null);
     });
 });
 
 /* add pets to database (only if logged in) */
-router.post('/addShelterPet', function(req, res){
-        var owner = req.session.body.Username;
-        var uuid = shortid.generate();
-        var today = new Date();
+router.post('/myPets', function(req, res){
+    var owner = req.session.body.Username;
+    var uuid = shortid.generate();
+    var today = new Date();
+    if(req.session.body.accountType === 'shelter'){
         var petInfo = {
             "name": req.body.name,
             "kind": req.body.kind,
@@ -130,13 +132,7 @@ router.post('/addShelterPet', function(req, res){
                 res.status(201).json(results); // returns info of newly added pet
             });
         }
-});
-
-router.post('/addUserPet', function(req, res){
-        var owner = req.session.body.Username;
-        var uuid = shortid.generate();
-        var today = new Date();
-        console.log(req.body.name);
+    }else if (req.session.body.accountType === 'user'){
         var petInfo = {
             "name": req.body.name,
             "kind": req.body.kind,
@@ -148,7 +144,6 @@ router.post('/addUserPet', function(req, res){
             "uuid": uuid,
             "user_Username": owner
         }
-        console.log(req.files);
         if (typeof(req.files) !== 'undefined'){
             var petDP = req.files.photo;
             var name = petInfo.uuid + '-dp-' + petDP.name;
@@ -188,65 +183,100 @@ router.post('/addUserPet', function(req, res){
                 res.status(201).json(results); // returns info of newly added pet
             });
         }
+    }    
+});
+
+router.get('/myPets', function(req, res){
+    var Username = req.session.body.Username;    
+    if(req.session.body.accountType === 'user'){
+        controller.viewUserPetsOf(Username, function(err, results){
+            if (err) return res.status(500).json(err);
+            if (!results) return res.status(500);
+            res.status(200).json(results);
+        });
+    }else if(req.session.body.accountType === 'shelter'){
+        controller.viewShelterPetsOf(Username, function(err, results){
+            if (err) return res.status(500).json(err);
+            if (!results) return res.status(500);
+            res.status(200).json(results);
+        });
+    }
+});
+
+router.delete('/myPets', function(req, res){
+    var Username = req.session.body.Username;
+    if(req.session.body.accountType === 'user'){
+        controller.deleteAllUserPets(Username, function(err, results){
+            if (err) return res.status(500).json(err);
+            if (!results) return res.status(500);
+            res.status(204).end();
+        });
+    }else if(req.session.body.accountType === 'shelter'){
+        controller.deleteAllShelterPets(Username, function(err, results){
+            if (err) return res.status(500).json(err);
+            if (!results) return res.status(500);
+            res.status(204).end();
+        });
+    }
 });
 
 /* returns specific pet of logged in user/shelter */ 
-router.get('/:pet_uuid/viewSpecificPetUser', function(req, res){
+router.get('/:pet_uuid', function(req, res){
+    if(req.session.body.accountType === 'user'){
         var pet_uuid = req.params.pet_uuid;
         var Username = req.session.body.Username;
         controller.viewSpecificPetUser(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns results
         }); 
-});
-
-router.get('/:pet_uuid/viewSpecificPetShelter', function(req, res){
+    }else if(req.session.body.accountType === 'shelter'){
         var pet_uuid = req.params.pet_uuid;
         var Username = req.session.body.Username;
         controller.viewSpecificPetShelter(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns results
         }); 
+    }    
 });
 
-/* update certain info of pets (only if logged in && pet exists) */
-router.put('/:pet_uuid/updateShelterPets', function(req, res){
-        var pet_uuid = req.params.pet_uuid; 
-        var changes = req.body;
-        controller.updateShelterPet(pet_uuid, changes, function(err, results){
-            if (err) return res.status(500).json(err);  // server error
-            res.json(results); // returns results
-        }); 
-});
-
-router.put('/:pet_uuid/updateUserPets', function(req, res){
+/* update certain info of a pet (only if logged in && pet exists) */
+router.put('/:pet_uuid', function(req, res){
+    if(req.session.body.accountType === 'user'){
         var pet_uuid = req.params.pet_uuid;
         var changes = req.body;
         controller.updateUserPet(pet_uuid, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.json(results); // returns pets of specified user
         }); 
+    }else if(req.session.body.accountType === 'shelter'){    
+        var pet_uuid = req.params.pet_uuid; 
+        var changes = req.body;
+        controller.updateShelterPet(pet_uuid, changes, function(err, results){
+            if (err) return res.status(500).json(err);  // server error
+            res.json(results); // returns results
+        });
+    } 
 });
 
 /* deletes a single pet given the pet's uuid */
-router.delete('/:pet_uuid/deleteUserPet', function(req, res){
+router.delete('/:pet_uuid', function(req, res){
+    if(req.session.body.accountType === 'user'){
         var pet_uuid = req.params.pet_uuid;
         var Username = req.session.body.Username;
         controller.deleteUserPet(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            if (!results) return res.status(500).json({message: 'unable to delete?'});
+            if (!results) return res.status(500);
             res.status(204).json(null);
         }); 
-});
-
-router.delete('/:pet_uuid/deleteShelterPet', function(req, res){
+    }else if(req.session.body.accountType === 'shelter'){
         var pet_uuid = req.params.pet_uuid;
         var Username = req.session.body.Username;
         controller.deleteShelterPet(Username, pet_uuid, function(err, results){
             if (err) return res.status(500).json(err);  // server error
-            if (!results) return res.status(500).json({message: 'unable to delete?'});
+            if (!results) return res.status(500);
             res.status(204).json(null);
         }); 
+    }    
 });
 
 router.get('*', function(req, res, next) {

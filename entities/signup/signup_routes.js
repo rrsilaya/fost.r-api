@@ -11,22 +11,9 @@ const controller = require('./signup_controller');
 router.use(validator());      // express-validator
 router.use(fileUpload());     // express-fileupload
 
-
 router.use(function(req, res, next){
-    if(!req.session.body)next(); // make sure we go to the next routes and don't stop here
-    else res.redirect('/api/feed');
-});
-
-router.get('/', (req, res)=>{
-  res.json({message: 'SIGNUP_AS_USER_OR_SHELTER'});
-});
-
-router.get('/user', (req, res)=>{
-  res.json({message: 'get api/signup/user'});
-});
-
-router.get('/shelter', (req, res)=>{
-  res.json({message: 'get api/signup/shelter'});
+  console.log('signup routes getting request...');
+  next();
 });
 
 router.post('/shelter', function(req,res,next){
@@ -45,13 +32,13 @@ router.post('/shelter', function(req,res,next){
     req.checkBody('Username', 'Username is required').notEmpty();
     req.checkBody('shelter_name', 'Shelter name is required').notEmpty();
     req.checkBody('address', 'Address is required').notEmpty();
-    req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty().isInt();
+    req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty();
     req.checkBody('email', 'Email is required').isEmail();
     req.checkBody('password', 'password is required').notEmpty();
     // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 
 
     var errors = req.validationErrors();
-    if(errors || !req.files.file) res.status(400).json({message: 'please enter correct inputs in fields'});
+    if(errors || !req.files.file) res.status(400).json(errors);
     else{
       const file=req.files.file;    //use later for file-upload
       var name = req.body.Username + '-proof-' + file.name;
@@ -77,8 +64,6 @@ router.post('/shelter', function(req,res,next){
           icon.mv(url, function(err){
             if (err){
               console.log('api err: not able to receive image');  
-              errors = 'Server error: not able to receive image';
-              console.log(errors);
             }else{
               newShelter.icon_url = url;
               var dimensions = sizeOf(url);
@@ -104,7 +89,7 @@ router.post('/shelter', function(req,res,next){
               errors = "Successfully signed up.";  
               console.log(errors);                  
               console.log(newShelter);
-              res.status(201).redirect('/api/feed');
+              res.status(201).json(newUser);
               break;
             case 'QUERRY_ERR':
               errors = "Sorry, there was some error in the query.";
@@ -150,7 +135,7 @@ router.post('/user', function(req,res,next){
     req.checkBody('lastname', 'Last name is required').notEmpty();
     req.checkBody('birthday', 'Birthday is required').notEmpty(); 
     req.checkBody('address', 'Address is required').notEmpty();
-    req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty().isInt();
+    req.checkBody('contactnum', 'Contact Number is required and should be numbers only').notEmpty();
     req.checkBody('email', 'Email is required').isEmail();
     req.checkBody('password', 'password is required').notEmpty();
     // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing 
@@ -182,8 +167,6 @@ router.post('/user', function(req,res,next){
           icon.mv(url, function(err){
             if (err){
               console.log('api err: not able to receive image');  
-              errors = 'Server error: not able to receive image';
-              console.log(errors);
             }else{
               newUser.icon_url = url;
               var dimensions = sizeOf(url);
@@ -193,9 +176,7 @@ router.post('/user', function(req,res,next){
           });
         }else console.log('image only for icons');
       }
-      console.log('here 2');
       controller.registerUser(newUser, function(err, callback){
-        console.log('here 3', callback);
         if (err){
           console.log('There was an error in the register controller');
           res.status(500).json(err);
@@ -205,7 +186,7 @@ router.post('/user', function(req,res,next){
             errors = "Successfully signed up.";
             console.log(errors);
             console.log(newUser);
-            res.status(201).redirect('/api/feed');
+            res.status(201).json(newUser);
             break;
           case 'QUERRY_ERR':
                 errors = "Sorry, there was some error in the query.";
@@ -235,7 +216,6 @@ router.post('/user', function(req,res,next){
 
 router.get('*', function(req, res, next) {
   if(req.session.body) res.redirect('/api/feed');
-  else res.redirect('/api/signup');
 });
 
 module.exports = router;
