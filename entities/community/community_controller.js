@@ -61,14 +61,16 @@ module.exports.addPost=function(newPost,callback){
 // vote a post
 module.exports.votePost = function(post_uuid, callback){
   var today = new Date(); // updated_at which could be useful for notifications later on 
+  console.log('voting posts!')
   connection.query('UPDATE posts SET votes = votes+1 && updated_at = ? WHERE post_uuid = ?', [today, post_uuid], function(err, results){
     if (err){
       console.log("there is an error");
       return callback(err);  // some error with query
     }else{
+      console.log('votes now is ' + results.votes);
       console.log(results);
-      return callback(null, results); // if successful
     }   
+    callback(null, results); // if successful
   });
 }
 
@@ -124,8 +126,8 @@ module.exports.voteComment = function(post_uuid, comment_uuid, callback){
       return callback(err);  // some error with query
     }else{
       console.log(results);
-      return callback(null, results); // if successful
     }   
+    callback(null, results); // if successful
   });
 }
 

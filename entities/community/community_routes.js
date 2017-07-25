@@ -120,7 +120,6 @@ router.post('/addPost',function(req,res,next){
       "Posted_by": req.session.body.Username,
       "post_title": req.body.post_title,
       "text_post": req.body.text_post,
-      "votes": 0,
       "post_uuid": post_uuid,
       "image_urlpath":image_urlpath,
       "created_at": today,
@@ -179,7 +178,6 @@ router.post('/:post_uuid', function(req,res,next){
       "comment_uuid":comment_uuid,
       "commented_by": user,
       "comment_body" :comment_body,
-      "votes": 0,
       "image_urlpath":image_urlpath,
       "created_at": today,
       "updated_at":today,
@@ -217,7 +215,7 @@ router.put('/:post_uuid/:comment_uuid', function(req, res){
   // will only be used for votes
   var post_uuid = req.params.post_uuid;
   var comment_uuid = req.params.comment_uuid;
-  controller.votePost(post_uuid, comment_uuid, function(err, post){
+  controller.voteComment(post_uuid, comment_uuid, function(err, post){
     if(err) return res.status(500).json(err);
     res.status(201).json(post);
   });
