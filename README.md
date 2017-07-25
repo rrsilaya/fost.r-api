@@ -88,6 +88,7 @@
 ### Requests
 Please take note of the capitalization. * is placed if it is **required**.
 | Routes                      | Method | Requests |
+| --------------------------- | ------ | ----------------------------------------------------------|
 | `/signup/user`              | `POST` | Username*, firstname*, lastname*, birthday*, address*, contactnum*, email*, password*, icon |
 | `/signup/shelter`           | `POST` | Username*, shelter_name*, address*, contactnum*, email*, password*, file*, icon |
 | `/login/user                | `POST` | Username*, password*                 |
