@@ -78,8 +78,8 @@
 | `/community/:post_uuid/:comment_uuid`   | `PUT`        | Vote a comment                                                |
 | `/rescue/`                              | `GET`        | View all requests                                                     |
 | `/rescue/viewMyRequests`                | `GET`        | View all submitted requests                                           |
-| `/rescue/:recue_uuid`                   | `GET`        | View :rescue_uuid of logged in user                                   |
-| `/rescue/:recue_uuid`                   | `DELETE`     | Deletes :rescue_uuid of logged in user                                |
+| `/rescue/:rescue_uuid`                   | `GET`        | View :rescue_uuid of logged in user                                   |
+| `/rescue/:rescue_uuid`                   | `DELETE`     | Deletes :rescue_uuid of logged in user                                |
 | `/rescue/:user/viewAllRequests`         | `GET`        | View all rescue requests from a user                                  |
 | `/rescue/:rescue_uuid/deleteRequest`    | `GET`        | Delete a rescue request                                               |
 | `/rescue/deleteAllMyRequests`           | `GET`        | Delete all rescue requests                                            |
@@ -97,7 +97,7 @@ Please take note of the capitalization. * is placed if it is **required**.
 | `/signup/shelter`           | `POST` | Username*, shelter_name*, address*, contactnum*, email*, password*, file*, icon |
 | `/login/user`               | `POST` | Username*, password*                                |
 | `/login/shelter`            | `POST` | Username*, password*                                |
-| `/pets/myPets`              | `POST` | name*, kind (DOG, CAT, BIRD, OTHERS)*, breed*, sex(MALE, FEMALE)*, birthday*               |
+| `/pets/myPets`              | `POST` | name*, kind* (DOG, CAT, BIRD, OTHERS), breed*, sex*(MALE, FEMALE), birthday*               |
 | `/accounts/MyAccount`       | `PUT`  | refer to *signup/_ route* depending on account type |
 | `/pets/:pet_uuid`           | `PUT`  | refer to *pets/myPets route*                        |
 | `/community/addPost`        | `POST` | post_title*, text_post*, photo                      |
@@ -108,48 +108,48 @@ Please take note of the capitalization. * is placed if it is **required**.
 
 | Routes                      | Method | Responses | 
 | --------------------------- | ------ | ---------------------------------------------------------- |
-| `/login/user`                           | `POST`       | (200) sends req.session.body.accountType |
-| `/login/shelter`                        | `POST`       | (200) sends req.session.body.accountType |
-| `/logout`                               | `GET`        | (200) sends null                         |
-| `/signup/user`                          | `POST`       | (201) json of newUser                    |
-| `/signup/shelter`                       | `POST`       | (201) json of newShelter                 |
-| `/feed `                                | `GET`        | (200)                                    |
+| `/login/user`                           | `POST`       | `(200)` sends req.session.body.accountType |
+| `/login/shelter`                        | `POST`       | `(200)` sends req.session.body.accountType |
+| `/logout`                               | `GET`        | `(200)` sends null                         |
+| `/signup/user`                          | `POST`       | `(201)` json of newUser                    |
+| `/signup/shelter`                       | `POST`       | `(201)` json of newShelter                 |
+| `/feed `                                | `GET`        | `(200)`                                    |
 | `/accounts/viewShelters`                | `GET`        | json of shelters                         |
 | `/accounts/viewUsers`                   | `GET`        | json of users                            |
-| `/accounts/MyAccount`                   | `GET`        | (200) json of own account's info         |
-| `/accounts/MyAccount`                   | `PUT`        | (201) json of mysql query                |
-| `/accounts/MyAccount`                   | `DELETE`     | (204) ends                               |
+| `/accounts/MyAccount`                   | `GET`        | `(200)` json of own account's info         |
+| `/accounts/MyAccount`                   | `PUT`        | `(201)` json of mysql query                |
+| `/accounts/MyAccount`                   | `DELETE`     | `(204)` ends                               |
 | `/pets/viewAllPets`                     | `GET`        | json of pets                             |
 | `/pets/:owner/viewShelterPets`          | `GET`        | json of pets                             |
 | `/pets/:owner/viewUserPets`             | `GET`        | json of pets                             |
-| `/pets/:owner/deleteAllUserPets`        | `DELETE`     | (204) ends                               |
-| `/pets/:owner/deleteAllShelter`         | `DELETE`     | (204) ends                               |
-| `/pets/myPets`                          | `POST`       | (201) json of mysql query                |
-| `/pets/myPets`                          | `GET`        | (200) json of owned pets                 |
-| `/pets/myPets`                          | `DELETE`     | (204) ends                               |
-| `/pets/:pet_uuid`                       | `GET`        | (200) json of pet's info                 |
-| `/pets/:pet_uuid`                       | `PUT`        | (201) json of mysql query                |
-| `/pets/:pet_uuid`                       | `DELETE`     | (204) ends                               |
-| `/community/ `                          | `GET`        | (200) json of posts                      |
-| `/community/addPost`                    | `POST`       | (201) json of post                       |
-| `/community/:post_uuid`                 | `GET`        | (200) sends posts and comments           |
-| `/community/:post_uuid`                 | `PUT`        | (201) json of mysql query                |
-| `/community/:post_uuid`                 | `DELETE`     | (204) ends                               |
-| `/community/:post_uuid`                 | `POST`       | (201) json of newComment                 |
-| `/community/:user/viewPosts`            | `GET`        | (200) json of posts by :user             |
-| `/community/deleteAllMyPosts`           | `DELETE`     | (204) ends                               |
-| `/community/:post_uuid/viewAllComments` | `GET`        | (200) json of comments in :post_uuid     |
-| `/community/:post_uuid/:comment_uuid`   | `GET`        | (200) json :comment_uuid in :post_uuid   |
-| `/community/:post_uuid/:comment_uuid`   | `DELETE`     | (204) ends                               |
-| `/community/:post_uuid/:comment_uuid`   | `PUT`        | (201) json of mysql query                |
-| `/rescue/`                              | `GET`        | (200) json of requests (if shelter); redirects to /viewMyRequests (if user)        |
-| `/rescue/viewMyRequests`                | `GET`        | (200) json of requests (only for users)  |
-| `/rescue/:rescue_uuid`                  | `GET`        | (200) json of rescue                     |
-| `/rescue/:rescue_uuid`                  | `DELETE`     | (204) ends                               |
-| `/rescue/:user/viewAllRequests`         | `GET`        | (200) json of requests from :user (only for shelters)  |
-| `/rescue/deleteAllMyRequests`           | `GET`        | (204) ends (only for users)              |
-| `/rescue/:rescue_uuid/viewRescueRequest`| `GET`        | (200) json of rescue where rescue_uuid = :rescue_uuid  |
-| `/rescue/submit_a_rescue_request`       | `POST`       | (201) json of newRescue                  |
+| `/pets/:owner/deleteAllUserPets`        | `DELETE`     | `(204)` ends                               |
+| `/pets/:owner/deleteAllShelter`         | `DELETE`     | `(204)` ends                               |
+| `/pets/myPets`                          | `POST`       | `(201)` json of mysql query                |
+| `/pets/myPets`                          | `GET`        | `(200)` json of owned pets                 |
+| `/pets/myPets`                          | `DELETE`     | `(204) ends                               |
+| `/pets/:pet_uuid`                       | `GET`        | `(200)` json of pet's info                 |
+| `/pets/:pet_uuid`                       | `PUT`        | `(201)` json of mysql query                |
+| `/pets/:pet_uuid`                       | `DELETE`     | `(204)` ends                               |
+| `/community/ `                          | `GET`        | `(200)` json of posts                      |
+| `/community/addPost`                    | `POST`       | `(201)` json of post                       |
+| `/community/:post_uuid`                 | `GET`        | `(200)` sends posts and comments           |
+| `/community/:post_uuid`                 | `PUT`        | `(201)` json of mysql query                |
+| `/community/:post_uuid`                 | `DELETE`     | `(204)` ends                               |
+| `/community/:post_uuid`                 | `POST`       | `(201)` json of newComment                 |
+| `/community/:user/viewPosts`            | `GET`        | `(200)` json of posts by :user             |
+| `/community/deleteAllMyPosts`           | `DELETE`     | `(204)` ends                               |
+| `/community/:post_uuid/viewAllComments` | `GET`        | `(200)` json of comments in :post_uuid     |
+| `/community/:post_uuid/:comment_uuid`   | `GET`        | `(200)` json :comment_uuid in :post_uuid   |
+| `/community/:post_uuid/:comment_uuid`   | `DELETE`     | `(204)` ends                               |
+| `/community/:post_uuid/:comment_uuid`   | `PUT`        | `(201)` json of mysql query                |
+| `/rescue/`                              | `GET`        | `(200)` json of requests (if shelter); redirects to /viewMyRequests (if user)        |
+| `/rescue/viewMyRequests`                | `GET`        | `(200)` json of requests (only for users)  |
+| `/rescue/:rescue_uuid`                  | `GET`        | `(200)` json of rescue                     |
+| `/rescue/:rescue_uuid`                  | `DELETE`     | `(204)` ends                               |
+| `/rescue/:user/viewAllRequests`         | `GET`        | `(200)` json of requests from :user (only for shelters)  |
+| `/rescue/deleteAllMyRequests`           | `GET`        | `(204)` ends (only for users)              |
+| `/rescue/:rescue_uuid/viewRescueRequest`| `GET`        | `(200)` json of rescue where rescue_uuid = :rescue_uuid  |
+| `/rescue/submit_a_rescue_request`       | `POST`       | `(201)` json of newRescue                  |
 ### Tables
 #### `users`
 
