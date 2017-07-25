@@ -10,6 +10,7 @@ module.exports.viewPost=function(post_uuid,callback){
     else return callback(null, results); // success
   });
 }
+
 /* view posts of a specific user*/
 module.exports.viewPostsOf=function(user,callback){
   connection.query('SELECT * FROM posts WHERE Posted_by = ? ORDER BY created_at DESC',user,function(err, results){
@@ -25,6 +26,7 @@ module.exports.viewAllPosts=function(callback){
     return callback(null, results); // success
   });
 }
+
 //deletes all posts of current user logged in 
 module.exports.deleteAllPosts=function(user,callback){
   connection.query('DELETE FROM posts WHERE Posted_by = ?', user, function(err, results){
@@ -58,7 +60,8 @@ module.exports.addPost=function(newPost,callback){
 
 // vote a post
 module.exports.votePost = function(post_uuid, callback){
-  connection.query('UPDATE posts SET votes = votes+1 WHERE post_uuid = ?', post_uuid, function(err, results){
+  var today = new Date(); // updated_at which could be useful for notifications later on 
+  connection.query('UPDATE posts SET votes = votes+1 && updated_at = ? WHERE post_uuid = ?', [today, post_uuid], function(err, results){
     if (err){
       console.log("there is an error");
       return callback(err);  // some error with query
@@ -73,9 +76,34 @@ module.exports.votePost = function(post_uuid, callback){
 
 //add a comment 
 module.exports.addComment=function(newComment,callback){
+  var today = new Date(); // updated_at which could be useful for notifications later on
+  var update = {
+    "updated_at":today
+  }
+  var post_uuid = newComment.post_uuid;
   connection.query('INSERT INTO comments_on_posts SET ?', newComment, function(err, results){
     if (err) return callback(err);  // some error with query
-    else return callback(null, results); // if successful
+    else {
+      connection.query('SELECT * FROM posts WHERE post_uuid = ? ', post_uuid,function(err, results){
+        console.log('searching the post to update updated_at');
+        if (err){
+          console.log('some error on updating');
+          return callback(err);
+        }
+        if (results){
+          if (results.Posted_by !== newComment.commented_by){
+            connection.query('UPDATE posts set ? WHERE post_uuid = ?', [update, post_uuid], function(err, results){
+              console.log('updating the post\'s updated_at');
+              if (err){
+                console.log('some error on updating 2');
+                return callback(err);
+              }console.log(results);
+            });
+          }
+        }
+      });
+      return callback(null, results); // if successful
+    }
   });
 }
 
@@ -89,7 +117,8 @@ module.exports.viewComment=function(post_uuid,comment_uuid,callback){
 
 // vote a comment
 module.exports.voteComment = function(post_uuid, comment_uuid, callback){
-  connection.query('UPDATE comments_on_posts SET votes = votes+1 WHERE post_uuid = ? && comment_uuid = ?', [post_uuid,comment_uuid], function(err, results){
+  var today = new Date(); // updated_at which could be useful for notifications later on
+  connection.query('UPDATE comments_on_posts SET votes = votes+1 && updated_at = ? WHERE post_uuid = ? && comment_uuid = ?', [post_uuid,comment_uuid], function(err, results){
     if (err){
       console.log("there is an error");
       return callback(err);  // some error with query

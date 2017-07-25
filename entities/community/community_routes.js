@@ -92,12 +92,8 @@ router.delete('/deleteAllMyPosts',function(req,res,next){
 
 
 router.post('/addPost',function(req,res,next){
-    console.log(req.body);
     var post_uuid=shortid.generate();
     var today=new Date();
-    var image_urlpath;
-
-    console.log(req.files);
     if(typeof req.files!=='undefined'){
       if(req.files.photo){
         var image=req.files.photo;
@@ -117,7 +113,7 @@ router.post('/addPost',function(req,res,next){
         image_urlpath = null;
       }
     }else{
-      image_urlpath = null;
+      var image_urlpath = null;
       console.log('file is undefined');
     }
     var newPost={

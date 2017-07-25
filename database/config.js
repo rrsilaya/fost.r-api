@@ -98,7 +98,7 @@ connection.query('\
     `post_title` varchar(255) NOT NULL,\
     `text_post` TEXT NOT NULL,\
     `votes` int (5) NOT NULL,\
-    `image_urlpath` varchar(255) UNIQUE  DEFAULT NULL ,\
+    `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,\
     `post_uuid` varchar(36) UNIQUE PRIMARY KEY NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL\
