@@ -45,6 +45,7 @@
 | `/login/user`                           | `POST`       | Redirects to `/feed` if logged in                                     |
 | `/login/shelter`                        | `POST`       | Redirects to `/feed` if logged in                                     |
 | `/logout`                               | `GET`        | Redirects to `/` after user logged out                                |
+| `/notifications`                        | `GET`        | View notifications                                                    |
 | `/signup/user`                          | `POST`       | Redirects to `/feed` if logged in                                     |
 | `/signup/shelter`                       | `POST`       | Redirects to `/feed` if logged in                                     |
 | `/feed `                                | `GET`        | Displays message (temp)                                               |
@@ -111,6 +112,7 @@ Please take note of the capitalization. * is placed if it is **required**.
 | `/login/user`                           | `POST`       | `(200)` sends req.session.body.accountType |
 | `/login/shelter`                        | `POST`       | `(200)` sends req.session.body.accountType |
 | `/logout`                               | `GET`        | `(200)` sends null                         |
+| `/notifications                         | `GET`        | `(204)` sends null                         |
 | `/signup/user`                          | `POST`       | `(201)` json of newUser                    |
 | `/signup/shelter`                       | `POST`       | `(201)` json of newShelter                 |
 | `/feed `                                | `GET`        | `(200)`                                    |
@@ -255,6 +257,16 @@ Please take note of the capitalization. * is placed if it is **required**.
   `email_sender`      | varchar(36)  | NO   |     | NULL    |       |
   `address_sender`    | varchar(236) | NO   |     | NULL    |       |
   `sender_Username`   | varchar(52)  | NO   | MUL | NULL    |       |
+
+### `notifications`
+
+  Field         | Type         | Null | Key | Default | Extra          |
+ ---------------|--------------|------|-----|---------|----------------|
+  notif_id      | int(11)      | NO   | PRI | NULL    | auto_increment |
+  notif_for     | varchar(36)  | NO   | MUL | NULL    |                |
+  notif_message | varchar(255) | NO   |     | NULL    |                |
+  notif_url     | varchar(255) | NO   |     | NULL    |                |
+  date_created  | datetime     | NO   |     | NULL    |                |
 
 ### Developers
 ##### API

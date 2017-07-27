@@ -4,7 +4,6 @@ const router=express.Router();
 const validator = require('express-validator');
 const session=require('express-session');
 const connection=require('./database/connection');
-
 var signup = require('./entities/signup/signup_routes');
 var login = require('./entities/login/login_routes');
 var pets = require('./entities/pets/pets_routes');
@@ -47,7 +46,7 @@ router.get('/notifications',function(req,res,next){
   notify.viewNotif(req.session.body.Username,function(err,results){
     if(err)  res.status(500).send(err);//server error
     else if(results.length!==0)  res.send(results);
-    else res.send("none");
+    else res.status(204).send(null);
   });
 
 });

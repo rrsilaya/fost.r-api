@@ -28,7 +28,7 @@ CREATE TABLE users (\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     PRIMARY KEY(Username, email)\
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
     );
 
 connection.query('\
@@ -46,7 +46,7 @@ CREATE TABLE shelters (\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     CONSTRAINT PRIMARY KEY(Username, email)\
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
+    ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
     );
 
 connection.query('\
@@ -68,7 +68,7 @@ connection.query('\
     REFERENCES shelters(Username)\
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
     );
 
 connection.query('\
@@ -89,7 +89,7 @@ CREATE TABLE pets_of_users (\
     REFERENCES users(Username)\
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;'
+    ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
     );
 
 connection.query('\
@@ -142,7 +142,7 @@ connection.query('\
 
 connection.query('\
     CREATE TABLE notifications (\
-    `notif_id` Integer NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,\
+    `notif_id` INT NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,\
     `notif_for` varchar(36) NOT NULL,\
     `notif_message` varchar(255) NOT NULL,\
     `notif_url` varchar(255)  NOT NULL,\
