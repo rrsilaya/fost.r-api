@@ -258,7 +258,7 @@ Please take note of the capitalization. * is placed if it is **required**.
   `address_sender`    | varchar(236) | NO   |     | NULL    |       |
   `sender_Username`   | varchar(52)  | NO   | MUL | NULL    |       |
 
-### `notifications`
+#### `notifications`
 
   Field         | Type         | Null | Key | Default | Extra          |
  ---------------|--------------|------|-----|---------|----------------|
@@ -267,6 +267,7 @@ Please take note of the capitalization. * is placed if it is **required**.
   notif_message | varchar(255) | NO   |     | NULL    |                |
   notif_url     | varchar(255) | NO   |     | NULL    |                |
   date_created  | datetime     | NO   |     | NULL    |                |
+
 
 ### Developers
 ##### API
