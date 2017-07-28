@@ -1,6 +1,6 @@
 const connection = require('./../../database/connection');
 const fs = require('fs');
-var resultHandler = function(err) { 
+const resultHandler = function(err) { 
     if(err) {
        console.log("unlink failed", err);
     } else {
@@ -57,6 +57,7 @@ module.exports.deleteRequest=function(rescue_uuid,sender_Username,callback){
       fs.unlink(results[0].rescue_imgurl,resultHandler);
     }
   });
+  //delete request
   connection.query('DELETE FROM rescue WHERE rescue_uuid = ? && sender_Username = ?',[rescue_uuid,sender_Username],function(err,results){
     if (err) return callback(err);   // some error with query
     else return callback(null, results); // success
