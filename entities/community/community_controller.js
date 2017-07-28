@@ -33,20 +33,18 @@ module.exports.deleteAllPosts=function(user,callback){
     if (err) return callback(err);  // some error with query
     else return callback(null, results); // if successful
   });
-
 } 
+
 //delete a single post given its uuid
 module.exports.deletePost=function(post_uuid,user,callback){
   connection.query('DELETE FROM posts WHERE post_uuid = ? && Posted_by = ?', [post_uuid,user], function(err, results){
     if (err){
       console.log("there is an error");
       return callback(err);  // some error with query
-
     }else{
       console.log(results);
       return callback(null, results); // if successful
     }
-    
   });
 }
 
@@ -59,8 +57,12 @@ module.exports.addPost=function(newPost,callback){
 }
 
 // vote a post
-module.exports.voteToPost = function(post_uuid, callback){
+module.exports.voteToPost = function(User, post_uuid, callback){
   var today = new Date(); // updated_at which could be useful for notifications later on 
+  var vote ={
+    "voted_by":User,
+    "post_uuid":post_uuid
+  } 
   connection.query('UPDATE posts SET votes = votes+1 WHERE post_uuid = ?', post_uuid, (err, results)=>{
     if (err){
       console.log('voteToPost error');
@@ -72,20 +74,33 @@ module.exports.voteToPost = function(post_uuid, callback){
           return callback(err);
         }else{ 
           console.log('updated updated_at');
-          callback(null, results);} // if successful
-      });
-    }   
-  });
-}
+          console.log('inserting INTO votes table');
+          connection.query('INSERT INTO votes_for_posts SET ?', vote, function(err,results){
+            if (err){ 
+              console.log('votePost err!');
+              callback(err);
+            }callback(null, results) // mysql query; successful
+          });
+      };
+    });
+  }});
+}  
 
 //unvote a post
-module.exports.unvoteToPost = function(post_uuid, callback){
+module.exports.unvoteToPost = function(User, post_uuid, callback){
   var today = new Date();
   connection.query('UPDATE posts SET votes = votes-1 WHERE post_uuid = ?', post_uuid, function(err, results){
     if (err){
       console.log('unvoteToPost err');
       callback(err);
-    }else callback(null, results); //returns mysql query; if successful
+    }else{
+      connection.query('DELETE FROM votes_for_posts WHERE voted_by = ? && post_uuid = ?', [User, post_uuid], function(err, results){
+      if (err){
+        console.log('unvotePost err');
+        callback(err);
+      }callback(null, results); // mysql query; successful
+    });
+    }
   });
 }
 
@@ -114,23 +129,6 @@ module.exports.checkIfVotedPost = function(User, post_uuid, callback){
   });
 }
 
-module.exports.votePost = function(vote, callback){
-  connection.query('INSERT INTO votes_for_posts SET ?', vote, function(err,results){
-    if (err){ 
-      console.log('votePost err!');
-      callback(err);
-    }callback(null, results) // mysql query
-  });
-}
-
-module.exports.unvotePost = function(vote, callback){
-  connection.query('DELETE FROM votes_for_posts WHERE voted_by = ? && post_uuid = ?', [vote.voted_by, vote.post_uuid], function(err, results){
-    if (err){
-      console.log('unvotePost err');
-      callback(err);
-    }callback(null, results);
-  });
-}
 /************ controllers for comments ******************/
 
 //add a comment 
@@ -144,7 +142,6 @@ module.exports.addComment=function(newComment,callback){
     if (err) return callback(err);  // some error with query
     else {
       connection.query('SELECT * FROM posts WHERE post_uuid = ? ', post_uuid,function(err, results){
-        console.log('searching the post to update updated_at');
         if (err){
           console.log('some error on updating');
           return callback(err);
@@ -152,7 +149,6 @@ module.exports.addComment=function(newComment,callback){
         if (results){
           if (results.Posted_by !== newComment.commented_by){
             connection.query('UPDATE posts set ? WHERE post_uuid = ?', [update, post_uuid], function(err, results){
-              console.log('updating the post\'s updated_at');
               if (err){
                 console.log('some error on updating 2');
                 return callback(err);

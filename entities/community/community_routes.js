@@ -38,7 +38,10 @@ router.get('/:post_uuid',function(req,res,next){
         controller.viewAllComments(post_uuid,function(err,comments){
           if(err) return res.status(500).json(err);  // server error
           else {
-            res.status(200).send([post,comments]);
+            controller.showAllVotesPost(post_uuid, function(err, votes){
+              if (err) res.status(500).json(err);
+              res.status(200).send([post,comments,votes]);
+            });
           }
         });
       }
@@ -48,48 +51,31 @@ router.get('/:post_uuid',function(req,res,next){
 router.put('/:post_uuid', function(req, res){
   // will only be used for votes
   var post_uuid = req.params.post_uuid;
-  var vote = {
-    "voted_by":req.session.body.Username,
-    "post_uuid":post_uuid
-  }
-  controller.checkIfVotedPost(req.session.body.Username, post_uuid, function(err, rows){
+  var User = req.session.body.Username;
+  controller.checkIfVotedPost(User, post_uuid, function(err, rows){
     if (err){
       res.status(500).send(err);
       console.log('checkIfVotedPost some err');
     }else if(!rows){
-      controller.voteToPost(post_uuid, function(err, rows2){
+      controller.voteToPost(User, post_uuid, function(err, rows2){
         if (err){
           console.log('voteToPost err');
           res.status(500).send(err);
         }else if(rows2){
-          controller.votePost(vote, function(err, rows3){
-            if (err){
-              res.status(500).send(err);
-              console.log('votePost err');
-            }else{
-              console.log(rows2);
-              console.log('voted na yey');
-              res.status(201).send(null);
-            }
-          });
+          console.log('haha');
+          console.log(rows2);
+          res.status(201).send(null);
         }
       });
     }else if(rows){
-      controller.unvoteToPost(post_uuid, function(err, rows2){
+      controller.unvoteToPost(User, post_uuid, function(err, rows2){
         if (err){
-          res.status(500).send(err);
           console.log('unvoteToPost err');
+          res.status(500).send(err);
         }else if(rows2){
-          controller.unvotePost(vote, function(err, rows3){
-            if (err){
-              res.status(500).send(err);
-              console.log('unvotePost err');
-            }else{
-              console.log(rows2);
-              console.log('unvoted na yey');
-              res.status(201).send(null);
-            }
-          });
+          console.log('haha');
+          console.log(rows2);
+          res.status(201).send(null);
         }
       });
     }
