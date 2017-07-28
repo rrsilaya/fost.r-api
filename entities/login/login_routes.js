@@ -24,7 +24,7 @@ router.post('/user',function(req,res,next) {
         res.status(200).send(req.session.body.accountType);
       }else{
         console.log('Invalid credentials.');
-        res.status(404);
+        res.status(404).end();
       }
     });
   }
@@ -44,7 +44,7 @@ router.post('/shelter',function(req,res,next) {
         res.status(200).send(req.session.body.accountType);
       }else{
         console.log('Invalid credentials.');
-        res.status(404);
+        res.status(404).end();
       }
     });
   }

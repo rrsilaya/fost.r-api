@@ -19,12 +19,13 @@ module.exports.loginUser = function(credentials, callback){
                     // console.log('err with bcrypt');
                     throw err;
                     callback(null, false);
-                }   
-                callback(null, true);
+                } 
+                if(isMatch) callback(null, true);
+                else callback(null, false);
             });
         }else{
             // console.log('Username doesn\'t exist');
-            callback(null, true);
+            callback(null, false);
         }
     }});
 }
@@ -47,11 +48,12 @@ module.exports.loginShelter = function(credentials, callback){
                         throw err;
                         callback(null, false);
                     }
-                    callback(null, true);
+                if(isMatch) callback(null, true);
+                else callback(null, false);
                 });
             }else{
                 // console.log('Username doesn\'t exist');  
-                callback(null, true);
+                callback(null, false);
             }
         }});
 }

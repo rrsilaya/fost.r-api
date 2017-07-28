@@ -54,14 +54,17 @@ router.put('/:post_uuid', function(req, res){
   }
   controller.checkIfVotedPost(req.session.body.Username, post_uuid, function(err, rows){
     if (err){
+      res.status(500).send(err);
       console.log('checkIfVotedPost some err');
     }else if(!rows){
       controller.voteToPost(post_uuid, function(err, rows2){
         if (err){
           console.log('voteToPost err');
+          res.status(500).send(err);
         }else if(rows2){
           controller.votePost(vote, function(err, rows3){
             if (err){
+              res.status(500).send(err);
               console.log('votePost err');
             }else{
               console.log(rows2);
@@ -73,11 +76,15 @@ router.put('/:post_uuid', function(req, res){
       });
     }else if(rows){
       controller.unvoteToPost(post_uuid, function(err, rows2){
-        if (err) console.log('unvoteToPost err');
-        else if(rows2){
+        if (err){
+          res.status(500).send(err);
+          console.log('unvoteToPost err');
+        }else if(rows2){
           controller.unvotePost(vote, function(err, rows3){
-            if (err) console.log('unvotePost err');
-            else{
+            if (err){
+              res.status(500).send(err);
+              console.log('unvotePost err');
+            }else{
               console.log(rows2);
               console.log('unvoted na yey');
               res.status(201).send(null);
