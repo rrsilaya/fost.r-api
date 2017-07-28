@@ -49,7 +49,7 @@ router.get('/', function(req, res) {
 router.get('/notifications',function(req,res,next){
   notify.viewNotif(req.session.body.Username,function(err,results){
     if(err)  res.status(500).send(err);//server error
-    else if(results)  res.send(results);
+    else if(results.length)  res.status(200).json(results);
     else res.status(204).send(null);
   });
 

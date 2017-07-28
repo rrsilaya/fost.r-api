@@ -50,6 +50,7 @@
 | `/signup/user`                           | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/signup/shelter`                        | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/feed `                                 | `GET`    | Displays message (temp)                                                                        |
+| `/notifications`                         | `GET`    | View all notifications                                                                         |
 | `/accounts/viewShelters`                 | `GET`    | View all shelter accounts                                                                      |
 | `/accounts/viewUsers`                    | `GET`    | View all user accounts                                                                         |
 | `/accounts/MyAccount`                    | `GET`    | View own info                                                                                  |
@@ -115,6 +116,7 @@
 | `/logout`                                | `GET`    | 200           | `null`                                                                |
 | `/signup/user`                           | `POST`   | 201           | json of newUser                                                       |
 | `/signup/shelter`                        | `POST`   | 201           | json of newShelter                                                    |
+| `/notifications`                         | `GET`    | 200           | json of notifications                                                 |
 | `/feed `                                 | `GET`    | 200           |                                                                       |
 | `/accounts/viewShelters`                 | `GET`    | 200           | json of shelters                                                      |
 | `/accounts/viewUsers`                    | `GET`    | 200           | json of users                                                         |
