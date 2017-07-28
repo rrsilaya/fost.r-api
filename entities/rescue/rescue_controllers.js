@@ -80,7 +80,7 @@ module.exports.viewUserRequests=function(Username,callback){
 }
 /*delete all my request*/
 module.exports.deleteAllMyRequests=function(Username,callback){
- connection.query('DELETE FROM rescue WHERE sender_Username = ?',Username,function(err,results){
+  connection.query('DELETE FROM rescue WHERE sender_Username = ?',Username,function(err,results){
     if (err) return callback(err);   // some error with query
     else return callback(null, results); // success
   });

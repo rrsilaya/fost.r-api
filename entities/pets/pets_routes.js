@@ -22,18 +22,18 @@ router.use(function(req, res, next){
 /*  views pets owned by all shelters or users 
     ideally used during development
 */
-router.get('/viewAllPets', function(req, res){
-    if(req.session.body.accountType === 'user'){
-        controller.viewAllUserPets(function(err, pets){
-            if (err) return res.status(500).json(err);  // server error
-            res.json(pets); // returns pets
-        });
-    }else if(req.session.body.accountType === 'shelter'){
-        controller.viewAllShelterPets(function(err, pets){
+router.get('/shelters/viewAllPets', function(req, res){
+    controller.viewAllShelterPets(function(err, pets){
         if (err) return res.status(500).json(err);  // server error
         res.json(pets); // returns pets
     });
-    }
+});
+
+router.get('/shelters/viewAllPets', function(req, res){
+    controller.viewAllUserPets(function(err, pets){
+            if (err) return res.status(500).json(err);  // server error
+            res.json(pets); // returns pets
+        });
 });
 
 /*  returns pets of <name> 

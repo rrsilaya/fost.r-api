@@ -33,6 +33,10 @@ router.use(function(req, res, next){
   }else res.status(403).send(null);
 });
 
+router.get('/session', function (req, res, next){
+    return res.status(200).send(req.session.body.accountType);
+});
+
 router.use('/accounts', accounts);
 router.use('/pets', pets);
 router.use('/community',community);
@@ -45,7 +49,7 @@ router.get('/', function(req, res) {
 router.get('/notifications',function(req,res,next){
   notify.viewNotif(req.session.body.Username,function(err,results){
     if(err)  res.status(500).send(err);//server error
-    else if(results.length!==0)  res.send(results);
+    else if(results)  res.send(results);
     else res.status(204).send(null);
   });
 
