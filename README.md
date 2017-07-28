@@ -47,6 +47,10 @@
 | `/login/user`                            | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/login/shelter`                         | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/logout`                                | `GET`    | Redirects to `/` after user logged out                                                         |
+| `/signup/userUsername`                   | `POST`   | Checks if entered username is already taken (users)                                            |
+| `/signup/userEmail`                      | `POST`   | Checks if entered email is already taken (users)                                               |
+| `/signup/shelterUsername`                | `POST`   | Checks if username is already taken (shelters)                                                 |
+| `/signup/shelterUsername`                | `POST`   | Checks if entered email is already taken (shelters)                                            |
 | `/signup/user`                           | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/signup/shelter`                        | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/feed `                                 | `GET`    | Displays message (temp)                                                                        |
