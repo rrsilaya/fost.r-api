@@ -16,9 +16,31 @@ router.use(function(req, res, next){
   next();
 });
 
+router.post('/shelterUsername', function(req, res){
+  // assuming that request has a Username 
+  controller.usernameCheckerShelter(req.body.Username, function(err, results){
+    if (err){
+      console.log('some error with checker');
+      res.status(500).json(err);
+    }if (!results) res.status(200).send(null);
+    else if (results) res.status(400).send(null);
+  });
+});
+
+router.post('/shelterEmail', function(req, res){
+  // assuming that request has a email 
+  controller.emailCheckerShelter(req.body.email, function(err, results){
+    if (err){
+      console.log('some error with checker');
+      res.status(500).json(err);
+    }if (!results) res.status(200).send(null);
+    else if (results) res.status(400).send(null);
+  });
+});
+
 router.post('/shelter', function(req,res,next){
     // console.log(req.files);
-  if( typeof req.body.Username!== 'undefined' &&
+  if(typeof req.body.Username!== 'undefined' &&
     typeof req.body.shelter_name!=='undefined' &&
     typeof req.body.address!=='undefined' &&
     typeof req.body.contactnum!=='undefined' &&
@@ -94,12 +116,12 @@ router.post('/shelter', function(req,res,next){
             case 'QUERRY_ERR':
               errors = "Sorry, there was some error in the query.";
               console.log(errors);                    
-              return res.status(400).json(err);
+              return res.status(500).json(err);
               break;
             case 'TAKEN_BOTH_ERR':
               errors = "Sorry, the email and username you entered are already taken.";
               console.log(errors);                    
-              return res.status(400).json(err);
+              return res.status(400).json(callback);
               break;
             case 'TAKEN_EA':
               errors="Sorry, the email address you entered is already taken"
@@ -117,6 +139,27 @@ router.post('/shelter', function(req,res,next){
     }else res.status(400).json({message:'invalid input'});      
 });
 
+router.post('/userUsername', function(req, res){
+  // assuming that request has a Username 
+  controller.usernameCheckerUser(req.body.Username, function(err, results){
+    if (err){
+      console.log('some error with checker');
+      res.status(500).json(err);
+    }if (!results) res.status(200).send(null);
+    else if (results) res.status(400).send(null);
+  });
+});
+
+router.post('/userEmail', function(req, res){
+  // assuming that request has a email 
+  controller.emailCheckerUser(req.body.email, function(err, results){
+    if (err){
+      console.log('some error with checker');
+      res.status(500).json(err);
+    }if (!results) res.status(200).send(null);
+    else if (results) res.status(400).send(null);
+  });
+});
 router.post('/user', function(req,res,next){
   if(
     typeof req.body.Username!== 'undefined' &&

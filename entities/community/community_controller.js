@@ -31,15 +31,36 @@ module.exports.viewPostsOf=function(user,callback){
 }
 
 //view all posts; will serve like the feed for the community page
-module.exports.viewAllPosts=function(callback){
+module.exports.sortByTimeDesc = function(callback){
   connection.query('SELECT * FROM posts ORDER BY created_at DESC', function(err, results){
     if (err) return callback(err);   // some error with query
     return callback(null, results); // success
   });
 }
 
+module.exports.sortByTimeAsc = function(callback){
+  connection.query('SELECT * FROM posts ORDER BY created_at', function(err, results){
+    if (err) return callback(err);   // some error with query
+    return callback(null, results); // success
+  });
+}
+
+module.exports.sortByCommentsDesc = function(callback){
+  connection.query('SELECT * FROM posts ORDER BY comments', function(err, results){
+    if (err) return callback(err);   // some error with query
+    return callback(null, results); // success
+  });
+}
+
+module.exports.sortByCommentsAsc = function(callback){
+  connection.query('SELECT * FROM posts ORDER BY comments', function(err, results){
+    if (err) return callback(err);   // some error with query
+    return callback(null, results); // success
+  });
+}
+
 //deletes all posts of current user logged in 
-module.exports.deleteAllPosts=function(user,callback){
+module.exports.deleteAllPosts=function(user, callback){
   connection.query('DELETE FROM posts WHERE Posted_by = ?', user, function(err, results){
     if (err) return callback(err);  // some error with query
     else return callback(null, results); // if successful
@@ -49,10 +70,9 @@ module.exports.deleteAllPosts=function(user,callback){
 //delete a single post given its uuid
 module.exports.deletePost=function(post_uuid,user,callback){
   //delete image attached to post
-   connection.query('SELECT * FROM posts WHERE post_uuid = ? ',post_uuid,function(err, results){
+  connection.query('SELECT * FROM posts WHERE post_uuid = ? ',post_uuid,function(err, results){
     if(results[0].image_urlpath) fs.unlink(results[0].image_urlpath,resultHandler);
   });
-
   connection.query('DELETE FROM posts WHERE post_uuid = ? && Posted_by = ?', [post_uuid,user], function(err, results){
     if (err){
       console.log("there is an error");
@@ -65,7 +85,7 @@ module.exports.deletePost=function(post_uuid,user,callback){
 }
 
 //add posts to 'post' table in 'fostr' db
-module.exports.addPost=function(newPost,callback){
+module.exports.addPost=function(newPost, callback){
   connection.query('INSERT INTO posts SET ?', newPost, function(err, results){
     if (err) return callback(err);  // some error with query
     return callback(null, results); // if successful

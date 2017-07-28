@@ -1,7 +1,27 @@
 const connection = require('./../../database/connection');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs'); // https://www.npmjs.com/package/bcryptjs
 
-// https://www.npmjs.com/package/bcryptjs
+
+module.exports.usernameCheckerUser = function(Username, callback){
+    connection.query('SELECT * FROM users where Username = ?', Username, (err, results)=>{
+        if (err) callback(err);
+        if (results.length > 0){
+            console.log('Username is already used! usernameChecker');
+            callback(null, true);
+        }else callback(null, false);
+    });
+}
+
+module.exports.emailCheckerUser = function(email, callback){
+    connection.query('SELECT * FROM users where email = ?', email, (err, results)=>{
+        if (err) callback(err);
+        if (results.length > 0){
+            console.log('email is already used! emailChecker');
+            callback(null, true);
+        }else callback(null, false);
+    });
+}
+
 module.exports.registerUser = function(newUser, callback){
     bcrypt.genSalt(10, function(err, salt) {
     bcrypt.hash(newUser.password, salt, function(err, hash) {
@@ -25,6 +45,27 @@ module.exports.registerUser = function(newUser, callback){
       });
     });
 }
+
+module.exports.usernameCheckerShelter = function(Username, callback){
+    connection.query('SELECT * FROM shelters where Username = ?', Username, (err, results)=>{
+        if (err) callback(err);
+        if (results.length > 0){
+            console.log('Username is already used! usernameChecker');
+            callback(null, true);
+        }else callback(null, false);
+    });
+}
+
+module.exports.emailCheckerShelter = function(email, callback){
+    connection.query('SELECT * FROM shelters where email = ?', email, (err, results)=>{
+        if (err) callback(err);
+        if (results.length > 0){
+            console.log('email is already used! emailChecker');
+            callback(null, true);
+        }else callback(null, false);
+    });
+}
+
 
 module.exports.registerShelter = function(newShelter, callback){
     bcrypt.genSalt(10, function(err, salt) {
