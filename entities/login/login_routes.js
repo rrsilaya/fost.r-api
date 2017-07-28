@@ -13,7 +13,8 @@ router.use(function(req, res, next){
 router.post('/user',function(req,res,next) {
   if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
     var credentials=req.body;
-    controller.loginUser(credentials,function(err,isMatch){
+    controller.loginUser(credentials,function(err, isMatch){
+      // isMatch holds the boolean whether the username and password match
       if(err){
         console.log(err);
         res.status(500).send(err);
@@ -22,7 +23,7 @@ router.post('/user',function(req,res,next) {
         req.session.body.accountType = 'user';
         console.log('Successfully logged in');
         res.status(200).send(req.session.body.accountType);
-      }else{
+      }else if (!isMatch){
         console.log('Invalid credentials.');
         res.status(404).end();
       }
@@ -34,6 +35,7 @@ router.post('/shelter',function(req,res,next) {
   if(typeof req.body.Username !== 'undefined' && typeof req.body.password!=='undefined'){
     var credentials=req.body;
     controller.loginShelter(credentials, function(err,isMatch){
+      // isMatch holds the boolean whether the username and password match
       if(err){
         console.log(err);
         res.status(500).send(err);
@@ -42,7 +44,7 @@ router.post('/shelter',function(req,res,next) {
         req.session.body.accountType = 'shelter';
         console.log('Successfully logged in');
         res.status(200).send(req.session.body.accountType);
-      }else{
+      }else if (!isMatch){
         console.log('Invalid credentials.');
         res.status(404).end();
       }

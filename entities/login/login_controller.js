@@ -6,13 +6,13 @@ module.exports.loginUser = function(credentials, callback){
     var Username = credentials.Username;
     var password = credentials.password;
 
-    connection.query('SELECT * FROM users WHERE Username = ?', [Username], function (error, results, fields) {
+    connection.query('SELECT * FROM users WHERE Username = ?', [Username], function (error, results) {
       if (error){
         // console.log('login failed; error with query');
         console.log(error);
         callback(null, false);
       }else{
-        // console.log(results);
+        console.log(results);
         if(results.length > 0){
             bcrypt.compare(password, results[0].password, function(err, isMatch) {
                 if (err){
@@ -24,7 +24,7 @@ module.exports.loginUser = function(credentials, callback){
                 else callback(null, false);
             });
         }else{
-            // console.log('Username doesn\'t exist');
+            console.log('Username doesn\'t exist');
             callback(null, false);
         }
     }});
@@ -52,7 +52,7 @@ module.exports.loginShelter = function(credentials, callback){
                 else callback(null, false);
                 });
             }else{
-                // console.log('Username doesn\'t exist');  
+                console.log('Username doesn\'t exist');  
                 callback(null, false);
             }
         }});

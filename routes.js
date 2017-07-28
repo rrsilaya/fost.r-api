@@ -33,6 +33,10 @@ router.use(function(req, res, next){
   }else res.status(403).send(null);
 });
 
+router.get('/session', function (req, res, next){
+    return res.status(200).send(req.session.body.accountType);
+});
+
 router.use('/accounts', accounts);
 router.use('/pets', pets);
 router.use('/community',community);
@@ -41,7 +45,6 @@ router.use('/rescue',rescue);
 router.get('/', function(req, res) {
   res.json({ message: 'to access api: localhost:3000/api/<route>' });   
 });
-
 
 router.get('/feed',function(req,res,next){
   console.log('Feed');
