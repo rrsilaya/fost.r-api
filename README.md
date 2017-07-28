@@ -153,58 +153,8 @@
 | `/rescue/:rescue_uuid/viewRescueRequest` | `GET`    | 200           | json of rescue where rescue_uuid = :rescue_uuid                       |
 | `/rescue/submit_a_rescue_request`        | `POST`   | 201           | json of newRescue                                                     |
 
-<<<<<<< HEAD
-| Routes                      | Method | Responses | 
-| --------------------------- | ------ | ---------------------------------------------------------- |
-| `/login/user`                           | `POST`       | `(200)` sends req.session.body.accountType |
-| `/login/shelter`                        | `POST`       | `(200)` sends req.session.body.accountType |
-| `/logout`                               | `GET`        | `(200)` sends null                         |
-| `/notifications                         | `GET`        | `(204)` sends null                         |
-| `/signup/user`                          | `POST`       | `(201)` json of newUser                    |
-| `/signup/shelter`                       | `POST`       | `(201)` json of newShelter                 |
-| `/feed `                                | `GET`        | `(200)`                                    |
-| `/accounts/viewShelters`                | `GET`        | json of shelters                           |
-| `/accounts/viewUsers`                   | `GET`        | json of users                              |
-| `/accounts/MyAccount`                   | `GET`        | `(200)` json of own account's info         |
-| `/accounts/MyAccount`                   | `PUT`        | `(201)` json of mysql query                |
-| `/accounts/MyAccount`                   | `DELETE`     | `(204)` ends                               |
-| `/pets/viewAllPets`                     | `GET`        | json of pets                               |
-| `/pets/:owner/viewShelterPets`          | `GET`        | json of pets                               |
-| `/pets/:owner/viewUserPets`             | `GET`        | json of pets                               |
-| `/pets/:owner/deleteAllUserPets`        | `DELETE`     | `(204)` ends                               |
-| `/pets/:owner/deleteAllShelter`         | `DELETE`     | `(204)` ends                               |
-| `/pets/myPets`                          | `POST`       | `(201)` json of mysql query                |
-| `/pets/myPets`                          | `GET`        | `(200)` json of owned pets                 |
-| `/pets/myPets`                          | `DELETE`     | `(204)` ends                               |
-| `/pets/:pet_uuid`                       | `GET`        | `(200)` json of pet's info                 |
-| `/pets/:pet_uuid`                       | `PUT`        | `(201)` json of mysql query                |
-| `/pets/:pet_uuid`                       | `DELETE`     | `(204)` ends                               |
-| `/community/ `                          | `GET`        | `(200)` json of posts                      |
-| `/community/addPost`                    | `POST`       | `(201)` json of post                       |
-| `/community/:post_uuid`                 | `GET`        | `(200)` sends posts and comments           |
-| `/community/:post_uuid`                 | `PUT`        | `(201)` json of mysql query                |
-| `/community/:post_uuid`                 | `DELETE`     | `(204)` ends                               |
-| `/community/:post_uuid`                 | `POST`       | `(201)` json of newComment                 |
-| `/community/:user/viewPosts`            | `GET`        | `(200)` json of posts by :user             |
-| `/community/deleteAllMyPosts`           | `DELETE`     | `(204)` ends                               |
-| `/community/:post_uuid/viewAllComments` | `GET`        | `(200)` json of comments in :post_uuid     |
-| `/community/:post_uuid/:comment_uuid`   | `GET`        | `(200)` json :comment_uuid in :post_uuid   |
-| `/community/:post_uuid/:comment_uuid`   | `DELETE`     | `(204)` ends                               |
-| `/community/:post_uuid/:comment_uuid`   | `PUT`        | `(201)` json of mysql query                |
-| `/rescue/`                              | `GET`        | `(200)` json of requests (if shelter); redirects to /viewMyRequests (if user)        |
-| `/rescue/viewMyRequests`                | `GET`        | `(200)` json of requests (only for users)  |
-| `/rescue/:rescue_uuid`                  | `GET`        | `(200)` json of rescue                     |
-| `/rescue/:rescue_uuid`                  | `DELETE`     | `(204)` ends                               |
-| `/rescue/:user/viewAllRequests`         | `GET`        | `(200)` json of requests from :user (only for shelters)  |
-| `/rescue/deleteAllMyRequests`           | `GET`        | `(204)` ends (only for users)              |
-| `/rescue/:rescue_uuid/viewRescueRequest`| `GET`        | `(200)` json of rescue where rescue_uuid = :rescue_uuid  |
-| `/rescue/submit_a_rescue_request`       | `POST`       | `(201)` json of newRescue                  |
-### Tables
-#### `users`
-=======
 ## Tables
 ### `users`
->>>>>>> 03cb6f27df7f4548abbb54a54cde35766429f5a7
 
 | Field         | Type         | Null | Key | Default |
 |:--------------|:-------------|:-----|:----|:--------|
@@ -310,24 +260,8 @@
 | `address_sender`    | varchar(236) | NO   |     | NULL    |
 | `sender_Username`   | varchar(52)  | NO   | MUL | NULL    |
 
-<<<<<<< HEAD
-#### `notifications`
-
-  Field         | Type         | Null | Key | Default | Extra          |
- ---------------|--------------|------|-----|---------|----------------|
-  notif_id      | int(11)      | NO   | PRI | NULL    | auto_increment |
-  notif_for     | varchar(36)  | NO   | MUL | NULL    |                |
-  notif_message | varchar(255) | NO   |     | NULL    |                |
-  notif_url     | varchar(255) | NO   |     | NULL    |                |
-  date_created  | datetime     | NO   |     | NULL    |                |
-
-
-### Developers
-##### API
-=======
 ## Developers
 #### API
->>>>>>> 03cb6f27df7f4548abbb54a54cde35766429f5a7
 * Evangelista, Erlen Mae
 * Somabes, Kia Mei
 
