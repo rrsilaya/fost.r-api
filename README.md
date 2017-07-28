@@ -260,6 +260,14 @@
 | `address_sender`    | varchar(236) | NO   |     | NULL    |
 | `sender_Username`   | varchar(52)  | NO   | MUL | NULL    |
 
+| Field         | Type         | Null | Key | Default | Extra          |
+|:--------------|:-------------|:-----|:----|:--------|:---------------|
+| notif_id      | int(11)      | NO   | PRI | NULL    | auto_increment |
+| notif_for     | varchar(36)  | NO   | MUL | NULL    |                |
+| notif_message | varchar(255) | NO   |     | NULL    |                |
+| notif_url     | varchar(255) | NO   |     | NULL    |                |
+| date_created  | datetime     | NO   |     | NULL    |                |
+
 ## Developers
 #### API
 * Evangelista, Erlen Mae
