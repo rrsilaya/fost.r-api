@@ -25,6 +25,7 @@
   * [`posts`](#posts)
   * [`comments_on_posts`](#comments_on_posts)
   * [`rescue`](#rescue)
+  * [`notifications`](#notifications)
 - [Developers](#developers)
   * [API](#api)
   * [Client](#client)

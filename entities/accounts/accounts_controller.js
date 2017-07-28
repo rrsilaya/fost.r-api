@@ -1,5 +1,7 @@
 const connection = require('./../../database/connection');
 const bcrypt = require('bcryptjs'); // for the password; ideally only the password's length should be passed
+
+//https://stackoverflow.com/questions/36659612/how-does-node-js-fs-unlink-works
 const fs = require('fs');
 const resultHandler = function(err) { 
     if(err) {

@@ -1,4 +1,6 @@
 const connection = require('./../../database/connection');
+//https://stackoverflow.com/questions/36659612/how-does-node-js-fs-unlink-works
+
 const fs = require('fs');
 const resultHandler = function(err) { 
     if(err) {
