@@ -52,10 +52,8 @@ module.exports.viewMyRequest=function(rescue_uuid,Username,callback){
 module.exports.deleteRequest=function(rescue_uuid,sender_Username,callback){
   //delete the file 
   connection.query('SELECT * FROM rescue WHERE rescue_uuid = ? && sender_Username = ? ',[rescue_uuid,sender_Username],function(err,results){
-    if (err) return callback(err);   // some error with query
-    else if (results.affectedRows!==0){
-      fs.unlink(results[0].rescue_imgurl,resultHandler);
-    }
+    if (results[0].rescue_imgurl)  fs.unlink(results[0].rescue_imgurl,resultHandler);
+    
   });
   //delete request
   connection.query('DELETE FROM rescue WHERE rescue_uuid = ? && sender_Username = ?',[rescue_uuid,sender_Username],function(err,results){

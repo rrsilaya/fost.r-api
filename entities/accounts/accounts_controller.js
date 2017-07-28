@@ -57,9 +57,7 @@ module.exports.updateShelterInfo = function(Username, changes, callback){
 module.exports.deleteUserAccount = function(Username, callback){
 	//delete icon
 	connection.query('SELECT * FROM users where Username = ?', Username, function(err, results){
-		if(results.affectedRows!==0){
-			fs.unlink(results[0].icon_url,resultHandler);
-		}
+		if(results[0].icon_url)  fs.unlink(results[0].icon_url,resultHandler);
 	});
 	connection.query('DELETE FROM users WHERE Username = ?', Username, function(err, results){
 		if (err) return callback(err);	// some error with query

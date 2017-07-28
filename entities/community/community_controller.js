@@ -266,9 +266,7 @@ module.exports.viewAllComments=function(post_uuid,callback){
 module.exports.deleteComment=function(post_uuid,comment_uuid,user,callback){
   //delete image attached to a comment
   connection.query('SELECT * FROM comments_on_posts WHERE post_uuid = ? && comment_uuid = ?',[post_uuid,comment_uuid],function(err,results){
-   if(results[0].image_urlpath){
-    fs.unlink(results[0].image_urlpath,resultHandler);
-   }
+   if(results[0].image_urlpath)  fs.unlink(results[0].image_urlpath,resultHandler);
   });
 
   connection.query('DELETE FROM comments_on_posts WHERE post_uuid =? && comment_uuid = ? && commented_by = ?',[post_uuid,comment_uuid,user],function(err,results){
