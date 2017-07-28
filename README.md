@@ -43,6 +43,7 @@
 |                  Route                   |  Method  |                                            Remarks                                             |
 | :--------------------------------------- | :------- | :--------------------------------------------------------------------------------------------- |
 | `/`                                      | `GET`    | Displays message(temp)                                                                         |
+| `/session`                               | `GET`    | Returns the account type                                                                       |
 | `/login/user`                            | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/login/shelter`                         | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/logout`                                | `GET`    | Redirects to `/` after user logged out                                                         |
@@ -108,6 +109,7 @@
 ### Responses
 |                  Route                   |  Method  | Response Code |                             Response Body                             |
 | :--------------------------------------- | :------- | :------------ | :-------------------------------------------------------------------- |
+| `/session`                               | `GET`    | 200           | `req.session.body.accountType`                                        |
 | `/login/user`                            | `POST`   | 200           | `req.session.body.accountType`                                        |
 | `/login/shelter`                         | `POST`   | 200           | `req.session.body.accountType`                                        |
 | `/logout`                                | `GET`    | 200           | `null`                                                                |
