@@ -34,7 +34,7 @@ module.exports.deleteAllPosts=function(user,callback){
     else return callback(null, results); // if successful
   });
 
-}
+} 
 //delete a single post given its uuid
 module.exports.deletePost=function(post_uuid,user,callback){
   connection.query('DELETE FROM posts WHERE post_uuid = ? && Posted_by = ?', [post_uuid,user], function(err, results){
@@ -59,23 +59,78 @@ module.exports.addPost=function(newPost,callback){
 }
 
 // vote a post
-module.exports.votePost = function(post_uuid, callback){
+module.exports.voteToPost = function(post_uuid, callback){
   var today = new Date(); // updated_at which could be useful for notifications later on 
   connection.query('UPDATE posts SET votes = votes+1 WHERE post_uuid = ?', post_uuid, (err, results)=>{
     if (err){
-      console.log("there is an error");
+      console.log('voteToPost error');
       return callback(err);  // some error with query
     }else{
       connection.query('UPDATE posts SET updated_at = ? WHERE post_uuid =?', [today, post_uuid], (err, results)=>{
         if (err){
           console.log('error upon updating updated_at');
           return callback(err);
-        }else callback(null, results); // if successful
+        }else{ 
+          console.log('updated updated_at');
+          callback(null, results);} // if successful
       });
     }   
   });
 }
 
+//unvote a post
+module.exports.unvoteToPost = function(post_uuid, callback){
+  var today = new Date();
+  connection.query('UPDATE posts SET votes = votes-1 WHERE post_uuid = ?', post_uuid, function(err, results){
+    if (err){
+      console.log('unvoteToPost err');
+      callback(err);
+    }else callback(null, results); //returns mysql query; if successful
+  });
+}
+
+/***** controllers for votes_for_posts **********/
+module.exports.showAllVotesPost = function(post_uuid, callback){
+  connection.query('SELECT * FROM votes_for_posts WHERE post_uuid = ?', post_uuid, function(err, results){
+    if (err) callback(err);
+    else{
+      console.log('showing votes for ' + post_uuid);
+      callback(null, results);
+    }
+  });
+}
+
+//check if voted already
+module.exports.checkIfVotedPost = function(User, post_uuid, callback){
+  connection.query('SELECT * FROM votes_for_posts WHERE post_uuid = ? && voted_by = ?', [post_uuid, User], function(err, results){
+  if (err) callback(err);
+  else if (results.length > 0){
+    console.log(User + ' has already voted ' + post_uuid);
+    callback(null, results);
+  }else{
+    console.log(User + ' has not yet voted ' + post_uuid);
+    callback(null, null);
+  }
+  });
+}
+
+module.exports.votePost = function(vote, callback){
+  connection.query('INSERT INTO votes_for_posts SET ?', vote, function(err,results){
+    if (err){ 
+      console.log('votePost err!');
+      callback(err);
+    }callback(null, results) // mysql query
+  });
+}
+
+module.exports.unvotePost = function(vote, callback){
+  connection.query('DELETE FROM votes_for_posts WHERE voted_by = ? && post_uuid = ?', [vote.voted_by, vote.post_uuid], function(err, results){
+    if (err){
+      console.log('unvotePost err');
+      callback(err);
+    }callback(null, results);
+  });
+}
 /************ controllers for comments ******************/
 
 //add a comment 
@@ -116,6 +171,31 @@ module.exports.viewComment=function(post_uuid,comment_uuid,callback){
   connection.query('SELECT * FROM comments_on_posts WHERE post_uuid = ? && comment_uuid = ?',[post_uuid,comment_uuid],function(err,results){
     if (err) return callback(err);   // some error with query
     else return callback(null, results); // success
+  });
+}
+
+/***** controllers for votes_for_posts **********/
+module.exports.showAllVotesComment = function(comment_uuid, callback){
+  connection.query('SELECT * FROM votes_for_comments WHERE post_uuid = ?', comment_uuid, function(err, results){
+    if (err) callback(err);
+    else{
+      console.log('showing votes for ' + comment_uuid);
+      callback(null, results);
+    }
+  });
+}
+
+//check if voted already
+module.exports.checkIfVotedComment = function(User, comment_uuid, callback){
+  connection.query('SELECT * FROM votes_for_comments WHERE comment_uuid = ? && voted_by = ?', [post_uuid, User], function(err, results){
+  if (err) callback(err);
+  else if (results.length > 0){
+    console.log(User + ' has already voted ' + comment_uuid);
+    callback(null, results);
+  }else{
+    console.log(User + ' has not yet voted ' + comment_uuid);
+    callback(null, null);
+  }
   });
 }
 

@@ -48,9 +48,44 @@ router.get('/:post_uuid',function(req,res,next){
 router.put('/:post_uuid', function(req, res){
   // will only be used for votes
   var post_uuid = req.params.post_uuid;
-  controller.votePost(post_uuid, function(err, post){
-    if(err) return res.status(500).json(err);
-    res.status(201).json(post);
+  var vote = {
+    "voted_by":req.session.body.Username,
+    "post_uuid":post_uuid
+  }
+  controller.checkIfVotedPost(req.session.body.Username, post_uuid, function(err, rows){
+    if (err){
+      console.log('checkIfVotedPost some err');
+    }else if(!rows){
+      controller.voteToPost(post_uuid, function(err, rows2){
+        if (err){
+          console.log('voteToPost err');
+        }else if(rows2){
+          controller.votePost(vote, function(err, rows3){
+            if (err){
+              console.log('votePost err');
+            }else{
+              console.log(rows2);
+              console.log('voted na yey');
+              res.status(201).send(null);
+            }
+          });
+        }
+      });
+    }else if(rows){
+      controller.unvoteToPost(post_uuid, function(err, rows2){
+        if (err) console.log('unvoteToPost err');
+        else if(rows2){
+          controller.unvotePost(vote, function(err, rows3){
+            if (err) console.log('unvotePost err');
+            else{
+              console.log(rows2);
+              console.log('unvoted na yey');
+              res.status(201).send(null);
+            }
+          });
+        }
+      });
+    }
   });
 });
 

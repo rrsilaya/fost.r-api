@@ -106,6 +106,15 @@ connection.query('\
     );
 
 connection.query('\
+    CREATE TABLE votes_for_posts(\
+    `voted_by` varchar(52) NOT NULL,\
+    `post_uuid` varchar(36) NOT NULL,\
+    CONSTRAINT votes_for_posts_fk FOREIGN KEY(post_uuid)\
+    REFERENCES posts(post_uuid)\
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
+    );
+
+connection.query('\
     CREATE TABLE comments_on_posts (\
     `comment_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `commented_by` varchar(52) NOT NULL,\
@@ -121,6 +130,16 @@ connection.query('\
     ON UPDATE CASCADE\
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
     );
+
+connection.query('\
+    CREATE TABLE votes_for_comments(\
+    `voted_by` varchar(52) NOT NULL,\
+    `comment_uuid` varchar(36) NOT NULL,\
+    CONSTRAINT votes_for_comments_fk FOREIGN KEY(comment_uuid)\
+    REFERENCES comments_on_posts(comment_uuid)\
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
+    );
+
 
 connection.query('\
     CREATE TABLE rescue (\
@@ -139,6 +158,22 @@ connection.query('\
     ON UPDATE CASCADE\
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
     );
+
+connection.query('\
+CREATE TABLE notifications(\
+    `notif_time` datetime NULL,\
+    `post_uuid` varchar(36) DEFAULT NULL,\
+    `comment_uuid` varchar(36) DEFAULT NULL,\
+    `viewed` enum("TRUE", "FALSE") DEFAULT "FALSE",\
+    FOREIGN KEY (post_uuid) REFERENCES posts (post_uuid)\
+    ON DELETE CASCADE,\
+    FOREIGN KEY (comment_uuid) REFERENCES comments_on_posts (comment_uuid)\
+    ON DELETE CASCADE\
+    ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
+    );
+
+connection.query('\
+DELETE FROM notifications WHERE notif_time < (CURDATE() - INTERVAL 15 DAY);');
 
 connection.end();
 
