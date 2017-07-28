@@ -262,6 +262,8 @@
 | `address_sender`    | varchar(236) | NO   |     | NULL    |
 | `sender_Username`   | varchar(52)  | NO   | MUL | NULL    |
 
+### `notifications`
+
 | Field         | Type         | Null | Key | Default | Extra          |
 |:--------------|:-------------|:-----|:----|:--------|:---------------|
 | notif_id      | int(11)      | NO   | PRI | NULL    | auto_increment |
