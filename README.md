@@ -43,7 +43,7 @@
 |                  Route                   |  Method  |                                            Remarks                                             |
 | :--------------------------------------- | :------- | :--------------------------------------------------------------------------------------------- |
 | `/`                                      | `GET`    | Displays message(temp)                                                                         |
-| `/session`                               | `GET`    | Returns the account type                                                                       |
+| `/session`                               | `GET`    | Returns the account type (if logged in)                                                        |
 | `/login/user`                            | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/login/shelter`                         | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/logout`                                | `GET`    | Redirects to `/` after user logged out                                                         |
@@ -227,7 +227,8 @@
 | `Posted_by`     | varchar(52)  |  NO  | MUL |  NULL   |
 | `post_title`    | varchar(255) |  NO  |     |  NULL   |
 | `text_post`     | TEXT         |  NO  |     |  NULL   |
-| `votes`         | int(5)       |  NO  |     |  NULL   |
+| `votes`         | int(6)       |  NO  |     |  NULL   |
+| `comments`      | int(6)       |  NO  |     |  NULL   |
 | `image_urlpath` | varchar(255) | YES  | UNI |  NULL   |
 | `post_uuid`     | varchar(36)  |  NO  | PRI |  NULL   |
 | `created_at`    | datetime     |  NO  |     |  NULL   |
@@ -239,7 +240,7 @@
 | `comment_uuid`  | varchar(36)  | NO   | PRI | NULL    |
 | `commented_by`  | varchar(52)  | NO   |     | NULL    |
 | `comment_body`  | varchar(255) | NO   |     | NULL    |
-| `votes`         | int(5)       | NO   |     | NULL    |
+| `votes`         | int(6)       | NO   |     | NULL    |
 | `image_urlpath` | varchar(255) | YES  | UNI | NULL    |
 | `created_at`    | datetime     | NO   |     | NULL    |
 | `updated_at`    | datetime     | NO   |     | NULL    |

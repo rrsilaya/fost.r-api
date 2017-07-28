@@ -148,11 +148,17 @@ module.exports.addComment=function(newComment,callback){
         }
         if (results){
           if (results.Posted_by !== newComment.commented_by){
-            connection.query('UPDATE posts set ? WHERE post_uuid = ?', [update, post_uuid], function(err, results){
+            connection.query('UPDATE posts SET ? WHERE post_uuid = ?', [update, post_uuid], function(err, results){
               if (err){
                 console.log('some error on updating 2');
                 return callback(err);
               }console.log(results);
+              connection.query('UPDATE posts SET comments = comments+1 WHERE post_uuid = ?', post_uuid, (err, results)=>{
+                if (err){
+                  console.log('some error updating comments counter');
+                  return callback(err);
+                }console.log('updated comments counter of ' + post_uuid);
+              })
             });
           }
         }
@@ -246,7 +252,16 @@ module.exports.viewAllComments=function(post_uuid,callback){
 module.exports.deleteComment=function(post_uuid,comment_uuid,user,callback){
   connection.query('DELETE FROM comments_on_posts WHERE post_uuid =? && comment_uuid = ? && commented_by = ?',[post_uuid,comment_uuid,user],function(err,results){
     if (err) return callback(err);   // some error with query
-    else return callback(null, results); // success
+    else{ 
+    // return callback(null, results); // success
+      connection.query('UPDATE posts SET comments = comments-1 WHERE post_uuid = ?', post_uuid, (err, results)=>{
+        if (err){
+          console.log('error comments-- on ' + post_uuid);
+          callback(err);
+        }console.log('subtracted');
+      });
+    callback(null, results); // success
+    }
   });
 }
 

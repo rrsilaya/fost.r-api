@@ -151,6 +151,7 @@ router.post('/addPost',function(req,res,next){
       "post_uuid": post_uuid,
       "image_urlpath":image_urlpath,
       "votes":0,
+      "comments":0,
       "created_at": today,
       "updated_at":today
     }
@@ -217,7 +218,7 @@ router.post('/:post_uuid', function(req,res,next){
     controller.addComment(newComment,function(err,results){
       if(err) res.status(500).send(err);//server error
       else if(results.affectedRows!==0){
-        res.status(201).json(newComment); // returns info of newly added post
+        res.status(201).json(newComment); // returns info of newly added comment
         console.log("Comment Added!!!!");
       }
     });
