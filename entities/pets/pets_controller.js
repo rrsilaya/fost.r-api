@@ -1,4 +1,13 @@
 const connection = require('./../../database/connection');
+const fs = require('fs');
+const resultHandler = function(err) { 
+    if(err) {
+       console.log("unlink failed", err);
+    } else {
+       console.log("file deleted");
+    }
+}
+
 /* queries for pets are all here */
 
 /* view all pets */
@@ -79,6 +88,10 @@ module.exports.updateShelterPet = function(uuid, changes, callback){
 
 /* delete specific pets given the uuid of pet */
 module.exports.deleteUserPet = function(Username, uuid, callback){
+	//delete image
+	connection.query('SELECT * FROM pets_of_users where user_Username = ? and uuid = ?', [Username, uuid], function(err, results){
+		if(results[0].url) fs.unlink(results[0].url,resultHandler);
+	});
 	connection.query('DELETE FROM pets_of_users WHERE user_Username = ? and uuid = ?', [Username, uuid], function(err, results){
 		if (err) return callback(err);	// some error with query
 		console.log(results);
@@ -87,6 +100,10 @@ module.exports.deleteUserPet = function(Username, uuid, callback){
 }
 
 module.exports.deleteShelterPet = function(Username, uuid, callback){
+	//delete image
+	connection.query('SELECT * FROM pets_of_shelters where shelter_Username = ? and uuid = ?', [Username, uuid], function(err, results){
+		if(results[0].url) fs.unlink(results[0].url,resultHandler);
+	});
 	connection.query('DELETE FROM pets_of_shelters WHERE shelter_Username = ? and uuid = ?', [Username, uuid], function(err, results){
 		if (err) return callback(err);	// some error with query
 		console.log(results);
