@@ -145,6 +145,7 @@ router.post('/submit_a_rescue_request',function(req,res,next){
         else if (results.affectedRows==1) res.status(201).json(newRescue);
         else res.status(400);
       });
+      
     });
   }
 });

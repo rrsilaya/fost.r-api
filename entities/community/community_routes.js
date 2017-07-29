@@ -7,6 +7,7 @@ var shortid = require('shortid');
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'); 
 // default has "-"" and "_" ; this sets the characters to only the entered characters (https://www.npmjs.com/package/shortid)
 var controller = require('./community_controller');
+var notify = require('./../notifications/notifications_controllers');
 
 router.use(validator());      // express-validator
 router.use(fileUpload());     // express-fileupload
@@ -65,7 +66,29 @@ router.put('/:post_uuid', function(req, res){
         }else if(rows2){
           console.log('haha');
           console.log(rows2);
+
+          /*notify the user */
+          var query = 'SELECT * FROM posts WHERE post_uuid = ?';
+          //returns Username of user who owns the post
+          notify.getUser(query,post_uuid,function(err,results){
+            if (err) console.log(err)
+            else if(results.affectedRows!==0 && (results[0].Posted_by!==req.session.body.Username)){
+              var newNotif = {
+                "notif_for": results[0].Posted_by,
+                "notif_message" : req.session.body.Username + " voted your post. ",
+                "notif_url" : "api/community/"+post_uuid,
+                "date_created" : new Date()
+              }
+              //add to notifications table
+              //when 'notif_for' is logged in,he/she will received this notification
+              notify.addNotif(newNotif,function(err,results){
+                if(err) console.log(err);
+                //else if(results.affectedRows!==0) //res.status(200).send(newComment);
+              });
+            }
+          });
           res.status(201).send(null);
+
         }
       });
     }else if(rows){
@@ -219,11 +242,37 @@ router.post('/:post_uuid', function(req,res,next){
     controller.addComment(newComment,function(err,results){
       if(err) res.status(500).send(err);//server error
       else if(results.affectedRows!==0){
-        res.status(201).json(newComment); // returns info of newly added comment
+
         console.log("Comment Added!!!!");
+
+        /*notify the user */
+        //define query
+        var query = 'SELECT * FROM posts WHERE post_uuid = ?';
+        //returns Username of user who owns the post
+        notify.getUser(query,post_uuid,function(err,results){
+          if(err) console.log(err);//server error
+          else if(results.affectedRows!==0 && (results[0].Posted_by!==req.session.body.Username)){
+            var newNotif = {
+              "notif_for": results[0].Posted_by,
+              "notif_message" : req.session.body.Username + " commented on your post. ",
+              "notif_url" : "api/community/"+post_uuid,
+              "date_created" : new Date()
+            }
+            //add to notifications table
+            //when 'notif_for' is logged in,he/she will received this notification
+            notify.addNotif(newNotif,function(err,results){
+              if(err) console.log(err);//server error
+              else if(results.affectedRows!==0)  console.log("user will be notified");
+            });
+          }
+        });
+        res.status(201).send(newComment); // returns info of newly added post
+
       }
     });
+    
 
+    
   }else{
     res.status(403);
     console.log('Login or signup first.');
@@ -249,7 +298,32 @@ router.put('/:post_uuid/:comment_uuid', function(req, res){
   var comment_uuid = req.params.comment_uuid;
   controller.voteComment(post_uuid, comment_uuid, function(err, results){
     if(err) return res.status(500).json(err);
-    res.status(201).json(results);
+    else if(results.affectedRows!==0){
+
+      /*notify the user */
+      //define query
+      var query = 'SELECT * FROM comments_on_posts WHERE comment_uuid = ?';
+      //returns Username of user who owns the post
+      notify.getUser(query,comment_uuid,function(err,results){
+        if(err) console.log(err);//server error
+        else if(results.affectedRows!==0 && (results[0].commented_by!==req.session.body.Username)){
+          var newNotif = {
+            "notif_for": results[0].commented_by,
+            "notif_message" : req.session.body.Username + " voted on your comment. ",
+            "notif_url" : "api/community/"+post_uuid+"/"+comment_uuid,
+            "date_created" : new Date()
+          }
+          console.log(newNotif);
+          //add to notifications table
+          //when 'notif_for' is logged in,he/she will received this notification
+          notify.addNotif(newNotif,function(err,results){
+            if(err) console.log(err);//server error
+            //else if(results.affectedRows!==0) res.status(200).send(newComment);
+          });
+        }
+      });
+      res.status(201).json(results);
+    }
   });
 });
 

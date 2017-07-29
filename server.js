@@ -7,8 +7,7 @@ const bodyParser =require('body-parser');
 const mysql=require('mysql');
 const logger = require('morgan');
 const connection=require('./database/connection');
-const routes=require('./routes.js');
-
+const routes=require('./routes');
 //configure app to use bodyParser()
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -25,6 +24,5 @@ const port = process.env.PORT || 3000;
 const server =app.listen(port, function() {
   console.log('Express server listening on port ' + port);
 });
-
 
 module.exports=app;

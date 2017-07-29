@@ -1,5 +1,16 @@
 
 const connection = require('./../../database/connection');
+//https://stackoverflow.com/questions/36659612/how-does-node-js-fs-unlink-works
+
+const fs = require('fs');
+const resultHandler = function(err) { 
+    if(err) {
+       console.log("unlink failed", err);
+    } else {
+       console.log("file deleted");
+    }
+}
+
 // contains all queries for community
 
 /********* controllers for posts *************/
@@ -71,7 +82,11 @@ module.exports.deleteAllPosts=function(user, callback){
 } 
 
 //delete a single post given its uuid
-module.exports.deletePost=function(post_uuid, user, callback){
+module.exports.deletePost=function(post_uuid,user,callback){
+  //delete image attached to post
+  connection.query('SELECT * FROM posts WHERE post_uuid = ? ',post_uuid,function(err, results){
+    if(results[0].image_urlpath) fs.unlink(results[0].image_urlpath,resultHandler);
+  });
   connection.query('DELETE FROM posts WHERE post_uuid = ? && Posted_by = ?', [post_uuid,user], function(err, results){
     if (err){
       console.log("there is an error");
@@ -285,6 +300,11 @@ module.exports.viewAllComments=function(post_uuid,callback){
 //delete a comment in a post 
 
 module.exports.deleteComment=function(post_uuid,comment_uuid,user,callback){
+  //delete image attached to a comment
+  connection.query('SELECT * FROM comments_on_posts WHERE post_uuid = ? && comment_uuid = ?',[post_uuid,comment_uuid],function(err,results){
+   if(results[0].image_urlpath)  fs.unlink(results[0].image_urlpath,resultHandler);
+  });
+
   connection.query('DELETE FROM comments_on_posts WHERE post_uuid =? && comment_uuid = ? && commented_by = ?',[post_uuid,comment_uuid,user],function(err,results){
     if (err) return callback(err);   // some error with query
     else{ 

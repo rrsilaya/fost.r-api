@@ -118,3 +118,17 @@ CREATE TABLE rescue (
     ON DELETE CASCADE
     ON UPDATE CASCADE
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE notifications (
+    `notif_id` Integer PRIMARY KEY AUTO INCREMENT NOT NULL,
+    `notif_for` varchar(52) NOT NULL,
+    `notif_body` varchar(255) NOT NULL,
+    `url` varchar(255)  NOT NULL,
+    `date_created` datetime NOT NULL,
+    CONSTRAINT notifications_fk FOREIGN KEY(notif_for)
+    REFERENCES users(Username) 
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    ) ENGINE=InnoDB AUTO_INCREMENT=1  DEFAULT CHARSET=latin1;'
+    );

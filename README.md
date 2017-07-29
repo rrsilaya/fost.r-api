@@ -25,6 +25,7 @@
   * [`posts`](#posts)
   * [`comments_on_posts`](#comments_on_posts)
   * [`rescue`](#rescue)
+  * [`notifications`](#notifications)
 - [Developers](#developers)
   * [API](#api)
   * [Client](#client)
@@ -54,6 +55,7 @@
 | `/signup/user`                           | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/signup/shelter`                        | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/feed `                                 | `GET`    | Displays message (temp)                                                                        |
+| `/notifications`                         | `GET`    | View all notifications                                                                         |
 | `/accounts/viewShelters`                 | `GET`    | View all shelter accounts                                                                      |
 | `/accounts/viewUsers`                    | `GET`    | View all user accounts                                                                         |
 | `/accounts/MyAccount`                    | `GET`    | View own info                                                                                  |
@@ -119,6 +121,7 @@
 | `/logout`                                | `GET`    | 200           | `null`                                                                |
 | `/signup/user`                           | `POST`   | 201           | json of newUser                                                       |
 | `/signup/shelter`                        | `POST`   | 201           | json of newShelter                                                    |
+| `/notifications`                         | `GET`    | 200           | json of notifications                                                 |
 | `/feed `                                 | `GET`    | 200           |                                                                       |
 | `/accounts/viewShelters`                 | `GET`    | 200           | json of shelters                                                      |
 | `/accounts/viewUsers`                    | `GET`    | 200           | json of users                                                         |
@@ -263,6 +266,16 @@
 | `email_sender`      | varchar(36)  | NO   |     | NULL    |
 | `address_sender`    | varchar(236) | NO   |     | NULL    |
 | `sender_Username`   | varchar(52)  | NO   | MUL | NULL    |
+
+### `notifications`
+
+| Field         | Type         | Null | Key | Default | Extra          |
+|:--------------|:-------------|:-----|:----|:--------|:---------------|
+| notif_id      | int(11)      | NO   | PRI | NULL    | auto_increment |
+| notif_for     | varchar(36)  | NO   | MUL | NULL    |                |
+| notif_message | varchar(255) | NO   |     | NULL    |                |
+| notif_url     | varchar(255) | NO   |     | NULL    |                |
+| date_created  | datetime     | NO   |     | NULL    |                |
 
 ## Developers
 #### API

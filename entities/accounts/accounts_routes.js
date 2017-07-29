@@ -37,6 +37,7 @@ router.get('/viewUsers', function(req, res){
 /*view basic info */
 router.get('/MyAccount',function(req,res){
     var Username = req.session.body.Username;
+
     if(req.session.body.accountType == 'user'){
         controller.viewUserInfo(Username, function(err,results){
             if (err) return res.status(500).json(err);  // server error
@@ -55,11 +56,13 @@ router.get('/MyAccount',function(req,res){
 router.put('/MyAccount', function(req, res){
     var Username = req.session.body.Username;
     var changes = req.body;
+
     if(req.session.body.accountType == 'user'){
         controller.updateUserInfo(Username, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
             res.status(201).json(results); // returns pets of specified user
         }); 
+
     }else if(req.session.body.accountType == 'shelter'){
         controller.updateShelterInfo(Username, changes, function(err, results){
             if (err) return res.status(500).json(err);  // server error
@@ -71,6 +74,7 @@ router.put('/MyAccount', function(req, res){
 /* deletion of accounts (only if logged in) */
 router.delete('/MyAccount', function(req, res){
     var Username = req.session.body.Username;
+
     if(req.session.body.accountType == 'user'){
         controller.deleteUserAccount(Username, function(err, results){
             if (err) return res.status(500).json(err);  // server error
