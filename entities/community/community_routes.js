@@ -264,6 +264,7 @@ router.post('/:post_uuid', function(req,res,next){
       image_urlpath=null;
     }
     var newComment={
+      "comment_title":comment_title,
       "comment_uuid":comment_uuid,
       "commented_by": user,
       "comment_body" :comment_body,
