@@ -10,6 +10,7 @@ var controller = require('./community_controller');
 
 router.use(validator());      // express-validator
 router.use(fileUpload());     // express-fileupload
+
 router.use(function(req, res, next) {
   console.log('getting request...');
   next();

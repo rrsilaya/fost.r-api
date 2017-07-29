@@ -35,7 +35,7 @@ module.exports.sortByTimeAsc = function(callback){
 }
 
 module.exports.sortByCommentsDesc = function(callback){
-  connection.query('SELECT * FROM posts ORDER BY comments', function(err, results){
+  connection.query('SELECT * FROM posts ORDER BY comments DESC', function(err, results){
     if (err) return callback(err);   // some error with query
     return callback(null, results); // success
   });
@@ -43,6 +43,20 @@ module.exports.sortByCommentsDesc = function(callback){
 
 module.exports.sortByCommentsAsc = function(callback){
   connection.query('SELECT * FROM posts ORDER BY comments', function(err, results){
+    if (err) return callback(err);   // some error with query
+    return callback(null, results); // success
+  });
+}
+
+module.exports.sortByVotesDesc = function(callback){
+  connection.query('SELECT * FROM posts ORDER BY votes DESC', function(err, results){
+    if (err) return callback(err);   // some error with query
+    return callback(null, results); // success
+  });
+}
+
+module.exports.sortByVotesAsc = function(callback){
+  connection.query('SELECT * FROM posts ORDER BY votes', function(err, results){
     if (err) return callback(err);   // some error with query
     return callback(null, results); // success
   });
