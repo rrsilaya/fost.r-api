@@ -104,9 +104,6 @@ router.put('/:post_uuid', function(req, res){
           console.log('voteToPost err');
           res.status(500).send(err);
         }else if(rows2){
-          console.log('haha');
-          console.log(rows2);
-
           /*notify the user */
           var query = 'SELECT * FROM posts WHERE post_uuid = ?';
           //returns Username of user who owns the post
@@ -137,8 +134,6 @@ router.put('/:post_uuid', function(req, res){
           console.log('unvoteToPost err');
           res.status(500).send(err);
         }else if(rows2){
-          console.log('haha');
-          console.log(rows2);
           res.status(201).send(null);
         }
       });
@@ -156,7 +151,7 @@ router.get('/:user/viewPosts',function(req,res,next){
     console.log(user);
     controller.viewPostsOf(user,function(err, posts){
         if (err) return res.status(500).json(err);  // server error
-        else res.json(posts); // returns pets of specified user
+        else res.json(posts); // returns posts of specified user
     }); 
 });
 
@@ -282,9 +277,7 @@ router.post('/:post_uuid', function(req,res,next){
     controller.addComment(newComment,function(err,results){
       if(err) res.status(500).send(err);//server error
       else if(results.affectedRows!==0){
-
         console.log("Comment Added!!!!");
-
         /*notify the user */
         //define query
         var query = 'SELECT * FROM posts WHERE post_uuid = ?';
@@ -307,19 +300,13 @@ router.post('/:post_uuid', function(req,res,next){
           }
         });
         res.status(201).send(newComment); // returns info of newly added post
-
       }
     });
-    
-
-    
   }else{
     res.status(403);
     console.log('Login or signup first.');
   }
 });
-
-
 
 /* view a comment (required : post_uuid && comment_uuid */
 router.get('/:post_uuid/:comment_uuid',function(req,res,next){
@@ -339,7 +326,6 @@ router.put('/:post_uuid/:comment_uuid', function(req, res){
   controller.voteComment(post_uuid, comment_uuid, function(err, results){
     if(err) return res.status(500).json(err);
     else if(results.affectedRows!==0){
-
       /*notify the user */
       //define query
       var query = 'SELECT * FROM comments_on_posts WHERE comment_uuid = ?';

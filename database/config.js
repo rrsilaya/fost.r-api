@@ -117,6 +117,7 @@ connection.query('\
 
 connection.query('\
     CREATE TABLE comments_on_posts (\
+    `comment_title` varchar(36) NOT NULL,\
     `comment_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `commented_by` varchar(52) NOT NULL,\
     `comment_body` varchar(255) NOT NULL,\
@@ -129,7 +130,7 @@ connection.query('\
     REFERENCES posts(post_uuid) \
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
-    ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
     );
 
 connection.query('\

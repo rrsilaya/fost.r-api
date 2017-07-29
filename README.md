@@ -254,6 +254,7 @@
 ### `comments_on_posts`
 | Field           | Type         | Null | Key | Default |
 |:----------------|:-------------|:-----|:----|:--------|
+| `comment_title` | varchar(36)  | NO   |     | NULL    |
 | `comment_uuid`  | varchar(36)  | NO   | PRI | NULL    |
 | `commented_by`  | varchar(52)  | NO   |     | NULL    |
 | `comment_body`  | varchar(255) | NO   |     | NULL    |
