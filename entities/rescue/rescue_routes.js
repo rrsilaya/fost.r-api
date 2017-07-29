@@ -18,7 +18,13 @@ router.get('/',function(req,res,next){
       if (err) return res.status(500).json(err);  // server error
       else res.status(200).json(requests); // returns all posts
     });
-  }else if(req.session.body.accountType === 'user') res.redirect('/viewMyRequests');
+  }else if(req.session.body.accountType === 'user'){
+    controller.viewUserRequests(req.session.body.Username,function(err,requests){
+      if (err) return res.status(500).json(err);  // server error
+      else res.status(200).json(requests); // returns request
+    });
+
+  }
 });
 
 router.get('/:rescue_uuid/viewRescueRequest', function (req, res, next){
@@ -77,6 +83,7 @@ router.get('/:user/viewAllRequests',function(req,res,next){
 
 //delete all my requests 
 router.delete('/deleteAllMyRequests',function(req,res,next){
+
   if(req.session.body.accountType === 'user'){
     controller.deleteAllMyRequests(req.session.body.Username,function(err,results){
       if (err) return res.status(500).json(err);  // server error
