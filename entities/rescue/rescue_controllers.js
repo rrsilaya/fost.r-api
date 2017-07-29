@@ -69,14 +69,15 @@ module.exports.viewMyRequest = function(rescue_uuid, Username, callback) {
 };
 
 //delete a request given that the request is posted by the user and its rescue_uuid is specified*/
+
 module.exports.deleteRequest=function(rescue_uuid,sender_Username,callback){
   //delete the file 
-
+  var link;
   connection.query(
     'SELECT * FROM rescue WHERE rescue_uuid = ? && sender_Username = ? ',
     [rescue_uuid,sender_Username],
     function(err,results){
-      if (results.affectedRows!==0)  
+      if (results.affectedRows!==0 && (typeof results[0].rescue_imgurl!==undefined))  
         fs.unlink(JSON.parse(JSON.stringify(results[0].rescue_imgurl)),resultHandler);
 
     }
@@ -125,7 +126,8 @@ module.exports.viewUserRequests = function(Username, callback) {
     }
   );
 };
-/*delete all my request*/
+/*delete all my request
+does not work unless module.exports.deleteRequest is commented out */
 module.exports.deleteAllMyRequests=function(Username,callback){
   //delete all images attached to photo
   connection.query(

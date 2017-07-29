@@ -22,11 +22,11 @@ router.get('/', function(req, res, next) {
       else res.status(200).json(requests); // returns all posts
     });
   }else if(req.session.body.accountType === 'user'){
+  
     controller.viewUserRequests(req.session.body.Username,function(err,requests){
       if (err) return res.status(500).json(err);  // server error
       else res.status(200).json(requests); // returns request
     });
-
   }
 
 });
@@ -54,7 +54,7 @@ router.get('/:rescue_uuid', function(req, res, next) {
 });
 
 //delete a request
-router.delete('/:rescue_uuid', function(req, res, next) {
+router.delete('/:rescue_uuid', function(req, res) {
   if (req.session.body.accountType === 'user') {
     var rescue_uuid = req.params.rescue_uuid;
     controller.deleteRequest(rescue_uuid, req.session.body.Username, function(
@@ -74,12 +74,8 @@ router.delete('/:rescue_uuid', function(req, res, next) {
 //view all request a user has submitted
 router.get('/viewMyRequests', function(req, res, next) {
   if (req.session.body.accountType === 'user') {
-    controller.viewUserRequests(req.session.body.Username, function(
-      err,
-      requests
-    ) {
-      if (err)
-        return res.status(500).json(err); // server error
+    controller.viewUserRequests(req.session.body.Username,function(err,requests){
+      if (err) return res.status(500).json(err);  // server error
       else res.status(200).json(requests); // returns request
     });
   }
