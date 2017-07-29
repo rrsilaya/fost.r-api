@@ -9,10 +9,11 @@ connection.query('DROP DATABASE IF EXISTS `' + db.database + '`;');
 
 connection.query('CREATE DATABASE `' + db.database + '`;');
 
-connection.query('USE ' + db.database + ';' );
+connection.query('USE ' + db.database + ';');
 
 //creates the tables
-connection.query('\
+connection.query(
+  '\
 CREATE TABLE users (\
     `Username` varchar(36) NOT NULL UNIQUE,\
     `firstname` varchar(36) NOT NULL,\
@@ -29,9 +30,10 @@ CREATE TABLE users (\
     `updated_at` datetime NOT NULL,\
     PRIMARY KEY(Username, email)\
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
-    );
+);
 
-connection.query('\
+connection.query(
+  '\
 CREATE TABLE shelters (\
     `Username` varchar(52) NOT NULL UNIQUE,\
     `shelter_name` varchar(52) NOT NULL,\
@@ -47,9 +49,10 @@ CREATE TABLE shelters (\
     `updated_at` datetime NOT NULL,\
     CONSTRAINT PRIMARY KEY(Username, email)\
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
-    );
+);
 
-connection.query('\
+connection.query(
+  '\
     CREATE TABLE pets_of_shelters (\
     `name` varchar(52) NOT NULL,\
     `kind` enum("DOG", "CAT", "BIRD", "OTHERS") NOT NULL,\
@@ -69,9 +72,10 @@ connection.query('\
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
-    );
+);
 
-connection.query('\
+connection.query(
+  '\
 CREATE TABLE pets_of_users (\
     `name` varchar(52) NOT NULL,\
     `kind` enum("DOG", "CAT", "BIRD", "OTHERS") NOT NULL,\
@@ -90,9 +94,10 @@ CREATE TABLE pets_of_users (\
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
-    );
+);
 
-connection.query('\
+connection.query(
+  '\
     CREATE TABLE posts (\
     `Posted_by` varchar(52) NOT NULL,\
     `post_title` varchar(255) NOT NULL,\
@@ -104,19 +109,22 @@ connection.query('\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL\
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
-    );
+);
 
-connection.query('\
+connection.query(
+  '\
     CREATE TABLE votes_for_posts(\
     `voted_by` varchar(52) NOT NULL,\
     `post_uuid` varchar(36) NOT NULL,\
     CONSTRAINT votes_for_posts_fk FOREIGN KEY(post_uuid)\
     REFERENCES posts(post_uuid)\
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
-    );
+);
 
-connection.query('\
+connection.query(
+  '\
     CREATE TABLE comments_on_posts (\
+    `comment_title` varchar(36) NOT NULL,\
     `comment_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `commented_by` varchar(52) NOT NULL,\
     `comment_body` varchar(255) NOT NULL,\
@@ -129,20 +137,21 @@ connection.query('\
     REFERENCES posts(post_uuid) \
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
-    ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
-    );
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
+);
 
-connection.query('\
+connection.query(
+  '\
     CREATE TABLE votes_for_comments(\
     `voted_by` varchar(52) NOT NULL,\
     `comment_uuid` varchar(36) NOT NULL,\
     CONSTRAINT votes_for_comments_fk FOREIGN KEY(comment_uuid)\
     REFERENCES comments_on_posts(comment_uuid)\
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
-    );
+);
 
-
-connection.query('\
+connection.query(
+  '\
     CREATE TABLE rescue (\
     `rescue_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `rescue_body` varchar(255) NOT NULL,\
@@ -158,9 +167,10 @@ connection.query('\
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
-    );
+);
 
-connection.query('\
+connection.query(
+  '\
     CREATE TABLE notifications (\
     `notif_id` INT NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,\
     `notif_for` varchar(36) NOT NULL,\
@@ -172,10 +182,12 @@ connection.query('\
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
     ) ENGINE=InnoDB AUTO_INCREMENT=1  DEFAULT CHARSET=latin1;'
-    );
+);
 
-connection.query('\
-DELETE FROM notifications WHERE date_created < (CURDATE() - INTERVAL 15 DAY);');
+connection.query(
+  '\
+DELETE FROM notifications WHERE date_created < (CURDATE() - INTERVAL 15 DAY);'
+);
 
 connection.end();
 

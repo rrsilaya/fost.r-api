@@ -114,7 +114,7 @@
 | `/accounts/MyAccount`             | `PUT`  | refer to `signup/` route depending on account type                                                                                               |                         |
 | `/pets/:pet_uuid`                 | `PUT`  | refer to `pets/myPets` route                                                                                                                     |                         |
 | `/community/addPost`              | `POST` | <ul><li>post_title</li><li>text_post</li></ul>                                                                                                   | <ul><li>photo</li></ul> |
-| `/community/:post_uuid`           | `POST` | <ul><li>comment_body</li></ul>                                                                                                                   | <ul><li>photo</li></ul> |
+| `/community/:post_uuid`           | `POST` | <ul><li>comment_body</li><li>comment_title</li></ul>                                                                                                                   | <ul><li>photo</li></ul> |
 | `/rescue/submit_a_rescue_request` | `POST` | <ul><li>rescue_body</li></ul>                                                                                                                    | <ul><li>photo</li></ul> |
 
 ### Responses
@@ -254,6 +254,7 @@
 ### `comments_on_posts`
 | Field           | Type         | Null | Key | Default |
 |:----------------|:-------------|:-----|:----|:--------|
+| `comment_title` | varchar(36)  | NO   |     | NULL    |
 | `comment_uuid`  | varchar(36)  | NO   | PRI | NULL    |
 | `commented_by`  | varchar(52)  | NO   |     | NULL    |
 | `comment_body`  | varchar(255) | NO   |     | NULL    |

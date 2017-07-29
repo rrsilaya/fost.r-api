@@ -6,7 +6,15 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "devstart": "nodemon server.js",
-    "build": "mysql -u root -p > ./database/schema.sql"
+    "build": "mysql -u root -p > ./database/schema.sql",
+    "prettify": "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write \"./entities/**/*.js\" \"./database/*.js\"",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write",
+      "git add"
+    ]
   },
   "author": "Erlen Evangelista",
   "license": "ISC",
@@ -26,6 +34,9 @@
     "socket.io": "^2.0.3"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.2",
+    "nodemon": "^1.11.0",
+    "prettier": "^1.5.3"
   }
 }
