@@ -72,7 +72,12 @@
 | `/pets/:pet_uuid`                        | `GET`    | View specific pet                                                                              |
 | `/pets/:pet_uuid`                        | `PUT`    | Update info of a pet  (could be used for ADOPT and DATES, set status to ADOPT, DATES, OR BOTH) |
 | `/pets/:pet_uuid`                        | `DELETE` | Delete a single pet given the pet_uuid                                                         |
-| `/community/ `                           | `GET`    | Displays all posts sorted by date                                                              |
+| `/community/sortByTimeDesc`              | `GET`    | Displays all posts sorted by date (from newest to oldest)                                      |
+| `/community/sortByTimeAsc`               | `GET`    | Displays all posts sorted by date (from oldest to newest)                                      |
+| `/community/sortByCommentsDesc`          | `GET`    | Displays all posts sorted by number of comments (from most to least)                           |
+| `/community/sortByCommentsAsc`           | `GET`    | Displays all posts sorted by number of comments (from least to most)                           |
+| `/community/sortByVotesDesc`             | `GET`    | Displays all posts sorted by number of votes (from most to least)                              |
+| `/community/sortByVotesAsc`              | `GET`    | Displays all posts sorted by number of votes (from least to most)                              |
 | `/community/addPost`                     | `POST`   | Add post                                                                                       |
 | `/community/:post_uuid`                  | `GET`    | View a post given its uuid                                                                     |
 | `/community/:post_uuid`                  | `PUT`    | Vote a post given its uuid                                                                     |
@@ -139,7 +144,12 @@
 | `/pets/:pet_uuid`                        | `GET`    | 200           | json of pet's info                                                    |
 | `/pets/:pet_uuid`                        | `PUT`    | 201           | json of mysql query                                                   |
 | `/pets/:pet_uuid`                        | `DELETE` | 204           |                                                                       |
-| `/community/ `                           | `GET`    | 200           | json of posts                                                         |
+| `/community/sortByTimeDesc`              | `GET`    | 200           | json of posts sorted by date (from newest to oldest)                  |
+| `/community/sortByTimeAsc`               | `GET`    | 200           | json of posts sorted by date (from oldest to newest)                  |
+| `/community/sortByCommentsDesc`          | `GET`    | 200           | json of posts sorted by number of comments (from most to least)       |
+| `/community/sortByCommentsAsc`           | `GET`    | 200           | json of posts sorted by number of comments (from least to most)       |
+| `/community/sortByVotesDesc`             | `GET`    | 200           | json of posts sorted by number of votes (from most to least)          |
+| `/community/sortByVotesAsc`              | `GET`    | 200           | json of posts sorted by number of votes (from least to most)          |
 | `/community/addPost`                     | `POST`   | 201           | json of post                                                          |
 | `/community/:post_uuid`                  | `GET`    | 200           |                                                                       |
 | `/community/:post_uuid`                  | `PUT`    | 201           | json of mysql query                                                   |
@@ -156,7 +166,7 @@
 | `/rescue/:rescue_uuid`                   | `GET`    | 200           | json of rescue                                                        |
 | `/rescue/:rescue_uuid`                   | `DELETE` | 204           |                                                                       |
 | `/rescue/:user/viewAllRequests`          | `GET`    | 200           | json of requests from :user (only for shelters)                       |
-| `/rescue/deleteAllMyRequests`            | `GET`    | 204           |                                                                       |
+| `/rescue/deleteAllMyRequests`            | `DELETE` | 204           |                                                                       |
 | `/rescue/:rescue_uuid/viewRescueRequest` | `GET`    | 200           | json of rescue where rescue_uuid = :rescue_uuid                       |
 | `/rescue/submit_a_rescue_request`        | `POST`   | 201           | json of newRescue                                                     |
 

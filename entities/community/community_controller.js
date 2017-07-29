@@ -30,7 +30,7 @@ module.exports.viewPostsOf=function(user,callback){
   });
 }
 
-//view all posts; will serve like the feed for the community page
+// newest to oldest
 module.exports.sortByTimeDesc = function(callback){
   connection.query('SELECT * FROM posts ORDER BY created_at DESC', function(err, results){
     if (err) return callback(err);   // some error with query
@@ -38,6 +38,7 @@ module.exports.sortByTimeDesc = function(callback){
   });
 }
 
+// oldest to newest
 module.exports.sortByTimeAsc = function(callback){
   connection.query('SELECT * FROM posts ORDER BY created_at', function(err, results){
     if (err) return callback(err);   // some error with query
@@ -45,6 +46,7 @@ module.exports.sortByTimeAsc = function(callback){
   });
 }
 
+// most to least commented
 module.exports.sortByCommentsDesc = function(callback){
   connection.query('SELECT * FROM posts ORDER BY comments DESC', function(err, results){
     if (err) return callback(err);   // some error with query
@@ -52,6 +54,7 @@ module.exports.sortByCommentsDesc = function(callback){
   });
 }
 
+// least to most commented
 module.exports.sortByCommentsAsc = function(callback){
   connection.query('SELECT * FROM posts ORDER BY comments', function(err, results){
     if (err) return callback(err);   // some error with query
@@ -59,6 +62,7 @@ module.exports.sortByCommentsAsc = function(callback){
   });
 }
 
+// most to least voted
 module.exports.sortByVotesDesc = function(callback){
   connection.query('SELECT * FROM posts ORDER BY votes DESC', function(err, results){
     if (err) return callback(err);   // some error with query
@@ -66,6 +70,7 @@ module.exports.sortByVotesDesc = function(callback){
   });
 }
 
+// least to most voted
 module.exports.sortByVotesAsc = function(callback){
   connection.query('SELECT * FROM posts ORDER BY votes', function(err, results){
     if (err) return callback(err);   // some error with query

@@ -19,25 +19,64 @@ router.use(function(req, res, next) {
 
 /************************* POSTS *******************************/
 
-/*  views all post sorted by date
-    comments are not shown
+// Sorting
 
-*/
-router.get('/', function(req,res,next){
-    controller.viewAllPosts(function(err,posts){
-      if (err) return res.status(500).json(err);  // server error
-      else res.status(200).json(posts); // returns all posts
-    });  
+// newest to oldest
+router.get('/sortByTimeDesc', function(req, res){
+  controller.sortByTimeDesc(function(err, posts){
+    if (err) res.status(500).json(err);
+    res.status(200).json(posts);
+  });
 });
 
-/* view a post given its uuid ; shows all comments on the post*/
-router.get('/:post_uuid',function(req,res,next){
-    var post_uuid=req.params.post_uuid;
+// oldest to newest
+router.get('/sortByTimeAsc', function(req, res){
+  controller.sortByTimeAsc(function(err, posts){
+    if (err) res.status(500).json(err);
+    res.status(200).json(posts);
+  });
+});
+
+// most to least commented
+router.get('/sortByCommentsDesc', function(req, res){
+  controller.sortByCommentsDesc(function(err, posts){
+    if (err) res.status(500).json(err);
+    res.status(200).json(posts);
+  });
+});
+
+// least to most commented
+router.get('/sortByCommentsAsc', function(req, res){
+  controller.sortByCommentsAsc(function(err, posts){
+    if (err) res.status(500).json(err);
+    res.status(200).json(posts);
+  });
+});
+
+// most to least voted
+router.get('/sortByVotesDesc', function(req, res){
+  controller.sortByVotesDesc(function(err, posts){
+    if (err) res.status(500).json(err);
+    res.status(200).json(posts);
+  });
+});
+
+// least to most voted
+router.get('/sortByVotesAsc', function(req, res){
+  controller.sortByVotesAsc(function(err, posts){
+    if (err) res.status(500).json(err);
+    res.status(200).json(posts);
+  });
+});
+
+/* view a post given its uuid ; shows all comments and votes on the post*/
+router.get('/:post_uuid', function(req,res,next){
+    var post_uuid = req.params.post_uuid;
     controller.viewPost(post_uuid,function(err,post){
       if (err) return res.status(500).json(err);  // server error
       else{
         //res.send(post,comments); // returns pets of specified user
-        controller.viewAllComments(post_uuid,function(err,comments){
+        controller.viewAllComments(post_uuid, function(err,comments){
           if(err) return res.status(500).json(err);  // server error
           else {
             controller.showAllVotesPost(post_uuid, function(err, votes){
@@ -49,6 +88,7 @@ router.get('/:post_uuid',function(req,res,next){
       }
     });
 });
+
 
 router.put('/:post_uuid', function(req, res){
   // will only be used for votes
