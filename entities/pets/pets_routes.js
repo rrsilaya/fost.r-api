@@ -20,9 +20,7 @@ router.use(function(req, res, next) {
   next();
 });
 
-/*  views pets owned by all shelters or users 
-    ideally used during development
-*/
+// returns all of the pets of all shelters
 router.get('/shelters/viewAllPets', function(req, res) {
   controller.viewAllShelterPets(function(err, pets) {
     if (err) return res.status(500).json(err); // server error
@@ -30,16 +28,38 @@ router.get('/shelters/viewAllPets', function(req, res) {
   });
 });
 
-router.get('/shelters/viewAllPets', function(req, res) {
+// returns all of the pets of the shelters for adoption
+router.get('/adopt', function(req, res) {
+  controller.viewPetsForAdopt(function(err, pets) {
+    if (err) res.status(500).json(err);
+    res.status(200).json(pets);
+  });
+});
+
+// returns all of the pets of the shelters for dates
+router.get('/dates', function(req, res) {
+  controller.viewPetsForDates(function(err, pets) {
+    if (err) res.status(500).json(err);
+    res.status(200).json(pets);
+  });
+});
+
+// returns all of the pets of the shelters for both adoption and dates
+router.get('/both', function(req, res) {
+  controller.viewPetsForBoth(function(err, pets) {
+    if (err) res.status(500).json(err);
+    res.status(200).json(pets);
+  });
+});
+
+router.get('/users/viewAllPets', function(req, res) {
   controller.viewAllUserPets(function(err, pets) {
     if (err) return res.status(500).json(err); // server error
     res.json(pets); // returns pets
   });
 });
 
-/*  returns pets of <name> 
-    ideally used during development
-*/
+/*  returns pets of <name> */
 router.get('/:owner/viewShelterPets', function(req, res) {
   var owner = req.params.owner;
   controller.viewShelterPetsOf(owner, function(err, pets) {

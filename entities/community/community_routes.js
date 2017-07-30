@@ -78,7 +78,7 @@ router.get('/:post_uuid', function(req, res, next) {
     if (err) return res.status(500).json(err);
     else {
       // server error
-      //res.send(post,comments); // returns pets of specified user
+      //res.send(post,comments);
       controller.viewAllComments(post_uuid, function(err, comments) {
         if (err) return res.status(500).json(err);
         else {
@@ -162,7 +162,7 @@ router.get('/:user/viewPosts', function(req, res, next) {
 });
 
 /*delete a post given its uuid*/
-router.delete('/:post_uuid', function(req, res, next) {
+router.delete('/:post_uuid/', function(req, res, next) {
   var post_uuid = req.params.post_uuid;
   var user = req.session.body.Username;
   //delete post on db
@@ -240,6 +240,7 @@ router.post('/addPost', function(req, res, next) {
 /* add comment to db if post_uuid is valid*/
 router.post('/:post_uuid', function(req, res, next) {
   if (req.body.comment_body) {
+    var comment_title = req.body.comment_title;
     var comment_body = req.body.comment_body;
     var post_uuid = req.params.post_uuid;
     var user = req.session.body.Username;
@@ -326,13 +327,20 @@ router.post('/:post_uuid', function(req, res, next) {
 });
 
 /* view a comment (required : post_uuid && comment_uuid */
+// also shows the votes of that comment
 router.get('/:post_uuid/:comment_uuid', function(req, res, next) {
   var post_uuid = req.params.post_uuid;
-  var comment_uuid = req.params.uuid;
+  var comment_uuid = req.params.comment_uuid;
   controller.viewComment(post_uuid, comment_uuid, function(err, comment) {
-    if (err)
-      return res.status(500).json(err); // server error
-    else res.status(200).json(comment);
+    if (err) return res.status(500).json(err);
+    else {
+      // server error
+      controller.showAllVotesComment(comment_uuid, function(err, votes) {
+        if (err) return res.status(500).json(err); // server error
+        console.log(comment, votes);
+        return res.status(200).send([comment, votes]);
+      });
+    }
   });
 });
 
@@ -392,12 +400,12 @@ router.delete('/:post_uuid/:comment_uuid', function(req, res, next) {
 });
 
 /* view all comments on a post given the post_uuid*/
-router.get('/:post_uuid/viewAllComments', function(req, res, next) {
+router.get('/viewAllComments/:post_uuid', function(req, res, next) {
+  console.log('viewing all comments');
   var post_uuid = req.params.post_uuid;
   controller.viewAllComments(post_uuid, function(err, comments) {
-    if (err)
-      return res.status(500).json(err); // server error
-    else res.json(comments);
+    if (err) return res.status(500).json(err); // server error
+    res.status(200).json(comments);
   });
 });
 

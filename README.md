@@ -61,7 +61,11 @@
 | `/accounts/MyAccount`                    | `GET`    | View own info                                                                                  |
 | `/accounts/MyAccount`                    | `PUT`    | Update own info                                                                                |
 | `/accounts/MyAccount`                    | `DELETE` | Delete own account                                                                             |
-| `/pets/viewAllPets`                      | `GET`    | View pets owned by either users or shelters(depending on the accountType logged in)            |
+| `/pets/shelters/viewAllPets`             | `GET`    | View pets owned by shelters                                                                    |
+| `/pets/users/viewAllPets`                | `GET`    | View pets owned by users                                                                       |
+| `/pets/adopt/`                           | `GET`    | Show all pets (of shelters) that are allowed for adoption                                      |
+| `/pets/dates/`                           | `GET`    | Show all pets (of shelters) that are allowed for dates                                         |
+| `/pets/both/`                            | `GET`    | Show all pets (of shelters) that are allowed for adoption & dates                              |
 | `/pets/:owner/viewShelterPets`           | `GET`    | View pets of owner                                                                             |
 | `/pets/:owner/viewUserPets`              | `GET`    | View pets of owner                                                                             |
 | `/pets/:owner/deleteAllUserPets`         | `DELETE` | Delete all pets of a given user                                                                |
@@ -85,7 +89,7 @@
 | `/community/:post_uuid`                  | `POST`   | Add a comment                                                                                  |
 | `/community/:user/viewPosts`             | `GET`    | View all posts of a user                                                                       |
 | `/community/deleteAllMyPosts`            | `DELETE` | Delete all posts of user                                                                       |
-| `/community/:post_uuid/viewAllComments`  | `GET`    | View all comments in the post                                                                  |
+| `/community/viewAllComments/:post_uuid`  | `GET`    | View all comments in the post                                                                  |
 | `/community/:post_uuid/:comment_uuid`    | `GET`    | View a comment                                                                                 |
 | `/community/:post_uuid/:comment_uuid`    | `DELETE` | Delete a comment                                                                               |
 | `/community/:post_uuid/:comment_uuid`    | `PUT`    | Vote a comment                                                                                 |
@@ -110,7 +114,7 @@
 | `/signup/shelter`                 | `POST` | <ul><li>Username</li><li>shelter_name</li><li>address</li><li>contactnum</li><li>email</li><li>password</li><li>file</li></ul>                   | <ul><li>icon</li></ul>  |
 | `/login/user`                     | `POST` | <ul><li>Username</li><li>password</li></ul>                                                                                                      |                         |
 | `/login/shelter`                  | `POST` | <ul><li>Username</li><li>password</li></ul>                                                                                                      |                         |
-| `/pets/myPets`                    | `POST` | <ul><li>name</li><li>kind *(DOG, CAT, BIRD, or OTHERS)*</li><li>breed</li><li>sex *(MALE or FEMALE)*</li><li>birthday</li></ul>                  |                         |
+| `/pets/myPets`                    | `POST` | <ul><li>name</li><li>kind *(DOG, CAT, BIRD, or OTHERS)*</li><li>breed</li><li>sex *(MALE or FEMALE)*</li><li>birthday</li></ul>                  | <ul><li>photo</li></ul> |
 | `/accounts/MyAccount`             | `PUT`  | refer to `signup/` route depending on account type                                                                                               |                         |
 | `/pets/:pet_uuid`                 | `PUT`  | refer to `pets/myPets` route                                                                                                                     |                         |
 | `/community/addPost`              | `POST` | <ul><li>post_title</li><li>text_post</li></ul>                                                                                                   | <ul><li>photo</li></ul> |
@@ -157,7 +161,7 @@
 | `/community/:post_uuid`                  | `POST`   | 201           | json of newComment                                                    |
 | `/community/:user/viewPosts`             | `GET`    | 200           | json of posts by :user                                                |
 | `/community/deleteAllMyPosts`            | `DELETE` | 204           |                                                                       |
-| `/community/:post_uuid/viewAllComments`  | `GET`    | 200           | json of comments in :post_uuid                                        |
+| `/community/viewAllComments/:post_uuid`  | `GET`    | 200           | json of comments in :post_uuid                                        |
 | `/community/:post_uuid/:comment_uuid`    | `GET`    | 200           | json `comment_uuid` in `post_uuid`                                    |
 | `/community/:post_uuid/:comment_uuid`    | `DELETE` | 204           |                                                                       |
 | `/community/:post_uuid/:comment_uuid`    | `PUT`    | 201           | json of mysql query                                                   |

@@ -319,8 +319,8 @@ module.exports.viewComment = function(post_uuid, comment_uuid, callback) {
     [post_uuid, comment_uuid],
     function(err, results) {
       if (err)
-        return callback(err); // some error with query
-      else return callback(null, results); // success
+        callback(err); // some error with query
+      else callback(null, results); // success
     }
   );
 };
@@ -353,8 +353,9 @@ module.exports.voteComment = function(post_uuid, comment_uuid, callback) {
 
 /***** controllers for votes_for_posts **********/
 module.exports.showAllVotesComment = function(comment_uuid, callback) {
+  console.log('comment_uuid = ' + comment_uuid);
   connection.query(
-    'SELECT * FROM votes_for_comments WHERE post_uuid = ?',
+    'SELECT * FROM votes_for_comments WHERE comment_uuid = ?',
     comment_uuid,
     function(err, results) {
       if (err) callback(err);
@@ -418,9 +419,9 @@ module.exports.viewAllComments = function(post_uuid, callback) {
     'SELECT * FROM comments_on_posts WHERE post_uuid = ?',
     post_uuid,
     function(err, results) {
-      if (err)
-        return callback(err); // some error with query
-      else return callback(null, results); // success
+      console.log(results);
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // success
     }
   );
 };
@@ -442,7 +443,6 @@ module.exports.deleteComment = function(
       }
     }
   );
-
   connection.query(
     'DELETE FROM comments_on_posts WHERE post_uuid =? && comment_uuid = ? && commented_by = ?',
     [post_uuid, comment_uuid, user],
@@ -450,7 +450,6 @@ module.exports.deleteComment = function(
       if (err) return callback(err);
       else {
         // some error with query
-        // return callback(null, results); // success
         connection.query(
           'UPDATE posts SET comments = comments-1 WHERE post_uuid = ?',
           post_uuid,
