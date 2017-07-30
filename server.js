@@ -8,7 +8,6 @@ const mysql=require('mysql');
 const logger = require('morgan');
 const connection=require('./database/connection');
 const routes=require('./routes');
-const path =require('path');
 
 //configure app to use bodyParser()
 app.use(logger('dev'));

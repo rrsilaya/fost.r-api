@@ -54,7 +54,7 @@ router.get('/:rescue_uuid', function(req, res, next) {
 });
 
 //delete a request
-router.delete('/:rescue_uuid', function(req, res) {
+router.delete('/:rescue_uuid', function(req, res,next) {
   if (req.session.body.accountType === 'user') {
     var rescue_uuid = req.params.rescue_uuid;
     controller.deleteRequest(rescue_uuid, req.session.body.Username, function(

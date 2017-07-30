@@ -52,7 +52,9 @@ router.post('/shelter', function(req, res, next) {
     typeof req.body.address !== 'undefined' &&
     typeof req.body.contactnum !== 'undefined' &&
     typeof req.body.email !== 'undefined' &&
-    typeof req.body.password !== 'undefined'
+    typeof req.body.password !== 'undefined' &&
+    typeof req.files.file !== 'undefined' 
+   
   ) {
     // checks req.<field>; the following messages can be sent to the views
     // https://github.com/ctavan/express-validator
@@ -70,7 +72,7 @@ router.post('/shelter', function(req, res, next) {
     // req.checkBody('password', 'password is required').isLength({min: 6, max: 18}); // commented first for quick testing
 
     var errors = req.validationErrors();
-    if (errors) res.status(400).json(errors);
+    if (errors || !req.files.file) res.status(400).json(errors);
     else {
       const file = req.files.file; //use later for file-upload
       var proofname = req.body.Username + '-proof-' + file.name;
