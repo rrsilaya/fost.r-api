@@ -20,6 +20,42 @@ module.exports.viewAllShelterPets = function(callback) {
   });
 };
 
+module.exports.viewAllPetsForDates = function(callback) {
+  var status = 'DATES';
+  connection.query(
+    'SELECT * FROM pets_of_shelters WHERE status = ?',
+    status,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // if successful
+    }
+  );
+};
+
+module.exports.viewAllPetsForAdopt = function(callback) {
+  var status = 'ADOPT';
+  connection.query(
+    'SELECT * FROM pets_of_shelters WHERE status = ?',
+    status,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // if successful
+    }
+  );
+};
+
+module.exports.viewAllPetsForBoth = function(callback) {
+  var status = 'BOTH';
+  connection.query(
+    'SELECT * FROM pets_of_shelters WHERE status = ?',
+    status,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // if successful
+    }
+  );
+};
+
 module.exports.viewAllUserPets = function(callback) {
   connection.query('SELECT * FROM pets_of_users', function(err, results) {
     if (err) return callback(err); // some error with query
@@ -31,6 +67,39 @@ module.exports.viewAllUserPets = function(callback) {
 module.exports.viewShelterPetsOf = function(shelter_Username, callback) {
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE shelter_Username = ?',
+    shelter_Username,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // if successful
+    }
+  );
+};
+
+module.exports.viewShelterPetsForDates = function(shelter_Username, callback) {
+  connection.query(
+    'SELECT * FROM pets_of_shelters WHERE shelter_Username = ? && status = "DATES"',
+    shelter_Username,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // if successful
+    }
+  );
+};
+
+module.exports.viewShelterPetsForAdopt = function(shelter_Username, callback) {
+  connection.query(
+    'SELECT * FROM pets_of_shelters WHERE shelter_Username = ? && status = "ADOPT"',
+    shelter_Username,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // if successful
+    }
+  );
+};
+
+module.exports.viewShelterPetsForBoth = function(shelter_Username, callback) {
+  connection.query(
+    'SELECT * FROM pets_of_shelters WHERE shelter_Username = ? status = "BOTH"',
     shelter_Username,
     function(err, results) {
       if (err) return callback(err); // some error with query

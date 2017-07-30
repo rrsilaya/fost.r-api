@@ -327,13 +327,20 @@ router.post('/:post_uuid', function(req, res, next) {
 });
 
 /* view a comment (required : post_uuid && comment_uuid */
+// also shows the votes of that comment
 router.get('/:post_uuid/:comment_uuid', function(req, res, next) {
   var post_uuid = req.params.post_uuid;
-  var comment_uuid = req.params.uuid;
+  var comment_uuid = req.params.comment_uuid;
   controller.viewComment(post_uuid, comment_uuid, function(err, comment) {
-    if (err)
-      return res.status(500).json(err); // server error
-    else res.status(200).json(comment);
+    if (err) return res.status(500).json(err);
+    else {
+      // server error
+      controller.showAllVotesComment(comment_uuid, function(err, votes) {
+        if (err) return res.status(500).json(err); // server error
+        console.log(comment, votes);
+        return res.status(200).send([comment, votes]);
+      });
+    }
   });
 });
 

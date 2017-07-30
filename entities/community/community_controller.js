@@ -318,8 +318,8 @@ module.exports.viewComment = function(post_uuid, comment_uuid, callback) {
     [post_uuid, comment_uuid],
     function(err, results) {
       if (err)
-        return callback(err); // some error with query
-      else return callback(null, results); // success
+        callback(err); // some error with query
+      else callback(null, results); // success
     }
   );
 };
@@ -352,8 +352,9 @@ module.exports.voteComment = function(post_uuid, comment_uuid, callback) {
 
 /***** controllers for votes_for_posts **********/
 module.exports.showAllVotesComment = function(comment_uuid, callback) {
+  console.log('comment_uuid = ' + comment_uuid);
   connection.query(
-    'SELECT * FROM votes_for_comments WHERE post_uuid = ?',
+    'SELECT * FROM votes_for_comments WHERE comment_uuid = ?',
     comment_uuid,
     function(err, results) {
       if (err) callback(err);
