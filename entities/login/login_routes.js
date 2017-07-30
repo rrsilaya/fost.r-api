@@ -25,7 +25,9 @@ router.post('/user', function(req, res, next) {
         req.session.body = credentials;
         req.session.body.accountType = 'user';
         console.log('Successfully logged in');
-        res.status(200).send(req.session.body.accountType);
+        res
+          .status(200)
+          .send([req.session.body.accountType, req.session.body.Username]);
       } else if (!isMatch) {
         console.log('Invalid credentials.');
         res.status(404).end();
@@ -49,7 +51,9 @@ router.post('/shelter', function(req, res, next) {
         req.session.body = credentials;
         req.session.body.accountType = 'shelter';
         console.log('Successfully logged in');
-        res.status(200).send(req.session.body.accountType);
+        res
+          .status(200)
+          .send([req.session.body.accountType, req.session.body.Username]);
       } else if (!isMatch) {
         console.log('Invalid credentials.');
         res.status(404).end();
