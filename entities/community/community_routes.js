@@ -78,7 +78,7 @@ router.get('/:post_uuid', function(req, res, next) {
     if (err) return res.status(500).json(err);
     else {
       // server error
-      //res.send(post,comments); // returns pets of specified user
+      //res.send(post,comments);
       controller.viewAllComments(post_uuid, function(err, comments) {
         if (err) return res.status(500).json(err);
         else {
@@ -162,7 +162,7 @@ router.get('/:user/viewPosts', function(req, res, next) {
 });
 
 /*delete a post given its uuid*/
-router.delete('/:post_uuid', function(req, res, next) {
+router.delete('/:post_uuid/', function(req, res, next) {
   var post_uuid = req.params.post_uuid;
   var user = req.session.body.Username;
   //delete post on db
@@ -382,7 +382,10 @@ router.delete('/:post_uuid/:comment_uuid', function(req, res, next) {
   var post_uuid = req.params.post_uuid;
   var comment_uuid = req.params.comment_uuid;
   var user = req.session.body.Username;
-  controller.deleteComment(post_uuid, comment_uuid, user, function(err,results){
+  controller.deleteComment(post_uuid, comment_uuid, user, function(
+    err,
+    results
+  ) {
     if (err) return res.status(500).json(err);
     else if (results.affectedRows == 0) return res.status(500);
     else res.status(204).end();
@@ -390,12 +393,12 @@ router.delete('/:post_uuid/:comment_uuid', function(req, res, next) {
 });
 
 /* view all comments on a post given the post_uuid*/
-router.get('/:post_uuid/viewAllComments', function(req, res, next) {
+router.get('/viewAllComments/:post_uuid', function(req, res, next) {
+  console.log('viewing all comments');
   var post_uuid = req.params.post_uuid;
   controller.viewAllComments(post_uuid, function(err, comments) {
-    if (err)
-      return res.status(500).json(err); // server error
-    else res.json(comments);
+    if (err) return res.status(500).json(err); // server error
+    res.status(200).json(comments);
   });
 });
 

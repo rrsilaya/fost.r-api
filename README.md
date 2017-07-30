@@ -85,7 +85,7 @@
 | `/community/:post_uuid`                  | `POST`   | Add a comment                                                                                  |
 | `/community/:user/viewPosts`             | `GET`    | View all posts of a user                                                                       |
 | `/community/deleteAllMyPosts`            | `DELETE` | Delete all posts of user                                                                       |
-| `/community/:post_uuid/viewAllComments`  | `GET`    | View all comments in the post                                                                  |
+| `/community/viewAllComments/:post_uuid`  | `GET`    | View all comments in the post                                                                  |
 | `/community/:post_uuid/:comment_uuid`    | `GET`    | View a comment                                                                                 |
 | `/community/:post_uuid/:comment_uuid`    | `DELETE` | Delete a comment                                                                               |
 | `/community/:post_uuid/:comment_uuid`    | `PUT`    | Vote a comment                                                                                 |
@@ -157,7 +157,7 @@
 | `/community/:post_uuid`                  | `POST`   | 201           | json of newComment                                                    |
 | `/community/:user/viewPosts`             | `GET`    | 200           | json of posts by :user                                                |
 | `/community/deleteAllMyPosts`            | `DELETE` | 204           |                                                                       |
-| `/community/:post_uuid/viewAllComments`  | `GET`    | 200           | json of comments in :post_uuid                                        |
+| `/community/viewAllComments/:post_uuid`  | `GET`    | 200           | json of comments in :post_uuid                                        |
 | `/community/:post_uuid/:comment_uuid`    | `GET`    | 200           | json `comment_uuid` in `post_uuid`                                    |
 | `/community/:post_uuid/:comment_uuid`    | `DELETE` | 204           |                                                                       |
 | `/community/:post_uuid/:comment_uuid`    | `PUT`    | 201           | json of mysql query                                                   |

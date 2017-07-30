@@ -417,9 +417,9 @@ module.exports.viewAllComments = function(post_uuid, callback) {
     'SELECT * FROM comments_on_posts WHERE post_uuid = ?',
     post_uuid,
     function(err, results) {
-      if (err)
-        return callback(err); // some error with query
-      else return callback(null, results); // success
+      console.log(results);
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // success
     }
   );
 };
@@ -440,7 +440,6 @@ module.exports.deleteComment = function(
         fs.unlink(results[0].image_urlpath, resultHandler);
     }
   );
-
   connection.query(
     'DELETE FROM comments_on_posts WHERE post_uuid =? && comment_uuid = ? && commented_by = ?',
     [post_uuid, comment_uuid, user],
@@ -448,7 +447,6 @@ module.exports.deleteComment = function(
       if (err) return callback(err);
       else {
         // some error with query
-        // return callback(null, results); // success
         connection.query(
           'UPDATE posts SET comments = comments-1 WHERE post_uuid = ?',
           post_uuid,
