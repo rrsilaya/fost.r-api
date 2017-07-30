@@ -53,7 +53,7 @@ CREATE TABLE shelters (\
 
 connection.query(
   '\
-    CREATE TABLE pets_of_shelters (\
+CREATE TABLE pets_of_shelters (\
     `name` varchar(52) NOT NULL,\
     `kind` enum("DOG", "CAT", "BIRD", "OTHERS") NOT NULL,\
     `breed` varchar(36) NOT NULL,\
@@ -87,13 +87,51 @@ CREATE TABLE pets_of_users (\
     `uuid` varchar(36) NOT NULL PRIMARY KEY,\
     `url` varchar(255) DEFAULT NULL,\
     `width` varchar(36) DEFAULT NULL,\
-    `height` varchaR(36) DEFAULT NULL,\
+    `height` varchar(36) DEFAULT NULL,\
     `user_Username` varchar(36) NOT NULL,\
     CONSTRAINT pets_of_users_fk FOREIGN KEY (user_Username)\
     REFERENCES users(Username)\
     ON DELETE CASCADE\
     ON UPDATE CASCADE\
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
+);
+
+connection.query(
+  '\
+CREATE TABLE adopts(\
+    `user_Username` varchar(36) NOT NULL,\
+    `pet_uuid` varchar(36) NOT NULL,\
+    `adopt_uuid` varchar(36) NOT NULL,\
+    `created_at` datetime NOT NULL,\
+    `updated_at` datetime NOT NULL,\
+    CONSTRAINT adopts_users_fk FOREIGN KEY (user_Username)\
+    REFERENCES users(Username)\
+    ON DELETE CASCADE\
+    ON UPDATE CASCADE,\
+    CONSTRAINT adopts_pets_of_shelters_fk FOREIGN KEY (pet_uuid)\
+    REFERENCES pets_of_shelters(uuid)\
+    ON DELETE CASCADE\
+    ON UPDATE CASCADE\
+    ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
+);
+
+connection.query(
+  '\
+CREATE TABLE dates(\
+    `user_Username` varchar(36) NOT NULL,\
+    `pet_uuid` varchar(36) NOT NULL,\
+    `dates_uuid` varchar(36) NOT NULL PRIMARY KEY,\
+    `created_at` datetime NOT NULL,\
+    `updated_at` datetime NOT NULL,\
+    CONSTRAINT dates_users_fk FOREIGN KEY (user_Username)\
+    REFERENCES users(Username)\
+    ON DELETE CASCADE\
+    ON UPDATE CASCADE,\
+    CONSTRAINT dates_pets_of_shelters_fk FOREIGN KEY (pet_uuid)\
+    REFERENCES pets_of_shelters(uuid)\
+    ON DELETE CASCADE\
+    ON UPDATE CASCADE\
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
 );
 
 connection.query(
@@ -113,7 +151,7 @@ connection.query(
 
 connection.query(
   '\
-    CREATE TABLE votes_for_posts(\
+CREATE TABLE votes_for_posts(\
     `voted_by` varchar(52) NOT NULL,\
     `post_uuid` varchar(36) NOT NULL,\
     CONSTRAINT votes_for_posts_fk FOREIGN KEY(post_uuid)\
@@ -123,7 +161,7 @@ connection.query(
 
 connection.query(
   '\
-    CREATE TABLE comments_on_posts (\
+CREATE TABLE comments_on_posts (\
     `comment_title` varchar(36) NOT NULL,\
     `comment_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `commented_by` varchar(52) NOT NULL,\
@@ -142,7 +180,7 @@ connection.query(
 
 connection.query(
   '\
-    CREATE TABLE votes_for_comments(\
+CREATE TABLE votes_for_comments(\
     `voted_by` varchar(52) NOT NULL,\
     `comment_uuid` varchar(36) NOT NULL,\
     CONSTRAINT votes_for_comments_fk FOREIGN KEY(comment_uuid)\
@@ -152,7 +190,7 @@ connection.query(
 
 connection.query(
   '\
-    CREATE TABLE rescue (\
+CREATE TABLE rescue (\
     `rescue_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `rescue_body` varchar(255) NOT NULL,\
     `rescue_imgurl` varchar(255) UNIQUE DEFAULT NULL,\
@@ -171,7 +209,7 @@ connection.query(
 
 connection.query(
   '\
-    CREATE TABLE notifications (\
+CREATE TABLE notifications (\
     `notif_id` INT NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,\
     `notif_for` varchar(36) NOT NULL,\
     `notif_message` varchar(255) NOT NULL,\

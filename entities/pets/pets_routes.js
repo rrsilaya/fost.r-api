@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 var fileUpload = require('express-fileupload'); // for file upload
 var mv = require('mv'); // for file upload; won't work when declared as consta
+var multer = require('multer');
+var upload = multer({ dest: 'photos/' });
 var sizeOf = require('image-size'); // get image dimensions
 const validator = require('express-validator');
 var shortid = require('shortid');
@@ -36,9 +38,75 @@ router.get('/adopt', function(req, res) {
   });
 });
 
+// adopt pet; only for pets_of_shelters; only for users (accountType)
+router.post('/adopt/:pet_uuid', function(req, res) {
+  if (req.session.body.accountType === 'user') {
+    var today = new Date();
+    var uuid = shortid.generate();
+    var newAdopt = {
+      user_Username: req.session.body.Username,
+      pet_uuid: req.params.pet_uuid,
+      adopt_uuid: uuid,
+      created_at: today,
+      updated_at: today
+    };
+    controller.adoptPet(newAdopt, function(err, results) {
+      if (err) res.status(500).json(err);
+      res.status(200).json(results);
+    });
+  }
+});
+
+// date pet ; only for pets_of_shelters
+router.post('/dates/:pet_uuid', function(req, res) {
+  if (req.session.body.accountType === 'user') {
+    var today = new Date();
+    var uuid = shortid.generate();
+    var newAdopt = {
+      user_Username: req.session.body.Username,
+      pet_uuid: req.params.pet_uuid,
+      date_uuid: uuid,
+      created_at: today,
+      updated_at: today
+    };
+    controller.datePet(newAdopt, function(err, results) {
+      if (err) res.status(500).json(err);
+      res.status(200).json(results);
+    });
+  }
+});
+
+// // delete request for adoption
+// router.delete('/adopt/:pet_uuid', function(req, res) {
+//   var pet = pet_uuid;
+
+// });
+
+// // delete request for dates
+// router.delete('/dates/:pet_uuid', function(req, res) {
+//   var pet = pet_uuid;
+
+// });
+
+router.get('/adopt/:owner', function(req, res) {
+  var owner = req.params.owner;
+  controller.viewPetsForAdoptSpecific(function(err, pets) {
+    if (err) res.status(500).json(err);
+    res.status(200).json(pets);
+  });
+});
+
 // returns all of the pets of the shelters for dates
 router.get('/dates', function(req, res) {
   controller.viewPetsForDates(function(err, pets) {
+    if (err) res.status(500).json(err);
+    res.status(200).json(pets);
+  });
+});
+
+router.get('/dates/:owner', function(req, res) {
+  var owner = req.params.owner;
+  controller.viewPetsForDatesSpecific(function(err, pets) {
     if (err) res.status(500).json(err);
     res.status(200).json(pets);
   });
@@ -52,6 +120,15 @@ router.get('/both', function(req, res) {
   });
 });
 
+router.get('/both/:owner', function(req, res) {
+  var owner = req.params.owner;
+  controller.viewPetsForBothSpecific(function(err, pets) {
+    if (err) res.status(500).json(err);
+    res.status(200).json(pets);
+  });
+});
+
+/* returns all pets of users */
 router.get('/users/viewAllPets', function(req, res) {
   controller.viewAllUserPets(function(err, pets) {
     if (err) return res.status(500).json(err); // server error
@@ -168,6 +245,7 @@ router.post('/myPets', function(req, res) {
       var petDP = req.files.photo;
       var name = petInfo.uuid + '-dp-' + petDP.name;
       var url = __dirname + '/photos/' + name;
+      console.log('uploading to.. ' + url);
       var mime = req.files.photo.mimetype;
       if (mime.substring(0, 5) === 'image') {
         petDP.mv(url, function(err) {
@@ -178,7 +256,8 @@ router.post('/myPets', function(req, res) {
               res.status(201).json(results); // returns info of newly added pet
             });
           }
-          petInfo.url = url;
+          petInfo.url = '/photos/' + name;
+          console.log('in db: ' + petInfo.url);
           var dimensions = sizeOf(url);
           petInfo.width = dimensions.width;
           petInfo.height = dimensions.height;
