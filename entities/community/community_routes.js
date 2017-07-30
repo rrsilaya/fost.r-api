@@ -240,6 +240,7 @@ router.post('/addPost', function(req, res, next) {
 /* add comment to db if post_uuid is valid*/
 router.post('/:post_uuid', function(req, res, next) {
   if (req.body.comment_body) {
+    var comment_title = req.body.comment_title;
     var comment_body = req.body.comment_body;
     var post_uuid = req.params.post_uuid;
     var user = req.session.body.Username;
@@ -381,10 +382,7 @@ router.delete('/:post_uuid/:comment_uuid', function(req, res, next) {
   var post_uuid = req.params.post_uuid;
   var comment_uuid = req.params.comment_uuid;
   var user = req.session.body.Username;
-  controller.deleteComment(post_uuid, comment_uuid, user, function(
-    err,
-    results
-  ) {
+  controller.deleteComment(post_uuid, comment_uuid, user, function(err,results){
     if (err) return res.status(500).json(err);
     else if (results.affectedRows == 0) return res.status(500);
     else res.status(204).end();
