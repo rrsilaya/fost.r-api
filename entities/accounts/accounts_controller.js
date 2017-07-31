@@ -10,15 +10,40 @@ const resultHandler = function(err) {
     console.log('file deleted');
   }
 };
+
+module.exports.countAllUsers = function(callback) {
+  connection.query('SELECT COUNT(*) as count FROM users', (err, count) => {
+    if (err) callback(err);
+    return callback(null, count[0].count);
+  });
+};
+
+module.exports.countAllShelters = function(callback) {
+  connection.query('SELECT COUNT(*) as count FROM shelters', (err, count) => {
+    if (err) callback(err);
+    return callback(null, count[0].count);
+  });
+};
+
 /* viewing all accounts (users or shelters)*/
-module.exports.viewAllUsers = function(callback) {
+module.exports.viewAllUsers = function(page_number, callback) {
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 15;
+
   connection.query('SELECT * FROM users', function(err, results) {
     if (err) return callback(err); // some error with query
     return callback(null, results); // if successful
   });
 };
 
-module.exports.viewAllShelters = function(callback) {
+module.exports.viewAllShelters = function(page_number, callback) {
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 15;
+
   connection.query('SELECT * FROM shelters', function(err, results) {
     if (err) return callback(err); // some error with query
     return callback(null, results); // if successful

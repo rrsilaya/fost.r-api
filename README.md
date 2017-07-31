@@ -56,13 +56,13 @@
 | `/signup/shelter`                        | `POST`   | Redirects to `/feed` if logged in                                                              |
 | `/feed `                                 | `GET`    | Displays message (temp)                                                                        |
 | `/notifications`                         | `GET`    | View all notifications                                                                         |
-| `/accounts/viewShelters`                 | `GET`    | View all shelter accounts                                                                      |
-| `/accounts/viewUsers`                    | `GET`    | View all user accounts                                                                         |
+| `/accounts/viewShelters/page/:page_number`| `GET`   | View all shelter accounts by page                                                              |
+| `/accounts/viewUsers/page/:page_number`  | `GET`    | View all user accounts by page                                                                 |
 | `/accounts/MyAccount`                    | `GET`    | View own info                                                                                  |
 | `/accounts/MyAccount`                    | `PUT`    | Update own info                                                                                |
 | `/accounts/MyAccount`                    | `DELETE` | Delete own account                                                                             |
-| `/pets/shelters/viewAllPets`             | `GET`    | View pets owned by shelters                                                                    |
-| `/pets/users/viewAllPets`                | `GET`    | View pets owned by users                                                                       |
+| `/pets/shelters/viewAllPets/page/:page_number`| `GET`| View pets owned by shelters by page                                                           |
+| `/pets/users/viewAllPets/page/:page_number`| `GET`  | View pets owned by users by page                                                               |
 | `/pets/adopt/`                           | `GET`    | Show all pets (of shelters) that are allowed for adoption                                      |
 | `/pets/dates/`                           | `GET`    | Show all pets (of shelters) that are allowed for dates                                         |
 | `/pets/both/`                            | `GET`    | Show all pets (of shelters) that are allowed for adoption & dates                              |
@@ -76,12 +76,12 @@
 | `/pets/:pet_uuid`                        | `GET`    | View specific pet                                                                              |
 | `/pets/:pet_uuid`                        | `PUT`    | Update info of a pet  (could be used for ADOPT and DATES, set status to ADOPT, DATES, OR BOTH) |
 | `/pets/:pet_uuid`                        | `DELETE` | Delete a single pet given the pet_uuid                                                         |
-| `/community/sortByTimeDesc`              | `GET`    | Displays all posts sorted by date (from newest to oldest)                                      |
-| `/community/sortByTimeAsc`               | `GET`    | Displays all posts sorted by date (from oldest to newest)                                      |
-| `/community/sortByCommentsDesc`          | `GET`    | Displays all posts sorted by number of comments (from most to least)                           |
-| `/community/sortByCommentsAsc`           | `GET`    | Displays all posts sorted by number of comments (from least to most)                           |
-| `/community/sortByVotesDesc`             | `GET`    | Displays all posts sorted by number of votes (from most to least)                              |
-| `/community/sortByVotesAsc`              | `GET`    | Displays all posts sorted by number of votes (from least to most)                              |
+| `/community/sortByTimeDesc/page/:page_number`| `GET`| Displays all posts sorted by date (from newest to oldest) by page                              |
+| `/community/sortByTimeAsc/page/:page_number`| `GET` | Displays all posts sorted by date (from oldest to newest) by page                              |
+| `/community/sortByCommentsDesc/page/:page_number`|`GET`| Displays all posts sorted by number of comments (from most to least) by page                |
+| `/community/sortByCommentsAsc/page/:page_number`| `GET`| Displays all posts sorted by number of comments (from least to most) by page                |
+| `/community/sortByVotesDesc/page/:page_number`| `GET`| Displays all posts sorted by number of votes (from most to least) by page                     |
+| `/community/sortByVotesAsc/page/:page_number`| `GET`| Displays all posts sorted by number of votes (from least to most) by page                      |
 | `/community/addPost`                     | `POST`   | Add post                                                                                       |
 | `/community/:post_uuid`                  | `GET`    | View a post given its uuid                                                                     |
 | `/community/:post_uuid`                  | `PUT`    | Vote a post given its uuid                                                                     |
