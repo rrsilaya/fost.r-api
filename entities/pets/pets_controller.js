@@ -12,12 +12,40 @@ const resultHandler = function(err) {
 
 /* queries for pets are all here */
 
+module.exports.countAllSheltersPets = function(callback) {
+  connection.query(
+    'SELECT COUNT(*) as count FROM pets_of_shelters',
+    (err, count) => {
+      if (err) callback(err);
+      callback(null, count[0].count); // this will return an integer of the count of all the posts
+    }
+  );
+};
+
+module.exports.countAllUsersPets = function(callback) {
+  connection.query(
+    'SELECT COUNT(*) as count FROM pets_of_users',
+    (err, count) => {
+      if (err) callback(err);
+      callback(null, count[0].count); // this will return an integer of the count of all the posts
+    }
+  );
+};
+
 /* view all pets */
-module.exports.viewAllShelterPets = function(callback) {
-  connection.query('SELECT * FROM pets_of_shelters', function(err, results) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // if successful
-  });
+module.exports.viewAllShelterPets = function(page_number, callback) {
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 25;
+  connection.query(
+    'SELECT * FROM pets_of_shelters LIMIT 25 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // if successful
+    }
+  );
 };
 
 module.exports.viewAllPetsForDates = function(callback) {
@@ -56,11 +84,19 @@ module.exports.viewAllPetsForBoth = function(callback) {
   );
 };
 
-module.exports.viewAllUserPets = function(callback) {
-  connection.query('SELECT * FROM pets_of_users', function(err, results) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // if successful
-  });
+module.exports.viewAllUserPets = function(page_number, callback) {
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 25;
+  connection.query(
+    'SELECT * FROM pets_of_users LIMIT 25 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // if successful
+    }
+  );
 };
 
 /* view pets of specific user/shelter */
