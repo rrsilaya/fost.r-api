@@ -110,24 +110,39 @@ module.exports.adoptPet = function(newAdoptRequest, callback) {
           newAdoptRequest,
           (err, results) => {
             if (err) return callback(err); // some error with query
-            return callback(null, results); // if successful
+            return callback(null, true); // if successful
           }
         );
-      } else return callback(null, null); // that pet doesnt exist or is not for adoption
+      } else return callback(null, false); // that pet doesnt exist or is not for adoption
     }
   );
 };
 
+module.exports.viewAdoptRequests = function(shelter, callback) {
+  connection.query('SELECT FROM adopts WHERE ');
+};
+
 module.exports.datePet = function(newDateRequest, callback) {
+  var pet = newDateRequest.pet_uuid;
   connection.query(
-    'INSERT INTO dates SET ?',
-    newDateRequest,
+    'SELECT FROM pets_of_shelters WHERE status = "DATES" && uuid = ?',
+    pet,
     (err, results) => {
       if (err) return callback(err); // some error with query
-      return callback(null, results); // if successful
+      if (results.length > 0) {
+        connection.query(
+          'INSERT INTO dates SET ?',
+          newAdoptRequest,
+          (err, results) => {
+            if (err) return callback(err); // some error with query
+            return callback(null, true); // if successful
+          }
+        );
+      } else return callback(null, false); // that pet doesnt exist or is not for adoption
     }
   );
 };
+
 module.exports.viewShelterPetsForBoth = function(shelter_Username, callback) {
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE shelter_Username = ? status = "BOTH"',
