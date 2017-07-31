@@ -64,10 +64,10 @@ router.get('/shelters/viewPetsByKind/:page_number/:kind', function(req, res) {
 });
 
 //By sex
-router.get('/users/viewPetsBySex/:page_number/:sex', function(req, res) {
+router.get('/shelters/viewPetsBySex/:page_number/:sex', function(req, res) {
   var page_number = req.params.page_number;
   var sex = req.params.sex;
-  var type = 'pets_of_users';
+  var type = 'pets_of_shelters';
   controller.countAllPetsBySex(type, sex, function(err, count) {
     if (err) res.status(500).json(err);
     else {
@@ -104,10 +104,10 @@ router.get('/users/viewPetsByKind/:page_number/:kind', function(req, res) {
 });
 
 //By sex
-router.get('/shelters/viewPetsBySex/:page_number/:sex', function(req, res) {
+router.get('/users/viewPetsBySex/:page_number/:sex', function(req, res) {
   var page_number = req.params.page_number;
   var sex = req.params.sex;
-  var type = 'pets_of_shelters';
+  var type = 'pets_of_users';
   controller.countAllPetsBySex(type, sex, function(err, count) {
     if (err) res.status(500).json(err);
     else {

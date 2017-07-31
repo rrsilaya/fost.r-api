@@ -231,7 +231,7 @@ module.exports.viewAdoptRequests = function(shelter, callback) {
 
 module.exports.datePet = function(newDateRequest, callback) {
   var pet = newDateRequest.pet_uuid;
-  var status = 'ADOPT';
+  var status = 'DATES';
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE status = ? && uuid = ?',
     [status, pet],
@@ -248,6 +248,17 @@ module.exports.datePet = function(newDateRequest, callback) {
           }
         );
       } else callback(null, false);
+    }
+  );
+};
+
+module.exports.viewDateRequests = function(shelter, callback) {
+  connection.query(
+    'SELECT * FROM pets_of_shelters RIGHT OUTER JOIN dates on pets_of_shelters.uuid = dates.pet_uuid where shelter_Username = ? ORDER BY updated_at',
+    shelter,
+    (err, results) => {
+      if (err) callback(err);
+      callback(null, results);
     }
   );
 };
