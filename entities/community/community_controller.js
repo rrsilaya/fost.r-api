@@ -158,7 +158,7 @@ module.exports.sortByVotesAsc = function(page_number, callback) {
     }
   );
 };
-/*
+/*FOR NOW
 //deletes all posts of current user logged in
 module.exports.uniqueako = function(user, callback) {
   connection.query('DELETE FROM posts WHERE Posted_by = ?', user, function(
