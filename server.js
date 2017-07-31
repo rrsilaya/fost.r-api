@@ -24,6 +24,7 @@ app.use('/rescue/rescue-images',express.static(path.join(__dirname, './entities/
 app.use('/signup/icons/shelters',express.static(path.join(__dirname, './entities/signup/icons/shelters')));
 app.use('/signup/shelter_docs',express.static(path.join(__dirname, './entities/signup/shelter_docs')));
 app.use('/signup/icons/users',express.static(path.join(__dirname, './entities/signup/icons/users')));
+app.use('/pets/photos',express.static(path.join(__dirname, './entities/pets/photos')));
 
 //https://hackernoon.com/restful-api-design-with-node-js-26ccf66eab09
 const port = process.env.PORT || 3000;

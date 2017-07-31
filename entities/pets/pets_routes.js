@@ -15,7 +15,6 @@ shortid.characters(
 
 var controller = require('./pets_controller');
 //serve static files
-router.use(express.static(path.join(__dirname, './photos')));
 
 router.use(validator()); // express-validator
 router.use(fileUpload()); // express-fileupload
@@ -95,7 +94,8 @@ router.get('/adopt/requests', function(req, res) {
     console.log('getting adopt requests for my pets');
   }
 });
-// // delete request for adoption
+
+// delete request for adoption
 // router.delete('/adopt/:pet_uuid', function(req, res) {
 //   var pet = pet_uuid;
 
@@ -215,6 +215,7 @@ router.post('/myPets', function(req, res) {
       var mime = req.files.photo.mimetype;
       var name = petInfo.uuid + '-dp-' + petDP.name;
       var url = __dirname + '/photos/' + name;
+
       if (mime.substring(0, 5) === 'image') {
         petDP.mv(url, function(err) {
           if (err) {
@@ -224,7 +225,8 @@ router.post('/myPets', function(req, res) {
               res.status(201).json(results); // returns info of newly added pet
             });
           }
-          petInfo.url = '/pets/' +name;
+          petInfo.url = '/pets/photos/' +name;
+          console.log(petInfo.url);
           var dimensions = sizeOf(url);
           petInfo.width = dimensions.width;
           petInfo.height = dimensions.height;
@@ -275,7 +277,8 @@ router.post('/myPets', function(req, res) {
               res.status(201).json(results); // returns info of newly added pet
             });
           }
-          petInfo.url = '/photos/' + name;
+          petInfo.url = '/pets/photos/' + name;
+
           console.log('in db: ' + petInfo.url);
           var dimensions = sizeOf(url);
           petInfo.width = dimensions.width;
