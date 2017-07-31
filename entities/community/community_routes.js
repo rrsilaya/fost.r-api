@@ -90,7 +90,7 @@ router.get('/sortByVotesAsc/page/:page_number', function(req, res) {
 });
 
 /* view a post given its uuid ; shows all comments and votes on the post*/
-router.get('/viewPost/:post_uuid', function(req, res, next) {
+router.get('/:post_uuid', function(req, res, next) {
   var post_uuid = req.params.post_uuid;
   controller.viewPost(post_uuid, function(err, post) {
     if (err) return res.status(500).json(err);
