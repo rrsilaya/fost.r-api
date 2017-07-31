@@ -7,8 +7,11 @@ var shortid = require('shortid');
 shortid.characters(
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
 );
+const path=require('path');
 // default has "-"" and "_" ; this sets the characters to only the entered characters (https://www.npmjs.com/package/shortid)
 var controller = require('./rescue_controllers');
+
+router.use(express.static(path.join(__dirname, './rescue-images')));
 
 router.use(validator()); // express-validator
 router.use(fileUpload()); // express-fileupload
@@ -116,7 +119,8 @@ router.post('/submit_a_rescue_request', function(req, res, next) {
   if (req.body.rescue_body && req.session.body.accountType === 'user') {
     var today = new Date();
     var rescue_uuid = shortid.generate();
-    var rescue_imgurl;
+    var rescue_imgurl,imgurl;
+
 
     //select user details
     controller.getUser(req.session.body.Username, function(err, user) {
@@ -135,21 +139,22 @@ router.post('/submit_a_rescue_request', function(req, res, next) {
             if (mime.substring(0, 5) === 'image') {
               image.mv(rescue_imgurl, function(err) {
                 if (err) {
-                  rescue_imgurl = null;
+                  imgurl = null;
                   console.log('api err: not able to receive image');
                 }
               });
             } else {
-              rescue_imgurl = null;
+              imgurl = null;
               console.log('file uploaded is not image');
             }
           } else if (!req.files.photo) {
-            rescue_imgurl = null;
+              mgurl = null;
           }
         } else {
-          rescue_imgurl = null;
+          imgurl=null;
           console.log('file is undefined');
         }
+                  console.log(mgurl);
 
         var newRescue = {
           rescue_uuid: rescue_uuid,

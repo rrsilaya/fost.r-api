@@ -13,6 +13,8 @@ shortid.characters(
 // default has "-"" and "_" ; this sets the characters to only the entered characters (https://www.npmjs.com/package/shortid)
 
 var controller = require('./pets_controller');
+//serve static files
+router.use(express.static(path.join(__dirname, './photos')));
 
 router.use(validator()); // express-validator
 router.use(fileUpload()); // express-fileupload
