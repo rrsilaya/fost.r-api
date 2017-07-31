@@ -43,7 +43,7 @@ router.get('/shelters/viewAllPets/page/:page_number', function(req, res) {
 
 // returns all of the pets of the shelters for adoption
 router.get('/adopt', function(req, res) {
-  controller.viewPetsForAdopt(function(err, pets) {
+  controller.viewAllPetsForAdopt(function(err, pets) {
     if (err) res.status(500).json(err);
     res.status(200).json(pets);
   });
@@ -62,13 +62,14 @@ router.post('/adopt/:pet_uuid', function(req, res) {
       created_at: today,
       updated_at: today
     };
+    console.log(newAdopt);
     controller.adoptPet(newAdopt, function(err, results) {
-      console.log(results);
+      console.log('results ' + results);
       if (err) res.status(500).json(err);
       if (results) res.status(200).json(results);
       else if (!results) {
         console.log('That pet is not for adopt.');
-        res.status(404).send(null);
+        res.status(404).end();
       }
     });
   }
@@ -98,9 +99,14 @@ router.post('/dates/:pet_uuid', function(req, res) {
   }
 });
 
-router.get('/adopt/requests', function(req, res) {
+router.get('/adoptRequests', function(req, res) {
   if (req.session.body.accountType === 'shelter') {
+    var Username = req.session.body.Username;
     console.log('getting adopt requests for my pets');
+    controller.viewAdoptRequests(Username, function(err, requests) {
+      if (err) res.status(500).json(err);
+      res.status(200).json(requests);
+    });
   }
 });
 
@@ -116,9 +122,10 @@ router.get('/adopt/requests', function(req, res) {
 
 // });
 
+// Viewing the pets of :owner that are allowed for adopt
 router.get('/adopt/:owner', function(req, res) {
   var owner = req.params.owner;
-  controller.viewPetsForAdoptSpecific(function(err, pets) {
+  controller.viewShelterPetsForAdopt(owner, function(err, pets) {
     if (err) res.status(500).json(err);
     res.status(200).json(pets);
   });
@@ -126,15 +133,16 @@ router.get('/adopt/:owner', function(req, res) {
 
 // returns all of the pets of the shelters for dates
 router.get('/dates', function(req, res) {
-  controller.viewPetsForDates(function(err, pets) {
+  controller.viewAllPetsForDates(function(err, pets) {
     if (err) res.status(500).json(err);
     res.status(200).json(pets);
   });
 });
 
+// Viewing the pets of :owner that are allowed for dates
 router.get('/dates/:owner', function(req, res) {
   var owner = req.params.owner;
-  controller.viewPetsForDatesSpecific(function(err, pets) {
+  controller.viewShelterPetsForDates(owner, function(err, pets) {
     if (err) res.status(500).json(err);
     res.status(200).json(pets);
   });
@@ -142,15 +150,16 @@ router.get('/dates/:owner', function(req, res) {
 
 // returns all of the pets of the shelters for both adoption and dates
 router.get('/both', function(req, res) {
-  controller.viewPetsForBoth(function(err, pets) {
+  controller.viewAllPetsForBoth(function(err, pets) {
     if (err) res.status(500).json(err);
     res.status(200).json(pets);
   });
 });
 
+// Viewing the pets of :owner that are allowed for adopt
 router.get('/both/:owner', function(req, res) {
   var owner = req.params.owner;
-  controller.viewPetsForBothSpecific(function(err, pets) {
+  controller.viewShelterPetsForBoth(owner, function(err, pets) {
     if (err) res.status(500).json(err);
     res.status(200).json(pets);
   });
@@ -223,6 +232,7 @@ router.post('/myPets', function(req, res) {
       kind: req.body.kind,
       breed: req.body.breed,
       sex: req.body.sex,
+      status: req.body.status,
       birthday: req.body.birthday,
       created_at: today,
       updated_at: today,
