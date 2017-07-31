@@ -24,49 +24,67 @@ router.use(function(req, res, next) {
 // Sorting
 
 // newest to oldest
-router.get('/sortByTimeDesc', function(req, res) {
-  controller.sortByTimeDesc(function(err, posts) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByTimeDesc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.sortByTimeDesc(page_number, function(err, posts) {
     if (err) res.status(500).json(err);
+    if (!posts) res.status(404);
     res.status(200).json(posts);
   });
 });
 
 // oldest to newest
-router.get('/sortByTimeAsc', function(req, res) {
-  controller.sortByTimeAsc(function(err, posts) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByTimeAsc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.sortByTimeAsc(page_number, function(err, posts) {
     if (err) res.status(500).json(err);
+    if (!posts) res.status(404);
     res.status(200).json(posts);
   });
 });
 
 // most to least commented
-router.get('/sortByCommentsDesc', function(req, res) {
-  controller.sortByCommentsDesc(function(err, posts) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByCommentsDesc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.sortByCommentsDesc(page_number, function(err, posts) {
     if (err) res.status(500).json(err);
+    if (!posts) res.status(404);
     res.status(200).json(posts);
   });
 });
 
 // least to most commented
-router.get('/sortByCommentsAsc', function(req, res) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByCommentsAsc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
   controller.sortByCommentsAsc(function(err, posts) {
     if (err) res.status(500).json(err);
+    if (!posts) res.status(404);
     res.status(200).json(posts);
   });
 });
 
 // most to least voted
-router.get('/sortByVotesDesc', function(req, res) {
-  controller.sortByVotesDesc(function(err, posts) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByVotesDesc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.sortByVotesDesc(page_number, function(err, posts) {
     if (err) res.status(500).json(err);
+    if (!posts) res.status(404);
     res.status(200).json(posts);
   });
 });
 
 // least to most voted
-router.get('/sortByVotesAsc', function(req, res) {
-  controller.sortByVotesAsc(function(err, posts) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByVotesAsc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.sortByVotesAsc(page_number, function(err, posts) {
     if (err) res.status(500).json(err);
+    if (!posts) res.status(404);
     res.status(200).json(posts);
   });
 });

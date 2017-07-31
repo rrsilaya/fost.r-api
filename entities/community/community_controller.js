@@ -39,69 +39,87 @@ module.exports.viewPostsOf = function(user, callback) {
 };
 
 // newest to oldest
-module.exports.sortByTimeDesc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY created_at DESC', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByTimeDesc = function(page_number, callback) {
+  var number = parseInt(page_number);
+  var offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY created_at DESC LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // success
+    }
+  );
 };
 
 // oldest to newest
-module.exports.sortByTimeAsc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY created_at', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByTimeAsc = function(page_number, callback) {
+  var number = parseInt(page_number);
+  var offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY created_at LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // success
+    }
+  );
 };
 
 // most to least commented
-module.exports.sortByCommentsDesc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY comments DESC', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByCommentsDesc = function(page_number, callback) {
+  var number = parseInt(page_number);
+  var offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY comments DESC LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // success
+    }
+  );
 };
 
 // least to most commented
-module.exports.sortByCommentsAsc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY comments', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByCommentsAsc = function(page_number, callback) {
+  var number = parseInt(page_number);
+  var offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY comments LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // success
+    }
+  );
 };
 
 // most to least voted
-module.exports.sortByVotesDesc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY votes DESC', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByVotesDesc = function(page_number, callback) {
+  var number = parseInt(page_number);
+  var offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY votes DESC LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // success
+    }
+  );
 };
 
 // least to most voted
-module.exports.sortByVotesAsc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY votes', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByVotesAsc = function(page_number, callback) {
+  var number = parseInt(page_number);
+  var offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY votes LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // success
+    }
+  );
 };
 
 //deletes all posts of current user logged in
