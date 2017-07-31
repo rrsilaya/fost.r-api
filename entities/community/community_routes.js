@@ -344,6 +344,16 @@ router.post('/:post_uuid', function(req, res, next) {
   }
 });
 
+/* view all comments on a post given the post_uuid*/
+router.get('/viewAllComments/:post_uuid', function(req, res, next) {
+  console.log('viewing all comments');
+  var post_uuid = req.params.post_uuid;
+  controller.viewAllComments(post_uuid, function(err, comments) {
+    if (err) return res.status(500).json(err); // server error
+    res.status(200).json(comments);
+  });
+});
+
 /* view a comment (required : post_uuid && comment_uuid */
 // also shows the votes of that comment
 router.get('/:post_uuid/:comment_uuid', function(req, res, next) {
@@ -414,16 +424,6 @@ router.delete('/:post_uuid/:comment_uuid', function(req, res, next) {
     if (err) return res.status(500).json(err);
     else if (results.affectedRows == 0) return res.status(500);
     else res.status(204).end();
-  });
-});
-
-/* view all comments on a post given the post_uuid*/
-router.get('/viewAllComments/:post_uuid', function(req, res, next) {
-  console.log('viewing all comments');
-  var post_uuid = req.params.post_uuid;
-  controller.viewAllComments(post_uuid, function(err, comments) {
-    if (err) return res.status(500).json(err); // server error
-    res.status(200).json(comments);
   });
 });
 

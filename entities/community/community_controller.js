@@ -19,9 +19,13 @@ module.exports.viewPost = function(post_uuid, callback) {
     'SELECT * FROM posts WHERE post_uuid = ? ',
     post_uuid,
     function(err, results) {
-      if (err)
-        return callback(err); // some error with query
-      else return callback(null, results); // success
+      if (err) return callback(err);
+      else {
+        // some error with query
+        console.log('showing post: ' + post_uuid);
+        console.log(results);
+        return callback(null, results); // success
+      }
     }
   );
 };
@@ -280,6 +284,7 @@ module.exports.showAllVotesPost = function(post_uuid, callback) {
       if (err) callback(err);
       else {
         console.log('showing votes for ' + post_uuid);
+        console.log(results);
         callback(null, results);
       }
     }
