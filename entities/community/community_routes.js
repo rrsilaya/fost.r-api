@@ -24,55 +24,73 @@ router.use(function(req, res, next) {
 // Sorting
 
 // newest to oldest
-router.get('/sortByTimeDesc', function(req, res) {
-  controller.sortByTimeDesc(function(err, posts) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByTimeDesc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.sortByTimeDesc(page_number, function(err, posts) {
     if (err) res.status(500).json(err);
-    res.status(200).json(posts);
+    if (!posts) res.status(404).send(null);
+    else res.status(200).json(posts);
   });
 });
 
 // oldest to newest
-router.get('/sortByTimeAsc', function(req, res) {
-  controller.sortByTimeAsc(function(err, posts) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByTimeAsc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.sortByTimeAsc(page_number, function(err, posts) {
     if (err) res.status(500).json(err);
-    res.status(200).json(posts);
+    if (!posts) res.status(404).send(null);
+    else res.status(200).json(posts);
   });
 });
 
 // most to least commented
-router.get('/sortByCommentsDesc', function(req, res) {
-  controller.sortByCommentsDesc(function(err, posts) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByCommentsDesc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.sortByCommentsDesc(page_number, function(err, posts) {
     if (err) res.status(500).json(err);
-    res.status(200).json(posts);
+    if (!posts) res.status(404).send(null);
+    else res.status(200).json(posts);
   });
 });
 
 // least to most commented
-router.get('/sortByCommentsAsc', function(req, res) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByCommentsAsc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
   controller.sortByCommentsAsc(function(err, posts) {
     if (err) res.status(500).json(err);
-    res.status(200).json(posts);
+    if (!posts) res.status(404).send(null);
+    else res.status(200).json(posts);
   });
 });
 
 // most to least voted
-router.get('/sortByVotesDesc', function(req, res) {
-  controller.sortByVotesDesc(function(err, posts) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByVotesDesc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.sortByVotesDesc(page_number, function(err, posts) {
     if (err) res.status(500).json(err);
-    res.status(200).json(posts);
+    if (!posts) res.status(404).send(null);
+    else res.status(200).json(posts);
   });
 });
 
 // least to most voted
-router.get('/sortByVotesAsc', function(req, res) {
-  controller.sortByVotesAsc(function(err, posts) {
+// where :page_number is an integer; will be used for pagination
+router.get('/sortByVotesAsc/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.sortByVotesAsc(page_number, function(err, posts) {
     if (err) res.status(500).json(err);
-    res.status(200).json(posts);
+    if (!posts) res.status(404).send(null);
+    else res.status(200).json(posts);
   });
 });
 
 /* view a post given its uuid ; shows all comments and votes on the post*/
-router.get('/:post_uuid', function(req, res, next) {
+router.get('/viewPost/:post_uuid', function(req, res, next) {
   var post_uuid = req.params.post_uuid;
   controller.viewPost(post_uuid, function(err, post) {
     if (err) return res.status(500).json(err);
@@ -326,6 +344,16 @@ router.post('/:post_uuid', function(req, res, next) {
   }
 });
 
+/* view all comments on a post given the post_uuid*/
+router.get('/viewAllComments/:post_uuid', function(req, res, next) {
+  console.log('viewing all comments');
+  var post_uuid = req.params.post_uuid;
+  controller.viewAllComments(post_uuid, function(err, comments) {
+    if (err) return res.status(500).json(err); // server error
+    res.status(200).json(comments);
+  });
+});
+
 /* view a comment (required : post_uuid && comment_uuid */
 // also shows the votes of that comment
 router.get('/:post_uuid/:comment_uuid', function(req, res, next) {
@@ -396,16 +424,6 @@ router.delete('/:post_uuid/:comment_uuid', function(req, res, next) {
     if (err) return res.status(500).json(err);
     else if (results.affectedRows == 0) return res.status(500);
     else res.status(204).end();
-  });
-});
-
-/* view all comments on a post given the post_uuid*/
-router.get('/viewAllComments/:post_uuid', function(req, res, next) {
-  console.log('viewing all comments');
-  var post_uuid = req.params.post_uuid;
-  controller.viewAllComments(post_uuid, function(err, comments) {
-    if (err) return res.status(500).json(err); // server error
-    res.status(200).json(comments);
   });
 });
 

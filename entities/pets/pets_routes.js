@@ -40,7 +40,8 @@ router.get('/adopt', function(req, res) {
   });
 });
 
-// adopt pet; only for pets_of_shelters; only for users (accountType)
+// adopt pet; only for pets_of_shelters
+// used by accountType = user
 router.post('/adopt/:pet_uuid', function(req, res) {
   if (req.session.body.accountType === 'user') {
     var today = new Date();
@@ -53,13 +54,19 @@ router.post('/adopt/:pet_uuid', function(req, res) {
       updated_at: today
     };
     controller.adoptPet(newAdopt, function(err, results) {
+      console.log(results);
       if (err) res.status(500).json(err);
-      res.status(200).json(results);
+      if (results) res.status(200).json(results);
+      else if (!results) {
+        console.log('That pet is not for adopt.');
+        res.status(404).send(null);
+      }
     });
   }
 });
 
 // date pet ; only for pets_of_shelters
+// used by accountType = user
 router.post('/dates/:pet_uuid', function(req, res) {
   if (req.session.body.accountType === 'user') {
     var today = new Date();
@@ -73,11 +80,20 @@ router.post('/dates/:pet_uuid', function(req, res) {
     };
     controller.datePet(newAdopt, function(err, results) {
       if (err) res.status(500).json(err);
-      res.status(200).json(results);
+      if (results) res.status(200).json(results);
+      else if (!results) {
+        console.log('That pet is not for dates.');
+        res.status(404).send(null);
+      }
     });
   }
 });
 
+router.get('/adopt/requests', function(req, res) {
+  if (req.session.body.accountType === 'shelter') {
+    console.log('getting adopt requests for my pets');
+  }
+});
 // // delete request for adoption
 // router.delete('/adopt/:pet_uuid', function(req, res) {
 //   var pet = pet_uuid;

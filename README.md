@@ -148,12 +148,12 @@
 | `/pets/:pet_uuid`                        | `GET`    | 200           | json of pet's info                                                    |
 | `/pets/:pet_uuid`                        | `PUT`    | 201           | json of mysql query                                                   |
 | `/pets/:pet_uuid`                        | `DELETE` | 204           |                                                                       |
-| `/community/sortByTimeDesc`              | `GET`    | 200           | json of posts sorted by date (from newest to oldest)                  |
-| `/community/sortByTimeAsc`               | `GET`    | 200           | json of posts sorted by date (from oldest to newest)                  |
-| `/community/sortByCommentsDesc`          | `GET`    | 200           | json of posts sorted by number of comments (from most to least)       |
-| `/community/sortByCommentsAsc`           | `GET`    | 200           | json of posts sorted by number of comments (from least to most)       |
-| `/community/sortByVotesDesc`             | `GET`    | 200           | json of posts sorted by number of votes (from most to least)          |
-| `/community/sortByVotesAsc`              | `GET`    | 200           | json of posts sorted by number of votes (from least to most)          |
+| `/community/sortByTimeDesc/page/:page_number`| `GET`| 200           | json of posts sorted by date (from newest to oldest)                  |
+| `/community/sortByTimeAsc/page/:page_number` | `GET`| 200           | json of posts sorted by date (from oldest to newest)                  |
+| `/community/sortByCommentsDesc/page/:page_number`| `GET`| 200       | json of posts sorted by number of comments (from most to least)       |
+| `/community/sortByCommentsAsc/page/:page_number` | `GET`| 200       | json of posts sorted by number of comments (from least to most)       |
+| `/community/sortByVotesDesc/page/:page_number`| `GET`   | 200       | json of posts sorted by number of votes (from most to least)          |
+| `/community/sortByVotesAsc/page/:page_number` | `GET`   | 200       | json of posts sorted by number of votes (from least to most)          |
 | `/community/addPost`                     | `POST`   | 201           | json of post                                                          |
 | `/community/:post_uuid`                  | `GET`    | 200           |                                                                       |
 | `/community/:post_uuid`                  | `PUT`    | 201           | json of mysql query                                                   |
@@ -217,6 +217,7 @@
 | `breed`         | varchar(36)                          |  NO  |     |  NULL   |
 | `sex`           | enum("MALE", "FEMALE")               |  NO  |     |  NULL   |
 | `birthday`      | varchar(36)                          |  NO  |     |  NULL   |
+| `description`   | varchar(200)                         | YES  |     |  NULL   |
 | `user_Username` | varchar(36)                          |  NO  | MUL |  NULL   |
 | `created_at`    | datetime                             |  NO  |     |  NULL   |
 | `updated_at`    | datetime                             |  NO  |     |  NULL   |
@@ -233,6 +234,7 @@
 | `breed`            | varchar(36)                          |  NO  |     |  NULL   |
 | `sex`              | enum("MALE", "FEMALE")               |  NO  |     |  NULL   |
 | `birthday`         | varchar(36)                          |  NO  |     |  NULL   |
+| `description`      | varchar(200)                         | YES  |     |  NULL   | 
 | `status`           | enum("DATES", "ADOPT", "BOTH")       | YES  |     |  NULL   |
 | `shelter_Username` | varchar(52)                          |  NO  | MUL |  NULL   |
 | `created_at`       | datetime                             |  NO  |     |  NULL   |

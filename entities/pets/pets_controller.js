@@ -110,24 +110,48 @@ module.exports.adoptPet = function(newAdoptRequest, callback) {
           newAdoptRequest,
           (err, results) => {
             if (err) return callback(err); // some error with query
-            return callback(null, results); // if successful
+            return callback(null, true); // if successful
           }
         );
-      } else return callback(null, null); // that pet doesnt exist or is not for adoption
+      } else return callback(null, false); // that pet doesnt exist or is not for adoption
+    }
+  );
+};
+
+module.exports.viewAdoptRequests = function(shelter, callback) {
+  connection.query(
+    'SELECT * FROM pets_of_shelters FULL OUTER JOIN adopts ON pets_of_shelters.uuid = adopts.pet_uuid WHERE pets_of_shelters.shelter_Username = ?',
+    shelter,
+    (err, results) => {
+      if (err) callback(err);
+      console.log('okay!');
+      console.log(results);
+      callback(null, results);
     }
   );
 };
 
 module.exports.datePet = function(newDateRequest, callback) {
+  var pet = newDateRequest.pet_uuid;
   connection.query(
-    'INSERT INTO dates SET ?',
-    newDateRequest,
+    'SELECT FROM pets_of_shelters WHERE status = "DATES" && uuid = ?',
+    pet,
     (err, results) => {
       if (err) return callback(err); // some error with query
-      return callback(null, results); // if successful
+      if (results.length > 0) {
+        connection.query(
+          'INSERT INTO dates SET ?',
+          newAdoptRequest,
+          (err, results) => {
+            if (err) return callback(err); // some error with query
+            return callback(null, true); // if successful
+          }
+        );
+      } else return callback(null, false); // that pet doesnt exist or is not for adoption
     }
   );
 };
+
 module.exports.viewShelterPetsForBoth = function(shelter_Username, callback) {
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE shelter_Username = ? status = "BOTH"',
@@ -225,7 +249,7 @@ module.exports.deleteUserPet = function(Username, uuid, callback) {
     'SELECT * FROM pets_of_users where user_Username = ? and uuid = ?',
     [Username, uuid],
     function(err, results) {
-      if (results.affectedRows!==0 && (typeof results[0].url!== undefined)) 
+      if (results.affectedRows !== 0 && typeof results[0].url !== undefined)
         fs.unlink(JSON.parse(JSON.stringify(results[0].url)), resultHandler);
     }
   );
@@ -246,7 +270,7 @@ module.exports.deleteShelterPet = function(Username, uuid, callback) {
     'SELECT * FROM pets_of_shelters where shelter_Username = ? and uuid = ?',
     [Username, uuid],
     function(err, results) {
-      if (results.affectedRows!==0 && (typeof results[0].url!== undefined)) 
+      if (results.affectedRows !== 0 && typeof results[0].url !== undefined)
         fs.unlink(JSON.parse(JSON.stringify(results[0].url)), resultHandler);
     }
   );

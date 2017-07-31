@@ -19,9 +19,13 @@ module.exports.viewPost = function(post_uuid, callback) {
     'SELECT * FROM posts WHERE post_uuid = ? ',
     post_uuid,
     function(err, results) {
-      if (err)
-        return callback(err); // some error with query
-      else return callback(null, results); // success
+      if (err) return callback(err);
+      else {
+        // some error with query
+        console.log('showing post: ' + post_uuid);
+        console.log(results);
+        return callback(null, results); // success
+      }
     }
   );
 };
@@ -39,69 +43,112 @@ module.exports.viewPostsOf = function(user, callback) {
 };
 
 // newest to oldest
-module.exports.sortByTimeDesc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY created_at DESC', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByTimeDesc = function(page_number, callback) {
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY created_at DESC LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      console.log(results);
+      if (results.length > 0)
+        return callback(null, results); // success; has results on that page
+      else return callback(null, null);
+    }
+  );
 };
 
 // oldest to newest
-module.exports.sortByTimeAsc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY created_at', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByTimeAsc = function(page_number, callback) {
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY created_at LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      if (results.length > 0)
+        return callback(null, results); // success; has results on that page
+      else return callback(null, null);
+    }
+  );
 };
 
 // most to least commented
-module.exports.sortByCommentsDesc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY comments DESC', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByCommentsDesc = function(page_number, callback) {
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY comments DESC LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      if (results.length > 0)
+        return callback(null, results); // success; has results on that page
+      else return callback(null, null);
+    }
+  );
 };
 
 // least to most commented
-module.exports.sortByCommentsAsc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY comments', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByCommentsAsc = function(page_number, callback) {
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY comments LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      if (results.length > 0)
+        return callback(null, results); // success; has results on that page
+      else return callback(null, null);
+    }
+  );
 };
 
 // most to least voted
-module.exports.sortByVotesDesc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY votes DESC', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByVotesDesc = function(page_number, callback) {
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY votes DESC LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      if (results.length > 0)
+        return callback(null, results); // success; has results on that page
+      else return callback(null, null);
+    }
+  );
 };
 
 // least to most voted
-module.exports.sortByVotesAsc = function(callback) {
-  connection.query('SELECT * FROM posts ORDER BY votes', function(
-    err,
-    results
-  ) {
-    if (err) return callback(err); // some error with query
-    return callback(null, results); // success
-  });
+module.exports.sortByVotesAsc = function(page_number, callback) {
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 10;
+  connection.query(
+    'SELECT * FROM posts ORDER BY votes LIMIT 10 OFFSET ?',
+    offset,
+    function(err, results) {
+      if (err) return callback(err); // some error with query
+      if (results.length > 0)
+        return callback(null, results); // success; has results on that page
+      else return callback(null, null);
+    }
+  );
 };
 
 //deletes all posts of current user logged in
@@ -123,8 +170,14 @@ module.exports.deletePost = function(post_uuid, user, callback) {
     'SELECT * FROM posts WHERE post_uuid = ? ',
     post_uuid,
     function(err, results) {
-      if (results.affectedRows!==0 && (typeof results[0].image_urlpath!==undefined)){
-        fs.unlink(JSON.parse(JSON.stringify(results[0].image_urlpath)), resultHandler);
+      if (
+        results.affectedRows !== 0 &&
+        typeof results[0].image_urlpath !== undefined
+      ) {
+        fs.unlink(
+          JSON.parse(JSON.stringify(results[0].image_urlpath)),
+          resultHandler
+        );
       }
     }
   );
@@ -231,6 +284,7 @@ module.exports.showAllVotesPost = function(post_uuid, callback) {
       if (err) callback(err);
       else {
         console.log('showing votes for ' + post_uuid);
+        console.log(results);
         callback(null, results);
       }
     }
@@ -438,8 +492,14 @@ module.exports.deleteComment = function(
     'SELECT * FROM comments_on_posts WHERE post_uuid = ? && comment_uuid = ?',
     [post_uuid, comment_uuid],
     function(err, results) {
-      if (results.affectedRows!==0 && (typeofresults[0].image_urlpath!== undefined)){
-        fs.unlink(JSON.parse(JSON.stringify(results[0].image_urlpath)), resultHandler);
+      if (
+        results.affectedRows !== 0 &&
+        typeofresults[0].image_urlpath !== undefined
+      ) {
+        fs.unlink(
+          JSON.parse(JSON.stringify(results[0].image_urlpath)),
+          resultHandler
+        );
       }
     }
   );
