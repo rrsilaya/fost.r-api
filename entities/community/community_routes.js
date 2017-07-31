@@ -278,31 +278,39 @@ router.post('/addPost', function(req, res, next) {
       if (mime.substring(0, 5) === 'image') {
         image.mv(url, function(err) {
           if (err) {
+            url=null;
+            image_urlpath=null;
             console.log('api err: not able to receive image');
           }
         });
       } else {
+        url=null;
+        image_urlpath=null;
         console.log('file uploaded is not image');
       }
     } else if (!req.files.photo) {
+      var url=null;
       var image_urlpath = null;
     }
   } else {
+    var url=null;
     var image_urlpath = null;
     console.log('file is undefined');
   }
-  console.log(image_urlpath);
+  
   var newPost = {
     Posted_by: req.session.body.Username,
     post_title: req.body.post_title,
     text_post: req.body.text_post,
     post_uuid: post_uuid,
     image_urlpath: image_urlpath,
+    img_abspath: url,
     votes: 0,
     comments: 0,
     created_at: today,
     updated_at: today
   };
+  console.log(newPost);
   controller.addPost(newPost, function(err, results) {
     if (err) res.status(500).send(err);
     else {
