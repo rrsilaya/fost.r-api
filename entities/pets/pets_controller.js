@@ -34,6 +34,64 @@ module.exports.countAllUsersPets = function(callback) {
 
 /** Sorting Pets **/
 
+module.exports.countAllPetsByKind = function(type, kind, callback) {
+  var kind = kind.toUpperCase();
+  connection.query(
+    'SELECT COUNT(*) as count FROM ? WHERE kind = ?',
+    [type, sex],
+    (err, count) => {
+      if (err) callback(err);
+      callback(null, count[0].count); // this will return an integer of the count of all the posts
+    }
+  );
+};
+
+module.exports.viewPetsByKind = function(type, page_number, kind, callback) {
+  var kind = kind.toUpperCase();
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 25;
+
+  connection.query(
+    'SELECT * FROM ? WHERE kind = ? LIMIT 25 OFFSET ?',
+    [type, kind, offset],
+    (err, results) => {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // successful
+    }
+  );
+};
+
+module.exports.countAllPetsBySex = function(type, sex, callback) {
+  var sex = sex.toUpperCase();
+  connection.query(
+    'SELECT COUNT(*) as count FROM ? WHERE sex = ?',
+    [type, sex],
+    (err, count) => {
+      if (err) callback(err);
+      callback(null, count[0].count); // this will return an integer of the count of all the posts
+    }
+  );
+};
+
+module.exports.viewPetsBySex = function(type, page_number, sex, callback) {
+  var sex = sex.toUpperCase();
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 25;
+
+  connection.query(
+    'SELECT * FROM ? WHERE kind = ? LIMIT 25 OFFSET ?',
+    [type, kind, offset],
+    (err, results) => {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // successful
+    }
+  );
+};
+
 /* view all pets */
 module.exports.viewAllShelterPets = function(page_number, callback) {
   var offset;
@@ -166,8 +224,6 @@ module.exports.viewAdoptRequests = function(shelter, callback) {
     shelter,
     (err, results) => {
       if (err) callback(err);
-      console.log('okay!');
-      console.log(results);
       callback(null, results);
     }
   );

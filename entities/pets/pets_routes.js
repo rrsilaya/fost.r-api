@@ -30,8 +30,90 @@ router.get('/shelters/viewAllPets/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 25);
       controller.viewAllShelterPets(page_number, function(err, pets) {
+        if (err) return res.status(500).json(err); // server error
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+      });
+    }
+  });
+});
+
+/********** SORTING PETS **********/
+
+//By kind
+router.get('/shelters/viewPetsByKind/:page_number/:kind', function(req, res) {
+  var page_number = req.params.page_number;
+  var kind = req.params.kind;
+  var type = 'pets_of_shelters';
+  controller.countAllPetsByKind(type, kind, function(err, count) {
+    if (err) res.status(500).json(err);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 25);
+      controller.viewPetsByKind(type, page_number, kind, function(err, pets) {
+        if (err) return res.status(500).json(err); // server error
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+      });
+    }
+  });
+});
+
+//By sex
+router.get('/users/viewPetsBySex/:page_number/:sex', function(req, res) {
+  var page_number = req.params.page_number;
+  var sex = req.params.sex;
+  var type = 'pets_of_users';
+  controller.countAllPetsBySex(type, sex, function(err, count) {
+    if (err) res.status(500).json(err);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 25);
+      controller.viewPetsByKind(type, page_number, sex, function(err, pets) {
+        if (err) return res.status(500).json(err); // server error
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+      });
+    }
+  });
+});
+
+//By kind
+router.get('/users/viewPetsByKind/:page_number/:kind', function(req, res) {
+  var page_number = req.params.page_number;
+  var kind = req.params.kind;
+  var type = 'pets_of_users';
+  controller.countAllPetsByKind(type, kind, function(err, count) {
+    if (err) res.status(500).json(err);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 25);
+      controller.viewPetsByKind(type, page_number, kind, function(err, pets) {
+        if (err) return res.status(500).json(err); // server error
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+      });
+    }
+  });
+});
+
+//By sex
+router.get('/shelters/viewPetsBySex/:page_number/:sex', function(req, res) {
+  var page_number = req.params.page_number;
+  var sex = req.params.sex;
+  var type = 'pets_of_shelters';
+  controller.countAllPetsBySex(type, sex, function(err, count) {
+    if (err) res.status(500).json(err);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 25);
+      controller.viewPetsByKind(type, page_number, sex, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
@@ -127,7 +209,8 @@ router.get('/adopt/:owner', function(req, res) {
   var owner = req.params.owner;
   controller.viewShelterPetsForAdopt(owner, function(err, pets) {
     if (err) res.status(500).json(err);
-    res.status(200).json(pets);
+    if (pets.length > 0) res.status(200).json(pets);
+    else res.status(404).send(null);
   });
 });
 
@@ -135,7 +218,8 @@ router.get('/adopt/:owner', function(req, res) {
 router.get('/dates', function(req, res) {
   controller.viewAllPetsForDates(function(err, pets) {
     if (err) res.status(500).json(err);
-    res.status(200).json(pets);
+    if (pets.length > 0) res.status(200).json(pets);
+    else res.status(404).send(null);
   });
 });
 
@@ -144,7 +228,8 @@ router.get('/dates/:owner', function(req, res) {
   var owner = req.params.owner;
   controller.viewShelterPetsForDates(owner, function(err, pets) {
     if (err) res.status(500).json(err);
-    res.status(200).json(pets);
+    if (pets.length > 0) res.status(200).json(pets);
+    else res.status(404).send(null);
   });
 });
 
@@ -152,7 +237,8 @@ router.get('/dates/:owner', function(req, res) {
 router.get('/both', function(req, res) {
   controller.viewAllPetsForBoth(function(err, pets) {
     if (err) res.status(500).json(err);
-    res.status(200).json(pets);
+    if (pets.length > 0) res.status(200).json(pets);
+    else res.status(404).send(null);
   });
 });
 
@@ -161,7 +247,8 @@ router.get('/both/:owner', function(req, res) {
   var owner = req.params.owner;
   controller.viewShelterPetsForBoth(owner, function(err, pets) {
     if (err) res.status(500).json(err);
-    res.status(200).json(pets);
+    if (pets.length > 0) res.status(200).json(pets);
+    else res.status(404).send(null);
   });
 });
 
@@ -172,7 +259,7 @@ router.get('/users/viewAllPets/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 25);
       controller.viewAllUserPets(page_number, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
