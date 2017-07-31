@@ -217,6 +217,7 @@
 | `breed`         | varchar(36)                          |  NO  |     |  NULL   |
 | `sex`           | enum("MALE", "FEMALE")               |  NO  |     |  NULL   |
 | `birthday`      | varchar(36)                          |  NO  |     |  NULL   |
+| `description`   | varchar(200)                         | YES  |     |  NULL   |
 | `user_Username` | varchar(36)                          |  NO  | MUL |  NULL   |
 | `created_at`    | datetime                             |  NO  |     |  NULL   |
 | `updated_at`    | datetime                             |  NO  |     |  NULL   |
@@ -233,6 +234,7 @@
 | `breed`            | varchar(36)                          |  NO  |     |  NULL   |
 | `sex`              | enum("MALE", "FEMALE")               |  NO  |     |  NULL   |
 | `birthday`         | varchar(36)                          |  NO  |     |  NULL   |
+| `description`      | varchar(200)                         | YES  |     |  NULL   | 
 | `status`           | enum("DATES", "ADOPT", "BOTH")       | YES  |     |  NULL   |
 | `shelter_Username` | varchar(52)                          |  NO  | MUL |  NULL   |
 | `created_at`       | datetime                             |  NO  |     |  NULL   |

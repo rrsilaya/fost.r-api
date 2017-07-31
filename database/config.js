@@ -59,6 +59,7 @@ CREATE TABLE pets_of_shelters (\
     `breed` varchar(36) NOT NULL,\
     `sex` enum("MALE", "FEMALE") NOT NULL,\
     `birthday` varchar(36) NOT NULL,\
+    `description` varchar(200) DEFAULT NULL,\
     `status` enum("DATES", "ADOPT", "BOTH") NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
@@ -82,6 +83,7 @@ CREATE TABLE pets_of_users (\
     `breed` varchar(36) NOT NULL,\
     `sex` enum("MALE", "FEMALE") NOT NULL,\
     `birthday` varchar(36) NOT NULL,\
+    `description` varchar(200) DEFAULT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     `uuid` varchar(36) NOT NULL PRIMARY KEY,\
@@ -115,6 +117,7 @@ CREATE TABLE adopts(\
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
 );
 
+SELECT * FROM;
 connection.query(
   '\
 CREATE TABLE dates(\
