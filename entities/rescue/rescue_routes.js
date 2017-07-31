@@ -7,14 +7,13 @@ var shortid = require('shortid');
 shortid.characters(
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
 );
-const path=require('path');
 // default has "-"" and "_" ; this sets the characters to only the entered characters (https://www.npmjs.com/package/shortid)
 var controller = require('./rescue_controllers');
 
-router.use(express.static(path.join(__dirname, './rescue-images')));
 
 router.use(validator()); // express-validator
 router.use(fileUpload()); // express-fileupload
+
 
 //display all requests for rescue
 router.get('/', function(req, res, next) {
@@ -133,8 +132,9 @@ router.post('/submit_a_rescue_request', function(req, res, next) {
         if (typeof req.files !== 'undefined') {
           if (req.files.photo) {
             var image = req.files.photo;
-            var name = rescue_uuid + '-attached-image-' + image.name;
+            var name = rescue_uuid + '_' + image.name;
             rescue_imgurl = __dirname + '/rescue-images/' + name;
+            imgurl='/rescue/rescue-images/'+name;
             var mime = req.files.photo.mimetype;
             if (mime.substring(0, 5) === 'image') {
               image.mv(rescue_imgurl, function(err) {
@@ -148,18 +148,16 @@ router.post('/submit_a_rescue_request', function(req, res, next) {
               console.log('file uploaded is not image');
             }
           } else if (!req.files.photo) {
-              mgurl = null;
+              imgurl = null;
           }
         } else {
           imgurl=null;
           console.log('file is undefined');
         }
-                  console.log(mgurl);
-
         var newRescue = {
           rescue_uuid: rescue_uuid,
           rescue_body: req.body.rescue_body,
-          rescue_imgurl: rescue_imgurl,
+          rescue_imgurl: imgurl,
           sender_Username: req.session.body.Username,
           date_submitted: today,
           contactnum_sender: contactnum_sender,

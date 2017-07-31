@@ -117,7 +117,7 @@ CREATE TABLE adopts(\
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;'
 );
 
-SELECT * FROM;
+//SELECT * FROM;
 connection.query(
   '\
 CREATE TABLE dates(\

@@ -11,6 +11,7 @@ var community = require('./entities/community/community_routes');
 var rescue = require('./entities/rescue/rescue_routes');
 var accounts = require('./entities/accounts/accounts_routes');
 var notify = require('./entities/notifications/notifications_controllers');
+const path=require('path');
 
 router.use(validator());
 
@@ -45,6 +46,7 @@ router.use('/accounts', accounts);
 router.use('/pets', pets);
 router.use('/community', community);
 router.use('/rescue', rescue);
+
 
 router.get('/', function(req, res) {
   res.json({ message: 'to access api: localhost:3000/api/<route>' });
