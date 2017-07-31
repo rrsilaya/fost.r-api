@@ -8,14 +8,15 @@ const mysql=require('mysql');
 const logger = require('morgan');
 const connection=require('./database/connection');
 const routes=require('./routes');
+
 //configure app to use bodyParser()
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended:true
 }))
-app.use('/api', routes);
 
+app.use('/api', routes);
 
 //https://hackernoon.com/restful-api-design-with-node-js-26ccf66eab09
 const port = process.env.PORT || 3000;

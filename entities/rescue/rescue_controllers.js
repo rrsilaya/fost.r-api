@@ -68,21 +68,21 @@ module.exports.viewMyRequest = function(rescue_uuid, Username, callback) {
   );
 };
 
-/* delete a request given that the request is posted by the user and its rescue_uuid is specified*/
-module.exports.deleteRequest = function(
-  rescue_uuid,
-  sender_Username,
-  callback
-) {
-  //delete the file
+//delete a request given that the request is posted by the user and its rescue_uuid is specified*/
+
+module.exports.deleteRequest=function(rescue_uuid,sender_Username,callback){
+  //delete the file 
+  var link;
   connection.query(
     'SELECT * FROM rescue WHERE rescue_uuid = ? && sender_Username = ? ',
-    [rescue_uuid, sender_Username],
-    function(err, results) {
-      if (results[0].rescue_imgurl)
-        fs.unlink(results[0].rescue_imgurl, resultHandler);
+    [rescue_uuid,sender_Username],
+    function(err,results){
+      if (results.affectedRows!==0 && (typeof results[0].rescue_imgurl!==undefined))  
+        fs.unlink(JSON.parse(JSON.stringify(results[0].rescue_imgurl)),resultHandler);
+
     }
   );
+
   //delete request
   connection.query(
     'DELETE FROM rescue WHERE rescue_uuid = ? && sender_Username = ?',
@@ -94,6 +94,7 @@ module.exports.deleteRequest = function(
     }
   );
 };
+
 
 /*update a request given that the request is posted by the user and its rescue_uuid is specified*/
 module.exports.updateRequest = function(
@@ -125,15 +126,31 @@ module.exports.viewUserRequests = function(Username, callback) {
     }
   );
 };
-/*delete all my request*/
-module.exports.deleteAllMyRequests = function(Username, callback) {
+/*delete all my request
+does not work unless module.exports.deleteRequest is commented out */
+module.exports.deleteAllMyRequests=function(Username,callback){
+  //delete all images attached to photo
+  connection.query(
+    'SELECT * FROM rescue WHERE sender_Username = ?',
+    Username,
+    function(err,results){
+      if(results.affectedRows!==0){
+        for (var i = 0, len = results.length; i < len; i++) {
+          if(results.affectedRows!==0) 
+            fs.unlink(JSON.parse(JSON.stringify(results[i].rescue_imgurl)),resultHandler);
+        }
+      }
+    }
+  );
+  
   connection.query(
     'DELETE FROM rescue WHERE sender_Username = ?',
     Username,
-    function(err, results) {
-      if (err)
-        return callback(err); // some error with query
-      else return callback(null, results); // success
-    }
-  );
-};
+    function(err,results){
+    if (err) return callback(err);   // some error with query
+    else return callback(null, results); // success
+  });
+}
+
+
+

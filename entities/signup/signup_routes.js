@@ -7,10 +7,14 @@ var fileUpload = require('express-fileupload');
 var sizeOf = require('image-size'); // get image dimensions
 const connection = require('./../../database/connection');
 const controller = require('./signup_controller');
+const path =require('path');
 
 router.use(validator()); // express-validator
 router.use(fileUpload()); // express-fileupload
 
+router.use(express.static(path.join(__dirname, './icons/shelters')));
+router.use(express.static(path.join(__dirname, './shelter_docs')));
+router.use(express.static(path.join(__dirname, './icons/users')));
 router.use(function(req, res, next) {
   console.log('signup routes getting request...');
   next();
@@ -49,7 +53,8 @@ router.post('/shelter', function(req, res, next) {
     typeof req.body.contactnum !== 'undefined' &&
     typeof req.body.email !== 'undefined' &&
     typeof req.body.password !== 'undefined' &&
-    typeof req.files.file !== 'undefined'
+    typeof req.files.file !== 'undefined' 
+   
   ) {
     // checks req.<field>; the following messages can be sent to the views
     // https://github.com/ctavan/express-validator
@@ -70,8 +75,8 @@ router.post('/shelter', function(req, res, next) {
     if (errors || !req.files.file) res.status(400).json(errors);
     else {
       const file = req.files.file; //use later for file-upload
-      var name = req.body.Username + '-proof-' + file.name;
-      var uploadpath = __dirname + '/shelter_docs/' + name;
+      var proofname = req.body.Username + '-proof-' + file.name;
+      var uploadpath =__dirname +'/shelter_docs/'+proofname;
       var today = new Date();
       var newShelter = {
         Username: req.body.Username,
@@ -88,13 +93,13 @@ router.post('/shelter', function(req, res, next) {
         const icon = req.files.icon; //use later for file-upload
         var mime = req.files.icon.mimetype;
         var name = newShelter.Username + '-' + icon.name;
-        var url = __dirname + '/icons/shelters/' + name;
+        var url = __dirname +'/icons/shelters/'+ name;
         if (mime.substring(0, 5) === 'image') {
           icon.mv(url, function(err) {
             if (err) {
               console.log('api err: not able to receive image');
             } else {
-              newShelter.icon_url = url;
+              newShelter.icon_url = 'localhost:3000/api/signup/' + name;
               var dimensions = sizeOf(url);
               newShelter.icon_width = dimensions.width;
               newShelter.icon_height = dimensions.height;
@@ -107,7 +112,7 @@ router.post('/shelter', function(req, res, next) {
           console.log(err);
           console.log('File not uploaded, please try again');
           res.status(500).redirect('/api/signup');
-        } else newShelter.file_path = uploadpath;
+        } else newShelter.file_path ='localhost:3000/api/signup/' + proofname;
       });
       controller.registerShelter(newShelter, function(err, callback) {
         if (err) {
@@ -119,7 +124,7 @@ router.post('/shelter', function(req, res, next) {
             errors = 'Successfully signed up.';
             console.log(errors);
             console.log(newShelter);
-            res.status(201).json(newUser);
+            res.status(201).json(newShelter);
             break;
           case 'QUERRY_ERR':
             errors = 'Sorry, there was some error in the query.';
@@ -227,7 +232,7 @@ router.post('/user', function(req, res, next) {
             if (err) {
               console.log('api err: not able to receive image');
             } else {
-              newUser.icon_url = url;
+              newUser.icon_url = 'localhost:3000/api/signup' +name;
               var dimensions = sizeOf(url);
               newUser.icon_width = dimensions.width;
               newUser.icon_height = dimensions.height;

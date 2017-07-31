@@ -141,8 +141,9 @@ module.exports.deletePost = function(post_uuid, user, callback) {
     'SELECT * FROM posts WHERE post_uuid = ? ',
     post_uuid,
     function(err, results) {
-      if (results[0].image_urlpath)
-        fs.unlink(results[0].image_urlpath, resultHandler);
+      if (results.affectedRows!==0 && (typeof results[0].image_urlpath!==undefined)){
+        fs.unlink(JSON.parse(JSON.stringify(results[0].image_urlpath)), resultHandler);
+      }
     }
   );
   connection.query(
@@ -455,8 +456,9 @@ module.exports.deleteComment = function(
     'SELECT * FROM comments_on_posts WHERE post_uuid = ? && comment_uuid = ?',
     [post_uuid, comment_uuid],
     function(err, results) {
-      if (results[0].image_urlpath)
-        fs.unlink(results[0].image_urlpath, resultHandler);
+      if (results.affectedRows!==0 && (typeofresults[0].image_urlpath!== undefined)){
+        fs.unlink(JSON.parse(JSON.stringify(results[0].image_urlpath)), resultHandler);
+      }
     }
   );
   connection.query(
