@@ -7,14 +7,11 @@ var fileUpload = require('express-fileupload');
 var sizeOf = require('image-size'); // get image dimensions
 const connection = require('./../../database/connection');
 const controller = require('./signup_controller');
-const path =require('path');
 
 router.use(validator()); // express-validator
 router.use(fileUpload()); // express-fileupload
 
-router.use(express.static(path.join(__dirname, './icons/shelters')));
-router.use(express.static(path.join(__dirname, './shelter_docs')));
-router.use(express.static(path.join(__dirname, './icons/users')));
+
 router.use(function(req, res, next) {
   console.log('signup routes getting request...');
   next();
@@ -99,7 +96,7 @@ router.post('/shelter', function(req, res, next) {
             if (err) {
               console.log('api err: not able to receive image');
             } else {
-              newShelter.icon_url = 'localhost:3000/api/signup/' + name;
+              newShelter.icon_url = '/signup/icons/shelters/' + name;
               var dimensions = sizeOf(url);
               newShelter.icon_width = dimensions.width;
               newShelter.icon_height = dimensions.height;
@@ -112,7 +109,7 @@ router.post('/shelter', function(req, res, next) {
           console.log(err);
           console.log('File not uploaded, please try again');
           res.status(500).redirect('/api/signup');
-        } else newShelter.file_path ='localhost:3000/api/signup/' + proofname;
+        } else newShelter.file_path ='/signup/shelter_docs/' + proofname;
       });
       controller.registerShelter(newShelter, function(err, callback) {
         if (err) {
@@ -232,7 +229,7 @@ router.post('/user', function(req, res, next) {
             if (err) {
               console.log('api err: not able to receive image');
             } else {
-              newUser.icon_url = 'localhost:3000/api/signup' +name;
+              newUser.icon_url = '/signup/icons/users/' +name;
               var dimensions = sizeOf(url);
               newUser.icon_width = dimensions.width;
               newUser.icon_height = dimensions.height;

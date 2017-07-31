@@ -10,8 +10,10 @@ shortid.characters(
 // default has "-"" and "_" ; this sets the characters to only the entered characters (https://www.npmjs.com/package/shortid)
 var controller = require('./rescue_controllers');
 
+
 router.use(validator()); // express-validator
 router.use(fileUpload()); // express-fileupload
+
 
 //display all requests for rescue
 router.get('/', function(req, res, next) {
@@ -116,7 +118,8 @@ router.post('/submit_a_rescue_request', function(req, res, next) {
   if (req.body.rescue_body && req.session.body.accountType === 'user') {
     var today = new Date();
     var rescue_uuid = shortid.generate();
-    var rescue_imgurl;
+    var rescue_imgurl,imgurl;
+
 
     //select user details
     controller.getUser(req.session.body.Username, function(err, user) {
@@ -129,32 +132,32 @@ router.post('/submit_a_rescue_request', function(req, res, next) {
         if (typeof req.files !== 'undefined') {
           if (req.files.photo) {
             var image = req.files.photo;
-            var name = rescue_uuid + '-attached-image-' + image.name;
+            var name = rescue_uuid + '_' + image.name;
             rescue_imgurl = __dirname + '/rescue-images/' + name;
+            imgurl='/rescue/rescue-images/'+name;
             var mime = req.files.photo.mimetype;
             if (mime.substring(0, 5) === 'image') {
               image.mv(rescue_imgurl, function(err) {
                 if (err) {
-                  rescue_imgurl = null;
+                  imgurl = null;
                   console.log('api err: not able to receive image');
                 }
               });
             } else {
-              rescue_imgurl = null;
+              imgurl = null;
               console.log('file uploaded is not image');
             }
           } else if (!req.files.photo) {
-            rescue_imgurl = null;
+              imgurl = null;
           }
         } else {
-          rescue_imgurl = null;
+          imgurl=null;
           console.log('file is undefined');
         }
-
         var newRescue = {
           rescue_uuid: rescue_uuid,
           rescue_body: req.body.rescue_body,
-          rescue_imgurl: rescue_imgurl,
+          rescue_imgurl: imgurl,
           sender_Username: req.session.body.Username,
           date_submitted: today,
           contactnum_sender: contactnum_sender,
