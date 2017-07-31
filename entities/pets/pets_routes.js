@@ -25,10 +25,20 @@ router.use(function(req, res, next) {
 });
 
 // returns all of the pets of all shelters
-router.get('/shelters/viewAllPets', function(req, res) {
-  controller.viewAllShelterPets(function(err, pets) {
-    if (err) return res.status(500).json(err); // server error
-    res.json(pets); // returns pets
+router.get('/shelters/viewAllPets/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.countAllSheltersPets(function(err, count) {
+    if (err) res.status(500).json(err);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 15);
+      controller.viewAllShelterPets(page_number, function(err, pets) {
+        if (err) return res.status(500).json(err); // server error
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+      });
+    }
   });
 });
 
@@ -148,10 +158,20 @@ router.get('/both/:owner', function(req, res) {
 });
 
 /* returns all pets of users */
-router.get('/users/viewAllPets', function(req, res) {
-  controller.viewAllUserPets(function(err, pets) {
-    if (err) return res.status(500).json(err); // server error
-    res.json(pets); // returns pets
+router.get('/users/viewAllPets/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.countAllUsersPets(function(err, count) {
+    if (err) res.status(500).json(err);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 15);
+      controller.viewAllUserPets(page_number, function(err, pets) {
+        if (err) return res.status(500).json(err); // server error
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+      });
+    }
   });
 });
 
