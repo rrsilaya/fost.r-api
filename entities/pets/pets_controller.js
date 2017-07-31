@@ -32,6 +32,8 @@ module.exports.countAllUsersPets = function(callback) {
   );
 };
 
+/** Sorting Pets **/
+
 /* view all pets */
 module.exports.viewAllShelterPets = function(page_number, callback) {
   var offset;
@@ -112,9 +114,10 @@ module.exports.viewShelterPetsOf = function(shelter_Username, callback) {
 };
 
 module.exports.viewShelterPetsForDates = function(shelter_Username, callback) {
+  var status = 'DATES';
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE  status = "DATES" && shelter_Username = ?',
-    shelter_Username,
+    'SELECT * FROM pets_of_shelters WHERE  status = ? && shelter_Username = ?',
+    [status, shelter_Username],
     function(err, results) {
       if (err) return callback(err); // some error with query
       return callback(null, results); // if successful
@@ -123,9 +126,10 @@ module.exports.viewShelterPetsForDates = function(shelter_Username, callback) {
 };
 
 module.exports.viewShelterPetsForAdopt = function(shelter_Username, callback) {
+  var status = 'ADOPT';
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = "ADOPT" && shelter_Username = ?',
-    shelter_Username,
+    'SELECT * FROM pets_of_shelters WHERE status = ? && shelter_Username = ?',
+    [status, shelter_Username],
     function(err, results) {
       if (err) return callback(err); // some error with query
       return callback(null, results); // if successful
@@ -135,28 +139,30 @@ module.exports.viewShelterPetsForAdopt = function(shelter_Username, callback) {
 
 module.exports.adoptPet = function(newAdoptRequest, callback) {
   var pet = newAdoptRequest.pet_uuid;
+  var status = 'ADOPT';
   connection.query(
-    'SELECT FROM pets_of_shelters WHERE status = "ADOPT" && uuid = ?',
-    pet,
+    'SELECT * FROM pets_of_shelters WHERE status = ? && uuid = ?',
+    [status, pet],
     (err, results) => {
-      if (err) return callback(err); // some error with query
-      if (results.length > 0) {
+      if (err) return callback(err);
+      else if (results.length > 0) {
         connection.query(
           'INSERT INTO adopts SET ?',
           newAdoptRequest,
-          (err, results) => {
-            if (err) return callback(err); // some error with query
-            return callback(null, true); // if successful
+          (err, query) => {
+            if (err) callback(err);
+            if (query) callback(null, true);
+            else return callback(null, false);
           }
         );
-      } else return callback(null, false); // that pet doesnt exist or is not for adoption
+      } else callback(null, false);
     }
   );
 };
 
 module.exports.viewAdoptRequests = function(shelter, callback) {
   connection.query(
-    'SELECT * FROM pets_of_shelters FULL OUTER JOIN adopts ON pets_of_shelters.uuid = adopts.pet_uuid WHERE pets_of_shelters.shelter_Username = ?',
+    'SELECT * FROM pets_of_shelters RIGHT OUTER JOIN adopts on pets_of_shelters.uuid = adopts.pet_uuid where shelter_Username = ? ORDER BY updated_at',
     shelter,
     (err, results) => {
       if (err) callback(err);
@@ -169,29 +175,32 @@ module.exports.viewAdoptRequests = function(shelter, callback) {
 
 module.exports.datePet = function(newDateRequest, callback) {
   var pet = newDateRequest.pet_uuid;
+  var status = 'ADOPT';
   connection.query(
-    'SELECT FROM pets_of_shelters WHERE status = "DATES" && uuid = ?',
-    pet,
+    'SELECT * FROM pets_of_shelters WHERE status = ? && uuid = ?',
+    [status, pet],
     (err, results) => {
-      if (err) return callback(err); // some error with query
-      if (results.length > 0) {
+      if (err) return callback(err);
+      else if (results.length > 0) {
         connection.query(
           'INSERT INTO dates SET ?',
           newAdoptRequest,
-          (err, results) => {
-            if (err) return callback(err); // some error with query
-            return callback(null, true); // if successful
+          (err, query) => {
+            if (err) callback(err);
+            if (query) callback(null, true);
+            else return callback(null, false);
           }
         );
-      } else return callback(null, false); // that pet doesnt exist or is not for adoption
+      } else callback(null, false);
     }
   );
 };
 
 module.exports.viewShelterPetsForBoth = function(shelter_Username, callback) {
+  var status = 'BOTH';
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE shelter_Username = ? status = "BOTH"',
-    shelter_Username,
+    'SELECT * FROM pets_of_shelters WHERE shelter_Username = ? && status = ?',
+    [status, shelter_Username],
     function(err, results) {
       if (err) return callback(err); // some error with query
       return callback(null, results); // if successful
@@ -210,25 +219,25 @@ module.exports.viewUserPetsOf = function(user_Username, callback) {
   );
 };
 
-/* view specific pet of user/shelter */
-module.exports.viewSpecificPetUser = function(Username, uuid, callback) {
+module.exports.searchPet = function(uuid, callback) {
   connection.query(
-    'SELECT * FROM pets_of_users where user_Username = ? and uuid = ?',
-    [Username, uuid],
+    'SELECT * FROM pets_of_shelters where uuid = ?',
+    uuid,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      return callback(null, results); // if successful
-    }
-  );
-};
-
-module.exports.viewSpecificPetShelter = function(Username, uuid, callback) {
-  connection.query(
-    'SELECT * FROM pets_of_shelters where shelter_Username = ? and uuid = ?',
-    [Username, uuid],
-    function(err, results) {
-      if (err) return callback(err); // some error with query
-      return callback(null, results); // if successful
+      if (results.length > 0) return callback(null, results);
+      else {
+        connection.query(
+          'SELECT * FROM pets_of_users where uuid = ?',
+          uuid,
+          function(err, results) {
+            if (err) return callback(err); // some error with query
+            if (results.length > 0)
+              return callback(null, results); // if successful
+            else return callback(null, null);
+          }
+        );
+      }
     }
   );
 };

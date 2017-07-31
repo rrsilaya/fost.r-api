@@ -19,17 +19,37 @@ router.use(function(req, res, next) {
 /*  view all accounts (users or shelters) 
     ideally only used during development
 */
-router.get('/viewShelters', function(req, res) {
-  controller.viewAllShelters(function(err, shelters) {
-    if (err) return res.status(500).json(err); // server error
-    res.json(shelters); // returns accounts of shelters
+router.get('/viewShelters/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.countAllShelters(function(err, count) {
+    if (err) res.status(500).json(err);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 15);
+      controller.viewAllShelters(function(err, shelters) {
+        if (err) return res.status(500).json(err); // server error
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, shelters: shelters }); // returns accounts of shelters
+      });
+    }
   });
 });
 
-router.get('/viewUsers', function(req, res) {
-  controller.viewAllUsers(function(err, users) {
-    if (err) return res.status(500).json(err); // server error
-    res.json(users); // returns accounts of users
+router.get('/viewUsers/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.countAllUsers(function(err, count) {
+    if (err) res.status(500).json(err);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 15);
+      controller.viewAllUsers(function(err, users) {
+        if (err) return res.status(500).json(err); // server error
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, users: users }); // returns accounts of shelters
+      });
+    }
   });
 });
 
