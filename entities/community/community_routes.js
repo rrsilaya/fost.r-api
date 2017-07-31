@@ -27,10 +27,20 @@ router.use(function(req, res, next) {
 // where :page_number is an integer; will be used for pagination
 router.get('/sortByTimeDesc/page/:page_number', function(req, res) {
   var page_number = req.params.page_number;
-  controller.sortByTimeDesc(page_number, function(err, posts) {
+  controller.countAllPosts(function(err, count) {
     if (err) res.status(500).json(err);
-    if (!posts) res.status(404).send(null);
-    else res.status(200).json(posts);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 15);
+      controller.sortByTimeDesc(page_number, function(err, posts) {
+        if (err) res.status(500).json(err);
+        if (!posts) res.status(404).send(null);
+        else
+          res
+            .status(200)
+            .json({ page: page_number, pageTotal: count, posts: posts });
+      });
+    }
   });
 });
 
@@ -38,10 +48,20 @@ router.get('/sortByTimeDesc/page/:page_number', function(req, res) {
 // where :page_number is an integer; will be used for pagination
 router.get('/sortByTimeAsc/page/:page_number', function(req, res) {
   var page_number = req.params.page_number;
-  controller.sortByTimeAsc(page_number, function(err, posts) {
+  controller.countAllPosts(function(err, count) {
     if (err) res.status(500).json(err);
-    if (!posts) res.status(404).send(null);
-    else res.status(200).json(posts);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 15);
+      controller.sortByTimeAsc(page_number, function(err, posts) {
+        if (err) res.status(500).json(err);
+        if (!posts) res.status(404).send(null);
+        else
+          res
+            .status(200)
+            .json({ page: page_number, pageTotal: count, posts: posts });
+      });
+    }
   });
 });
 
@@ -49,10 +69,20 @@ router.get('/sortByTimeAsc/page/:page_number', function(req, res) {
 // where :page_number is an integer; will be used for pagination
 router.get('/sortByCommentsDesc/page/:page_number', function(req, res) {
   var page_number = req.params.page_number;
-  controller.sortByCommentsDesc(page_number, function(err, posts) {
+  controller.countAllPosts(function(err, count) {
     if (err) res.status(500).json(err);
-    if (!posts) res.status(404).send(null);
-    else res.status(200).json(posts);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 15);
+      controller.sortByCommentsDesc(page_number, function(err, posts) {
+        if (err) res.status(500).json(err);
+        if (!posts) res.status(404).send(null);
+        else
+          res
+            .status(200)
+            .json({ page: page_number, pageTotal: count, posts: posts });
+      });
+    }
   });
 });
 
@@ -60,10 +90,20 @@ router.get('/sortByCommentsDesc/page/:page_number', function(req, res) {
 // where :page_number is an integer; will be used for pagination
 router.get('/sortByCommentsAsc/page/:page_number', function(req, res) {
   var page_number = req.params.page_number;
-  controller.sortByCommentsAsc(function(err, posts) {
+  controller.countAllPosts(function(err, count) {
     if (err) res.status(500).json(err);
-    if (!posts) res.status(404).send(null);
-    else res.status(200).json(posts);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 15);
+      controller.sortByCommentsAsc(function(err, posts) {
+        if (err) res.status(500).json(err);
+        if (!posts) res.status(404).send(null);
+        else
+          res
+            .status(200)
+            .json({ page: page_number, pageTotal: count, posts: posts });
+      });
+    }
   });
 });
 
@@ -71,10 +111,20 @@ router.get('/sortByCommentsAsc/page/:page_number', function(req, res) {
 // where :page_number is an integer; will be used for pagination
 router.get('/sortByVotesDesc/page/:page_number', function(req, res) {
   var page_number = req.params.page_number;
-  controller.sortByVotesDesc(page_number, function(err, posts) {
+  controller.countAllPosts(function(err, count) {
     if (err) res.status(500).json(err);
-    if (!posts) res.status(404).send(null);
-    else res.status(200).json(posts);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 15);
+      controller.sortByVotesDesc(page_number, function(err, posts) {
+        if (err) res.status(500).json(err);
+        if (!posts) res.status(404).send(null);
+        else
+          res
+            .status(200)
+            .json({ page: page_number, pageTotal: count, posts: posts });
+      });
+    }
   });
 });
 
@@ -82,15 +132,25 @@ router.get('/sortByVotesDesc/page/:page_number', function(req, res) {
 // where :page_number is an integer; will be used for pagination
 router.get('/sortByVotesAsc/page/:page_number', function(req, res) {
   var page_number = req.params.page_number;
-  controller.sortByVotesAsc(page_number, function(err, posts) {
+  controller.countAllPosts(function(err, count) {
     if (err) res.status(500).json(err);
-    if (!posts) res.status(404).send(null);
-    else res.status(200).json(posts);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 15);
+      controller.sortByVotesAsc(page_number, function(err, posts) {
+        if (err) res.status(500).json(err);
+        if (!posts) res.status(404).send(null);
+        else
+          res
+            .status(200)
+            .json({ page: page_number, pageTotal: count, posts: posts });
+      });
+    }
   });
 });
 
 /* view a post given its uuid ; shows all comments and votes on the post*/
-router.get('/viewPost/:post_uuid', function(req, res, next) {
+router.get('/:post_uuid', function(req, res, next) {
   var post_uuid = req.params.post_uuid;
   controller.viewPost(post_uuid, function(err, post) {
     if (err) return res.status(500).json(err);
