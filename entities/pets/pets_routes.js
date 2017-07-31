@@ -4,7 +4,6 @@ var fileUpload = require('express-fileupload'); // for file upload
 var mv = require('mv'); // for file upload; won't work when declared as consta
 var multer = require('multer');
 var upload = multer({ dest: 'photos/' });
-const path =require('path');
 var sizeOf = require('image-size'); // get image dimensions
 const validator = require('express-validator');
 var shortid = require('shortid');

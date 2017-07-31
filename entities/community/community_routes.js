@@ -272,10 +272,11 @@ router.post('/addPost', function(req, res, next) {
     if (req.files.photo) {
       var image = req.files.photo;
       var name = post_uuid + '-attached-image-' + image.name;
-      var image_urlpath = __dirname + '/images_attached_to_posts/' + name;
+      var url = __dirname + '/images_attached_to_posts/' + name;
+      var image_urlpath = '/community/images_attached_to_posts/'+name;
       var mime = req.files.photo.mimetype;
       if (mime.substring(0, 5) === 'image') {
-        image.mv(image_urlpath, function(err) {
+        image.mv(url, function(err) {
           if (err) {
             console.log('api err: not able to receive image');
           }
@@ -284,12 +285,13 @@ router.post('/addPost', function(req, res, next) {
         console.log('file uploaded is not image');
       }
     } else if (!req.files.photo) {
-      image_urlpath = null;
+      var image_urlpath = null;
     }
   } else {
     var image_urlpath = null;
     console.log('file is undefined');
   }
+  console.log(image_urlpath);
   var newPost = {
     Posted_by: req.session.body.Username,
     post_title: req.body.post_title,
@@ -329,10 +331,11 @@ router.post('/:post_uuid', function(req, res, next) {
       if (req.files.photo) {
         var image = req.files.photo;
         var name = comment_uuid + '-attached-image-' + image.name;
-        var image_urlpath = __dirname + '/images_attached_to_comments/' + name;
+        var url = __dirname + '/images_attached_to_comments/' + name;
+        var image_urlpath = '/community/images_attached_to_comments/'+name; 
         var mime = req.files.photo.mimetype;
         if (mime.substring(0, 5) === 'image') {
-          image.mv(image_urlpath, function(err) {
+          image.mv(url, function(err) {
             if (err) {
               image_urlpath = null;
               console.log('api err: not able to receive image');
@@ -343,12 +346,12 @@ router.post('/:post_uuid', function(req, res, next) {
           console.log('file uploaded is not image');
         }
       } else if (!req.files.photo) {
-        image_urlpath = null;
+        var image_urlpath = null;
         console.log('user did not attached an image');
       }
     } else {
       console.log('file is undefined');
-      image_urlpath = null;
+      var image_urlpath = null;
     }
     var newComment = {
       comment_title: comment_title,
