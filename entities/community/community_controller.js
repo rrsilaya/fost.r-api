@@ -158,9 +158,9 @@ module.exports.sortByVotesAsc = function(page_number, callback) {
     }
   );
 };
-
+/*
 //deletes all posts of current user logged in
-module.exports.deleteAllPosts = function(user, callback) {
+module.exports.uniqueako = function(user, callback) {
   connection.query('DELETE FROM posts WHERE Posted_by = ?', user, function(
     err,
     results
@@ -170,9 +170,10 @@ module.exports.deleteAllPosts = function(user, callback) {
     else return callback(null, results); // if successful
   });
 };
-
+*/
 //delete a single post given its uuid
 module.exports.deletePost = function(post_uuid, user, callback) {
+
   //delete image attached to post
   connection.query(
     'SELECT * FROM posts WHERE post_uuid = ? ',
@@ -180,28 +181,29 @@ module.exports.deletePost = function(post_uuid, user, callback) {
     function(err, results) {
       if (
         results.affectedRows !== 0 &&
-        typeof results[0].image_urlpath !== undefined
+        typeof results[0].img_abspath!== 'undefined'
       ) {
         fs.unlink(
-          JSON.parse(JSON.stringify(results[0].image_urlpath)),
+          JSON.parse(JSON.stringify(results[0].img_abspath)),
           resultHandler
         );
+          connection.query(
+            'DELETE FROM posts WHERE post_uuid = ? && Posted_by = ?',
+            [post_uuid, user],
+            function(err, results) {
+              if (err) {
+                console.log('there is an error');
+                return callback(err); // some error with query
+              } else {
+                //console.log(results);
+                return callback(null, results); // if successful
+              }
+            }
+          );
       }
     }
   );
-  connection.query(
-    'DELETE FROM posts WHERE post_uuid = ? && Posted_by = ?',
-    [post_uuid, user],
-    function(err, results) {
-      if (err) {
-        console.log('there is an error');
-        return callback(err); // some error with query
-      } else {
-        console.log(results);
-        return callback(null, results); // if successful
-      }
-    }
-  );
+
 };
 
 //add posts to 'post' table in 'fostr' db
@@ -502,10 +504,10 @@ module.exports.deleteComment = function(
     function(err, results) {
       if (
         results.affectedRows !== 0 &&
-        typeofresults[0].image_urlpath !== undefined
+        typeof results[0].img_abspath !== undefined
       ) {
         fs.unlink(
-          JSON.parse(JSON.stringify(results[0].image_urlpath)),
+          JSON.parse(JSON.stringify(results[0].img_abspath)),
           resultHandler
         );
       }

@@ -146,6 +146,7 @@ connection.query(
     `votes` int (6) NOT NULL,\
     `comments` int(6) NOT NULL,\
     `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,\
+    `img_abspath` varchar(255) UNIQUE DEFAULT NULL,\
     `post_uuid` varchar(36) UNIQUE PRIMARY KEY NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL\
@@ -170,6 +171,7 @@ CREATE TABLE comments_on_posts (\
     `commented_by` varchar(52) NOT NULL,\
     `comment_body` varchar(255) NOT NULL,\
     `votes` int (6) NOT NULL,\
+    `img_abspath` varchar(255) UNIQUE DEFAULT NULL,\
     `image_urlpath` varchar(255) UNIQUE DEFAULT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
