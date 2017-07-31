@@ -210,25 +210,25 @@ module.exports.viewUserPetsOf = function(user_Username, callback) {
   );
 };
 
-/* view specific pet of user/shelter */
-module.exports.viewSpecificPetUser = function(Username, uuid, callback) {
+module.exports.searchPet = function(uuid, callback) {
   connection.query(
-    'SELECT * FROM pets_of_users where user_Username = ? and uuid = ?',
-    [Username, uuid],
+    'SELECT * FROM pets_of_shelters where uuid = ?',
+    uuid,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      return callback(null, results); // if successful
-    }
-  );
-};
-
-module.exports.viewSpecificPetShelter = function(Username, uuid, callback) {
-  connection.query(
-    'SELECT * FROM pets_of_shelters where shelter_Username = ? and uuid = ?',
-    [Username, uuid],
-    function(err, results) {
-      if (err) return callback(err); // some error with query
-      return callback(null, results); // if successful
+      if (results.length > 0) return callback(null, results);
+      else {
+        connection.query(
+          'SELECT * FROM pets_of_users where uuid = ?',
+          uuid,
+          function(err, results) {
+            if (err) return callback(err); // some error with query
+            if (results.length > 0)
+              return callback(null, results); // if successful
+            else return callback(null, null);
+          }
+        );
+      }
     }
   );
 };

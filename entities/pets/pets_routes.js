@@ -244,7 +244,7 @@ router.post('/myPets', function(req, res) {
               res.status(201).json(results); // returns info of newly added pet
             });
           }
-          petInfo.url = '/pets/photos/' +name;
+          petInfo.url = '/pets/photos/' + name;
           console.log(petInfo.url);
           var dimensions = sizeOf(url);
           petInfo.width = dimensions.width;
@@ -359,27 +359,14 @@ router.delete('/myPets', function(req, res) {
   }
 });
 
-/* returns specific pet of logged in user/shelter */
-
+/* returns specific pet */
 router.get('/:pet_uuid', function(req, res) {
-  if (req.session.body.accountType === 'user') {
-    var pet_uuid = req.params.pet_uuid;
-    var Username = req.session.body.Username;
-    controller.viewSpecificPetUser(Username, pet_uuid, function(err, results) {
-      if (err) return res.status(500).json(err); // server error
-      res.status(200).json(results); // returns results
-    });
-  } else if (req.session.body.accountType === 'shelter') {
-    var pet_uuid = req.params.pet_uuid;
-    var Username = req.session.body.Username;
-    controller.viewSpecificPetShelter(Username, pet_uuid, function(
-      err,
-      results
-    ) {
-      if (err) return res.status(500).json(err); // server error
-      res.status(200).json(results); // returns results
-    });
-  }
+  var pet_uuid = req.params.pet_uuid;
+  controller.searchPet(pet_uuid, function(err, pet) {
+    if (err) res.status(500).send(err);
+    if (!pet) res.status(404).end();
+    else res.status(200).json(pet);
+  });
 });
 
 /* update certain info of a pet (only if logged in && pet exists) */
