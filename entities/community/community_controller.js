@@ -160,7 +160,7 @@ module.exports.sortByVotesAsc = function(page_number, callback) {
 };
 /*FOR NOW
 //deletes all posts of current user logged in
-module.exports.uniqueako = function(user, callback) {
+module.exports.deleteAllPosts = function(user, callback) {
   connection.query('DELETE FROM posts WHERE Posted_by = ?', user, function(
     err,
     results
@@ -537,6 +537,8 @@ module.exports.deleteComment = function(
   );
 };
 
+
+/* note : di ata to kailangan? kasi walang delete all comments na route sa community_routes
 //delete all comments in a post
 
 module.exports.deleteAllComments = function(post_uuid, callback) {
@@ -549,4 +551,4 @@ module.exports.deleteAllComments = function(post_uuid, callback) {
       else return callback(null, results); // success
     }
   );
-};
+};*/

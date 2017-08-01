@@ -203,6 +203,7 @@ connection.query(
 CREATE TABLE rescue (\
     `rescue_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `rescue_body` varchar(255) NOT NULL,\
+    `rescue_abspath` varchar(255) UNIQUE DEFAULT NULL,\
     `rescue_imgurl` varchar(255) UNIQUE DEFAULT NULL,\
     `date_submitted` datetime NOT NULL,\
     `updated_on` datetime NOT NULL,\

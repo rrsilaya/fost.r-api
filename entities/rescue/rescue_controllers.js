@@ -77,8 +77,8 @@ module.exports.deleteRequest=function(rescue_uuid,sender_Username,callback){
     'SELECT * FROM rescue WHERE rescue_uuid = ? && sender_Username = ? ',
     [rescue_uuid,sender_Username],
     function(err,results){
-      if (results.affectedRows!==0 && (typeof results[0].rescue_imgurl!==undefined))  
-        fs.unlink(JSON.parse(JSON.stringify(results[0].rescue_imgurl)),resultHandler);
+      if (results.affectedRows!==0 && (typeof results[0].rescue_abspath!==undefined))  
+        fs.unlink(JSON.parse(JSON.stringify(results[0].rescue_abspath)),resultHandler);
 
     }
   );
@@ -137,7 +137,7 @@ module.exports.deleteAllMyRequests=function(Username,callback){
       if(results.affectedRows!==0){
         for (var i = 0, len = results.length; i < len; i++) {
           if(results.affectedRows!==0) 
-            fs.unlink(JSON.parse(JSON.stringify(results[i].rescue_imgurl)),resultHandler);
+            fs.unlink(JSON.parse(JSON.stringify(results[i].rescue_abspath)),resultHandler);
         }
       }
     }

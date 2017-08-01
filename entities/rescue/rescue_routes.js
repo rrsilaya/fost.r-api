@@ -73,6 +73,24 @@ router.delete('/:rescue_uuid', function(req, res,next) {
   }
 });
 
+//resolve request
+router.delete('/resolve/:rescue_uuid', function(req, res,next) {
+  if (req.session.body.accountType === 'shelter') {
+    var rescue_uuid = req.params.rescue_uuid;
+    controller.deleteRequest(rescue_uuid, req.session.body.Username, function(
+      err,
+      results
+    ) {
+      if (err) return res.status(500).json(err);
+      else if (results.affectedRows == 0) {
+        // server error
+        return res.status(500);
+        console.log('unable to delete request');
+      } else res.status(204).end(); // deleted request
+    });
+  }
+});
+
 //view all request a user has submitted
 router.get('/viewMyRequests', function(req, res, next) {
   if (req.session.body.accountType === 'user') {
