@@ -111,7 +111,7 @@
 
 
 
-## Routes for photos : 'localhost:3000/<route>/<filename.jpg>'
+## Routes for photos : 'localhost:3000/route/<filename.jpg>'
 
 |                  Route                   |  Method  |                                            Remarks                                             |
 | :--------------------------------------- | :------- | :--------------------------------------------------------------------------------------------- |
