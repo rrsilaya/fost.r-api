@@ -57,8 +57,9 @@ router.get('/:rescue_uuid', function(req, res, next) {
 
 //delete a request
 router.delete('/:rescue_uuid', function(req, res,next) {
+  var rescue_uuid = req.params.rescue_uuid;
+
   if (req.session.body.accountType === 'user') {
-    var rescue_uuid = req.params.rescue_uuid;
     controller.deleteRequest(rescue_uuid, req.session.body.Username, function(
       err,
       results
@@ -70,26 +71,26 @@ router.delete('/:rescue_uuid', function(req, res,next) {
         console.log('unable to delete request');
       } else res.status(204).end(); // deleted request
     });
+  }else if (req.session.body.accountType === 'shelter') {//if shelter resolved the request
+    //get sender username
+    controller.getSender(rescue_uuid,function(err,sender){
+      if (err) res.status(403).end();
+      else if(sender){
+        //delete request
+        controller.deleteRequest(rescue_uuid, sender[0].sender_Username, function(err,results) {
+          if (err) return res.status(500).json(err);
+          else if (results.affectedRows == 0) {
+            // server error
+            return res.status(500);
+            console.log('unable to delete request');
+          } else res.status(204).end(); // deleted request
+        });
+      }
+    })
+    
   }
 });
 
-//resolve request
-router.delete('/resolve/:rescue_uuid', function(req, res,next) {
-  if (req.session.body.accountType === 'shelter') {
-    var rescue_uuid = req.params.rescue_uuid;
-    controller.deleteRequest(rescue_uuid, req.session.body.Username, function(
-      err,
-      results
-    ) {
-      if (err) return res.status(500).json(err);
-      else if (results.affectedRows == 0) {
-        // server error
-        return res.status(500);
-        console.log('unable to delete request');
-      } else res.status(204).end(); // deleted request
-    });
-  }
-});
 
 //view all request a user has submitted
 router.get('/viewMyRequests', function(req, res, next) {
@@ -176,6 +177,7 @@ router.post('/submit_a_rescue_request', function(req, res, next) {
           rescue_uuid: rescue_uuid,
           rescue_body: req.body.rescue_body,
           rescue_imgurl: imgurl,
+          rescue_abspath: rescue_imgurl,
           sender_Username: req.session.body.Username,
           date_submitted: today,
           contactnum_sender: contactnum_sender,

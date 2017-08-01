@@ -74,6 +74,7 @@ router.post('/shelter', function(req, res, next) {
       const file = req.files.file; //use later for file-upload
       var proofname = req.body.Username + '-proof-' + file.name;
       var uploadpath =__dirname +'/shelter_docs/'+proofname;
+      var absfile_path='/signup/shelter-docs/'+proofname;
       var today = new Date();
       var newShelter = {
         Username: req.body.Username,
@@ -100,6 +101,7 @@ router.post('/shelter', function(req, res, next) {
               var dimensions = sizeOf(url);
               newShelter.icon_width = dimensions.width;
               newShelter.icon_height = dimensions.height;
+              newShelter.absfile_path=uploadpath;
             }
           });
         } else console.log('image only for icons');
