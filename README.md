@@ -109,6 +109,21 @@
 | `/rescue/submit_a_rescue_request`        | `POST`   | Submit a request for rescue                                                                    |
 | `/*`                                     | `GET`    | Redirects to `/feed` if logged in, otherwise redirect to `/`                                   |
 
+
+
+## Routes for photos : 'localhost:3000/<route>/<filename.jpg>'
+
+|                  Route                   |  Method  |                                            Remarks                                             |
+| :--------------------------------------- | :------- | :--------------------------------------------------------------------------------------------- |
+| `/signup/icons/shelters`                 | `GET`    | Display a photo  from  `entities/signup/icons/shelters`                                        |
+| `signup/icons/users`                     | `GET`    | Display a photo  from  `entities/signup/icons/users`                                           |
+| `/signup/shelter-docs`                   | `GET`    | Display a photo  from  `entities/signup/shelter-docs`                                          |
+| `/pets/photos`                           | `GET`    | Display a photo  from  `entities/pets/photos`                                                  |
+| `/community/images_attached_to_posts`    | `GET`    | Display a photo  from  `entities/community/images_attached_to_posts`                           |
+| `/community/images_attached_to_comments` | `GET`    | Display a photo  from  `entities/community/images_attached_to_comments`                        | 
+| `/rescue/rescue-images`                  | `GET`    | Display a photo  from  `entities/rescue/rescue-images`                                         |
+
+
 ## API
 ### Requests
 > Please take note of the capitalization.

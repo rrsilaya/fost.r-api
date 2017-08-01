@@ -538,7 +538,7 @@ module.exports.deleteComment = function(
 };
 
 
-/* note : di ata to kailangan? kasi walang delete all comments na route sa community_routes
+/* comments will automatically be deleted kasi foreign key si post_uuid  and it is set on cascade delete
 //delete all comments in a post
 
 module.exports.deleteAllComments = function(post_uuid, callback) {
