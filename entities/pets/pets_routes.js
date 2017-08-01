@@ -133,7 +133,11 @@ router.get('/adopt/page/:page_number', function(req, res) {
       count = Math.ceil(count / 25);
       controller.viewAllPetsForAdopt(page_number, function(err, pets) {
         if (err) res.status(500).json(err);
-        res.status(200).json(pets);
+        if (pets) res.status(404).send(null);
+        else
+          res
+            .status(200)
+            .json((page: page_number), (pageTotal: count), (pets: pets));
       });
     }
   });
@@ -217,8 +221,7 @@ router.get('/adopt/:owner', function(req, res) {
   var owner = req.params.owner;
   controller.viewShelterPetsForAdopt(owner, function(err, pets) {
     if (err) res.status(500).json(err);
-    if (pets.length > 0) res.status(200).json(pets);
-    else res.status(404).send(null);
+    res.status(200).json(pets);
   });
 });
 
@@ -232,7 +235,11 @@ router.get('/dates/page/:page_number', function(req, res) {
       count = Math.ceil(count / 25);
       controller.viewAllPetsForDates(page_number, function(err, pets) {
         if (err) res.status(500).json(err);
-        res.status(200).json(pets);
+        if (pets) res.status(404).send(null);
+        else
+          res
+            .status(200)
+            .json((page: page_number), (pageTotal: count), (pets: pets));
       });
     }
   });
@@ -243,8 +250,7 @@ router.get('/dates/:owner', function(req, res) {
   var owner = req.params.owner;
   controller.viewShelterPetsForDates(owner, function(err, pets) {
     if (err) res.status(500).json(err);
-    if (pets.length > 0) res.status(200).json(pets);
-    else res.status(404).send(null);
+    res.status(200).json(pets);
   });
 });
 
@@ -258,7 +264,11 @@ router.get('/both/page/:page_number', function(req, res) {
       count = Math.ceil(count / 25);
       controller.viewAllPetsForBoth(page_number, function(err, pets) {
         if (err) res.status(500).json(err);
-        res.status(200).json(pets);
+        if (pets) res.status(404).send(null);
+        else
+          res
+            .status(200)
+            .json((page: page_number), (pageTotal: count), (pets: pets));
       });
     }
   });
@@ -269,8 +279,7 @@ router.get('/both/:owner', function(req, res) {
   var owner = req.params.owner;
   controller.viewShelterPetsForBoth(owner, function(err, pets) {
     if (err) res.status(500).json(err);
-    if (pets.length > 0) res.status(200).json(pets);
-    else res.status(404).send(null);
+    res.status(200).json(pets);
   });
 });
 
@@ -297,7 +306,7 @@ router.get('/:owner/viewShelterPets', function(req, res) {
   var owner = req.params.owner;
   controller.viewShelterPetsOf(owner, function(err, pets) {
     if (err) return res.status(500).json(err); // server error
-    res.json(pets); // returns pets of specified shelter
+    res.status(200).json(pets); // returns pets of specified shelter
   });
 });
 
@@ -305,7 +314,7 @@ router.get('/:owner/viewUserPets', function(req, res) {
   var owner = req.params.owner;
   controller.viewUserPetsOf(owner, function(err, pets) {
     if (err) return res.status(500).json(err); // server error
-    res.json(pets); // returns pets of specified user
+    res.status(200).json(pets); // returns pets of specified user
   });
 });
 

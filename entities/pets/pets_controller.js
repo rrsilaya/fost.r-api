@@ -91,12 +91,15 @@ module.exports.viewPetsBySex = function(type, page_number, sex, callback) {
     }
   );
 };
+/*
+  module.exports.countAllPetsByAge = function(age, callback){
+    var counter;
+    // receives months only
+    age *= 30;
+    moment().subtract(age, 'days').calendar();
 
-// module.exports.countAllPetsByAge = function(age, callback){
-//   var counter;
-
-// }
-
+ }
+*/
 /* view all pets */
 module.exports.viewAllShelterPets = function(page_number, callback) {
   var offset;
@@ -136,7 +139,9 @@ module.exports.viewAllPetsForDates = function(page_number, callback) {
     [status, offset],
     function(err, results) {
       if (err) return callback(err); // some error with query
-      return callback(null, results); // if successful
+      if (results.length > 0)
+        return callback(null, results); // found results on that page
+      else return callback(null, null); // no results on that page
     }
   );
 };
@@ -164,7 +169,9 @@ module.exports.viewAllPetsForAdopt = function(page_number, callback) {
     status,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      return callback(null, results); // if successful
+      if (results.length > 0)
+        return callback(null, results); // found results on that page
+      else return callback(null, null); // no results on that page
     }
   );
 };
@@ -192,7 +199,9 @@ module.exports.viewAllPetsForBoth = function(page_number, callback) {
     status,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      return callback(null, results); // if successful
+      if (results.length > 0)
+        return callback(null, results); // found results on that page
+      else return callback(null, null); // no results on that page
     }
   );
 };

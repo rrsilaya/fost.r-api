@@ -173,7 +173,6 @@ module.exports.deleteAllPosts = function(user, callback) {
 */
 //delete a single post given its uuid
 module.exports.deletePost = function(post_uuid, user, callback) {
-
   //delete image attached to post
   connection.query(
     'SELECT * FROM posts WHERE post_uuid = ? ',
@@ -181,29 +180,28 @@ module.exports.deletePost = function(post_uuid, user, callback) {
     function(err, results) {
       if (
         results.affectedRows !== 0 &&
-        typeof results[0].img_abspath!== 'undefined'
+        typeof results[0].img_abspath !== 'undefined'
       ) {
         fs.unlink(
           JSON.parse(JSON.stringify(results[0].img_abspath)),
           resultHandler
         );
-          connection.query(
-            'DELETE FROM posts WHERE post_uuid = ? && Posted_by = ?',
-            [post_uuid, user],
-            function(err, results) {
-              if (err) {
-                console.log('there is an error');
-                return callback(err); // some error with query
-              } else {
-                //console.log(results);
-                return callback(null, results); // if successful
-              }
+        connection.query(
+          'DELETE FROM posts WHERE post_uuid = ? && Posted_by = ?',
+          [post_uuid, user],
+          function(err, results) {
+            if (err) {
+              console.log('there is an error');
+              return callback(err); // some error with query
+            } else {
+              //console.log(results);
+              return callback(null, results); // if successful
             }
-          );
+          }
+        );
       }
     }
   );
-
 };
 
 //add posts to 'post' table in 'fostr' db
@@ -476,12 +474,27 @@ module.exports.unvotePost = function(vote, callback) {
   );
 };
 
-//view all comments in a post
-
-module.exports.viewAllComments = function(post_uuid, callback) {
+// count all comments in a post
+module.exports.countAllComments = function(post_uuid, callback) {
   connection.query(
-    'SELECT * FROM comments_on_posts WHERE post_uuid = ?',
-    post_uuid,
+    'SELECT COUNT(*) as count FROM comments_on_posts',
+    (err, count) => {
+      if (err) callback(err);
+      callback(null, count[0].count); // this will return an integer of the count of all the comments in post_uuid
+    }
+  );
+};
+
+//view all comments in a post
+module.exports.viewAllComments = function(page_number, post_uuid, callback) {
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 10;
+
+  connection.query(
+    'SELECT * FROM comments_on_posts WHERE post_uuid = ? ORDER BY votes LIMIT 10 OFFSET ?',
+    [post_uuid, offset],
     function(err, results) {
       console.log(results);
       if (err) return callback(err); // some error with query
@@ -489,8 +502,8 @@ module.exports.viewAllComments = function(post_uuid, callback) {
     }
   );
 };
-//delete a comment in a post
 
+//delete a comment in a post
 module.exports.deleteComment = function(
   post_uuid,
   comment_uuid,
@@ -536,7 +549,6 @@ module.exports.deleteComment = function(
     }
   );
 };
-
 
 /* comments will automatically be deleted kasi foreign key si post_uuid  and it is set on cascade delete
 //delete all comments in a post
