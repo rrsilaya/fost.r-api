@@ -18,7 +18,7 @@ CREATE TABLE users (\
     `Username` varchar(36) NOT NULL UNIQUE,\
     `firstname` varchar(36) NOT NULL,\
     `lastname` varchar(36) NOT NULL,\
-    `birthday` varchar(36) NOT NULL,\
+    `birthday` date DEFAULT NULL,\
     `address` varchar(236) NOT NULL,\
     `contactnum` varchar(20) NOT NULL,\
     `email` varchar(36) NOT NULL UNIQUE,\
@@ -82,7 +82,7 @@ CREATE TABLE pets_of_users (\
     `kind` enum("DOG", "CAT", "BIRD", "OTHERS") NOT NULL,\
     `breed` varchar(36) NOT NULL,\
     `sex` enum("MALE", "FEMALE") NOT NULL,\
-    `birthday` varchar(36) NOT NULL,\
+    `birthday` date DEFAULT NULL,\
     `description` varchar(200) DEFAULT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
