@@ -253,7 +253,7 @@ router.delete('/:post_uuid/', function(req, res, next) {
   });
 });
 
-/*delete all posts of user and comments on the posts*/
+/*delete all posts of user and comments on the posts
 router.delete('/deleteAllMyPosts', function(req, res, next) {
   var user = req.session.body.Username;
   controller.deleteAllPosts(user, function(err, results) {
@@ -263,7 +263,7 @@ router.delete('/deleteAllMyPosts', function(req, res, next) {
       return res.status(500);
     else return res.status(204).end();
   });
-});
+});*/
 
 router.post('/addPost', function(req, res, next) {
   var post_uuid = shortid.generate();
@@ -345,27 +345,32 @@ router.post('/:post_uuid', function(req, res, next) {
         if (mime.substring(0, 5) === 'image') {
           image.mv(url, function(err) {
             if (err) {
+              var url=null;
               image_urlpath = null;
               console.log('api err: not able to receive image');
             }
           });
         } else {
+          var url=null;
           image_urlpath = null;
           console.log('file uploaded is not image');
         }
       } else if (!req.files.photo) {
-        var image_urlpath = null;
-        console.log('user did not attached an image');
+          var url=null;
+          var image_urlpath = null;
+          console.log('user did not attached an image');
       }
     } else {
-      console.log('file is undefined');
-      var image_urlpath = null;
+        var url=null;
+        console.log('file is undefined');
+        var image_urlpath = null;
     }
     var newComment = {
       comment_title: comment_title,
       comment_uuid: comment_uuid,
       commented_by: user,
       comment_body: comment_body,
+      img_abspath: url,
       image_urlpath: image_urlpath,
       votes: 0,
       created_at: today,

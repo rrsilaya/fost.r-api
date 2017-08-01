@@ -24,6 +24,7 @@ CREATE TABLE users (\
     `email` varchar(36) NOT NULL UNIQUE,\
     `password` varchar(255) NOT NULL,\
     `icon_url` varchar(255) DEFAULT NULL,\
+    `icon_abspath`varchar(255) DEFAULT NULL,\
     `icon_width` varchar(36) DEFAULT NULL,\
     `icon_height` varchar(36) DEFAULT NULL,\
     `created_at` datetime NOT NULL,\
@@ -42,9 +43,11 @@ CREATE TABLE shelters (\
     `email` varchar(36) NOT NULL UNIQUE,\
     `password` varchar(255) NOT NULL,\
     `icon_url` varchar(255) DEFAULT NULL,\
+    `icon_abspath`varchar(255) DEFAULT NULL,\
     `icon_width` varchar(36) DEFAULT NULL,\
     `icon_height` varchar(36) DEFAULT NULL,\
     `file_path` varchar(255) NOT NULL,\
+    `absfile_path` varchar(255) NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     CONSTRAINT PRIMARY KEY(Username, email)\
@@ -65,6 +68,7 @@ CREATE TABLE pets_of_shelters (\
     `updated_at` datetime NOT NULL,\
     `uuid` varchar(36) NOT NULL PRIMARY KEY,\
     `url` varchar(255) DEFAULT NULL,\
+    `abspath` varchar(255) DEFAULT NULL,\
     `width` varchar(36) DEFAULT NULL,\
     `height` varchar(36) DEFAULT NULL,\
     `shelter_Username` varchar(52) NOT NULL,\
@@ -88,6 +92,7 @@ CREATE TABLE pets_of_users (\
     `updated_at` datetime NOT NULL,\
     `uuid` varchar(36) NOT NULL PRIMARY KEY,\
     `url` varchar(255) DEFAULT NULL,\
+    `abspath` varchar(255) DEFAULT NULL,\
     `width` varchar(36) DEFAULT NULL,\
     `height` varchar(36) DEFAULT NULL,\
     `user_Username` varchar(36) NOT NULL,\
@@ -198,6 +203,7 @@ connection.query(
 CREATE TABLE rescue (\
     `rescue_uuid` varchar(36) NOT NULL UNIQUE PRIMARY KEY,\
     `rescue_body` varchar(255) NOT NULL,\
+    `rescue_abspath` varchar(255) UNIQUE DEFAULT NULL,\
     `rescue_imgurl` varchar(255) UNIQUE DEFAULT NULL,\
     `date_submitted` datetime NOT NULL,\
     `updated_on` datetime NOT NULL,\
