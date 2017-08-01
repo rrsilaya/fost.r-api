@@ -61,10 +61,15 @@
 | `/accounts/MyAccount`                    | `GET`    | View own info                                                                                  |
 | `/accounts/MyAccount`                    | `PUT`    | Update own info                                                                                |
 | `/accounts/MyAccount`                    | `DELETE` | Delete own account                                                                             |
+| `/pets/shelters/viewPetsBySex/:page_number/:sex/`|`GET`| View pets by specified sex in paramaters by page                                            |
+| `/pets/shelters/viewPetsByKind/:page_number/:kind/`|`GET`| View pets by specified kind in paramaters by page                                         |
 | `/pets/shelters/viewAllPets/page/:page_number`| `GET`| View pets owned by shelters by page                                                           |
 | `/pets/users/viewAllPets/page/:page_number`| `GET`  | View pets owned by users by page                                                               |
 | `/pets/adopt/`                           | `GET`    | Show all pets (of shelters) that are allowed for adoption                                      |
-| `/pets/dates/`                           | `GET`    | Show all pets (of shelters) that are allowed for dates                                         |
+| `/pets/adopt/:owner`                     | `GET`    | Show all pets (of a shelter) that are allowed for adoption                                     |
+| `/pets/adopt/:pet_uuid`                  | `POST`   | Process adoption request for :pet_uuid (if you're a user)                                      |
+| `/pets/dates/:owner`                     | `GET`    | Show all pets (of a shelter) that are allowed for dates                                        |
+| `/pets/dates/:pet_uuid`                  | `POST`   | Process date request for :pet_uuid (if you're a user)                                          |
 | `/pets/both/`                            | `GET`    | Show all pets (of shelters) that are allowed for adoption & dates                              |
 | `/pets/:owner/viewShelterPets`           | `GET`    | View pets of owner                                                                             |
 | `/pets/:owner/viewUserPets`              | `GET`    | View pets of owner                                                                             |
