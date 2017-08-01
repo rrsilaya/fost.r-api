@@ -20,6 +20,15 @@ module.exports.getUser = function(Username, callback) {
     else return callback(null, user); // success
   });
 };
+
+/*get details of the sender*/
+module.exports.getSender = function(rescue_uuid,callback){
+  connection.query('SELECT * FROM rescue WHERE rescue_uuid = ?',rescue_uuid,function(err,sender){
+    if(err) return callback(err);
+    else return callback(null,sender);
+  });
+};
+
 /* add a request for rescue to db*/
 module.exports.addRescue = function(newRescue, callback) {
   connection.query('INSERT INTO rescue SET ? ', newRescue, function(
