@@ -124,10 +124,18 @@ router.get('/users/viewPetsBySex/:page_number/:sex', function(req, res) {
 });
 
 // returns all of the pets of the shelters for adoption
-router.get('/adopt', function(req, res) {
-  controller.viewAllPetsForAdopt(function(err, pets) {
+router.get('/adopt/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.countAllPetsForAdopt(function(err, count) {
     if (err) res.status(500).json(err);
-    res.status(200).json(pets);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 25);
+      controller.viewAllPetsForAdopt(page_number, function(err, pets) {
+        if (err) res.status(500).json(err);
+        res.status(200).json(pets);
+      });
+    }
   });
 });
 
@@ -215,11 +223,18 @@ router.get('/adopt/:owner', function(req, res) {
 });
 
 // returns all of the pets of the shelters for dates
-router.get('/dates', function(req, res) {
-  controller.viewAllPetsForDates(function(err, pets) {
+router.get('/dates/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.countAllPetsForDates(function(err, count) {
     if (err) res.status(500).json(err);
-    if (pets.length > 0) res.status(200).json(pets);
-    else res.status(404).send(null);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 25);
+      controller.viewAllPetsForDates(page_number, function(err, pets) {
+        if (err) res.status(500).json(err);
+        res.status(200).json(pets);
+      });
+    }
   });
 });
 
@@ -234,11 +249,18 @@ router.get('/dates/:owner', function(req, res) {
 });
 
 // returns all of the pets of the shelters for both adoption and dates
-router.get('/both', function(req, res) {
-  controller.viewAllPetsForBoth(function(err, pets) {
+router.get('/both/page/:page_number', function(req, res) {
+  var page_number = req.params.page_number;
+  controller.countAllPetsForBoth(function(err, count) {
     if (err) res.status(500).json(err);
-    if (pets.length > 0) res.status(200).json(pets);
-    else res.status(404).send(null);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 25);
+      controller.viewAllPetsForBoth(page_number, function(err, pets) {
+        if (err) res.status(500).json(err);
+        res.status(200).json(pets);
+      });
+    }
   });
 });
 

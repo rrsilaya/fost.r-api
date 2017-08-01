@@ -92,6 +92,11 @@ module.exports.viewPetsBySex = function(type, page_number, sex, callback) {
   );
 };
 
+// module.exports.countAllPetsByAge = function(age, callback){
+//   var counter;
+
+// }
+
 /* view all pets */
 module.exports.viewAllShelterPets = function(page_number, callback) {
   var offset;
@@ -108,11 +113,27 @@ module.exports.viewAllShelterPets = function(page_number, callback) {
   );
 };
 
-module.exports.viewAllPetsForDates = function(callback) {
+module.exports.countAllPetsForDates = function(callback) {
   var status = 'DATES';
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ?',
+    'SELECT COUNT(*) as count FROM pets_of_shelters WHERE status = ?',
     status,
+    (err, count) => {
+      if (err) callback(err);
+      callback(null, count[0].count); // this will return an integer of the count of all the posts
+    }
+  );
+};
+
+module.exports.viewAllPetsForDates = function(page_number, callback) {
+  var status = 'DATES';
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 25;
+  connection.query(
+    'SELECT * FROM pets_of_shelters WHERE status = ? LIMIT 25 OFFSET ?',
+    [status, offset],
     function(err, results) {
       if (err) return callback(err); // some error with query
       return callback(null, results); // if successful
@@ -120,10 +141,26 @@ module.exports.viewAllPetsForDates = function(callback) {
   );
 };
 
-module.exports.viewAllPetsForAdopt = function(callback) {
+module.exports.countAllPetsForAdopt = function(callback) {
   var status = 'ADOPT';
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ?',
+    'SELECT COUNT(*) as count FROM pets_of_shelters WHERE status = ?',
+    status,
+    (err, count) => {
+      if (err) callback(err);
+      callback(null, count[0].count); // this will return an integer of the count of all the posts
+    }
+  );
+};
+
+module.exports.viewAllPetsForAdopt = function(page_number, callback) {
+  var status = 'ADOPT';
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 25;
+  connection.query(
+    'SELECT * FROM pets_of_shelters WHERE status = ? LIMIT 25 OFFSET ?',
     status,
     function(err, results) {
       if (err) return callback(err); // some error with query
@@ -132,10 +169,26 @@ module.exports.viewAllPetsForAdopt = function(callback) {
   );
 };
 
-module.exports.viewAllPetsForBoth = function(callback) {
+module.exports.countAllPetsForBoth = function(callback) {
   var status = 'BOTH';
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ?',
+    'SELECT COUNT(*) as count FROM pets_of_shelters WHERE status = ?',
+    status,
+    (err, count) => {
+      if (err) callback(err);
+      callback(null, count[0].count); // this will return an integer of the count of all the posts
+    }
+  );
+};
+
+module.exports.viewAllPetsForBoth = function(page_number, callback) {
+  var status = 'BOTH';
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 25;
+  connection.query(
+    'SELECT * FROM pets_of_shelters WHERE status = ? LIMIT 25 OFFSET ?',
     status,
     function(err, results) {
       if (err) return callback(err); // some error with query
