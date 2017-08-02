@@ -327,7 +327,9 @@ router.get('/:owner/viewUserPets', function(req, res) {
 
 /*  deletes all pets of <name> 
     ideally used during development
-*/
+
+
+
 router.delete('/:owner/deleteAllUserPets', function(req, res) {
   var owner = req.params.owner;
   controller.deleteAllUserPets(owner, function(err, results) {
@@ -345,7 +347,7 @@ router.delete('/:owner/deleteAllShelterPets', function(req, res) {
     res.status(204).end();
   });
 });
-
+*/
 /* add pets to database (only if logged in) */
 router.post('/myPets', function(req, res) {
   var owner = req.session.body.Username;
@@ -476,7 +478,7 @@ router.get('/myPets', function(req, res) {
     });
   }
 });
-
+/*
 router.delete('/myPets', function(req, res) {
   var Username = req.session.body.Username;
   if (req.session.body.accountType === 'user') {
@@ -493,7 +495,7 @@ router.delete('/myPets', function(req, res) {
     });
   }
 });
-
+*/
 /* returns specific pet */
 router.get('/:pet_uuid', function(req, res) {
   var pet_uuid = req.params.pet_uuid;

@@ -458,8 +458,8 @@ module.exports.deleteShelterPet = function(Username, uuid, callback) {
     }
   );
 };
-
-/* delete all pets of shelter/user */
+/* 
+/* delete all pets of shelter/user 
 module.exports.deleteAllUserPets = function(Username, callback) {
   connection.query(
     'DELETE FROM pets_of_users WHERE user_Username = ?',
@@ -483,3 +483,4 @@ module.exports.deleteAllShelterPets = function(Username, callback) {
     }
   );
 };
+*/
