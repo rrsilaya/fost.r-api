@@ -458,29 +458,3 @@ module.exports.deleteShelterPet = function(Username, uuid, callback) {
     }
   );
 };
-/* 
-/* delete all pets of shelter/user 
-module.exports.deleteAllUserPets = function(Username, callback) {
-  connection.query(
-    'DELETE FROM pets_of_users WHERE user_Username = ?',
-    Username,
-    function(err, results) {
-      if (err) return callback(err); // some error with query
-      console.log(results);
-      return callback(null, results); // if successful
-    }
-  );
-};
-
-module.exports.deleteAllShelterPets = function(Username, callback) {
-  connection.query(
-    'DELETE FROM pets_of_shelters WHERE shelter_Username = ?',
-    Username,
-    function(err, results) {
-      if (err) return callback(err); // some error with query
-      console.log(results);
-      return callback(null, results); // if successful
-    }
-  );
-};
-*/

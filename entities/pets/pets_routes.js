@@ -478,24 +478,7 @@ router.get('/myPets', function(req, res) {
     });
   }
 });
-/*
-router.delete('/myPets', function(req, res) {
-  var Username = req.session.body.Username;
-  if (req.session.body.accountType === 'user') {
-    controller.deleteAllUserPets(Username, function(err, results) {
-      if (err) return res.status(500).json(err);
-      if (!results) return res.status(500);
-      res.status(204).end();
-    });
-  } else if (req.session.body.accountType === 'shelter') {
-    controller.deleteAllShelterPets(Username, function(err, results) {
-      if (err) return res.status(500).json(err);
-      if (!results) return res.status(500);
-      res.status(204).end();
-    });
-  }
-});
-*/
+
 /* returns specific pet */
 router.get('/:pet_uuid', function(req, res) {
   var pet_uuid = req.params.pet_uuid;

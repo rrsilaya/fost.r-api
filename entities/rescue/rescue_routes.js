@@ -9,6 +9,7 @@ shortid.characters(
 );
 // default has "-"" and "_" ; this sets the characters to only the entered characters (https://www.npmjs.com/package/shortid)
 var controller = require('./rescue_controllers');
+var notify = require('./../notifications/notifications_controllers');
 
 
 router.use(validator()); // express-validator
@@ -57,6 +58,19 @@ router.get('/:rescue_uuid', function(req, res, next) {
     controller.getSender(rescue_uuid,function(err,sender){
       if (err) res.status(403).end();
       else if(sender){
+
+        var newNotif = {
+                notif_for: sender[0].sender_Username,
+                notif_message: req.session.body.Username + ' resolved your request for animal rescue. ',
+                notif_url: 'api/rescue/' + rescue_uuid,
+                date_created: new Date()
+              };
+              //add to notifications table
+              //when 'notif_for' is logged in,he/she will received this notification
+              notify.addNotif(newNotif, function(err, results) {
+                if (err) console.log(err);
+                else console.log(sender[0].sender_Username + 'will be notified');
+              });
         if(sender[0].sender_Username === req.session.body.Username){
           controller.viewRequest(rescue_uuid, function(err, request) {
             if (err) return res.status(500).json(err); // server error
@@ -90,6 +104,8 @@ router.delete('/:rescue_uuid', function(req, res,next) {
     controller.getSender(rescue_uuid,function(err,sender){
       if (err) res.status(403).end();
       else if(sender){
+        //notify sender 
+
         //delete request
         controller.deleteRequest(rescue_uuid, sender[0].sender_Username, function(err,results) {
           if (err) return res.status(500).json(err);
@@ -105,8 +121,6 @@ router.delete('/:rescue_uuid', function(req, res,next) {
   }
 });
 
-
-
 //view all request of a user
 router.get('/:user/viewAllRequests', function(req, res, next) {
   if (req.session.body.accountType === 'shelter') {
@@ -118,9 +132,6 @@ router.get('/:user/viewAllRequests', function(req, res, next) {
     });
   }
 });
-
-
-
 
 //add a rescue request to db
 router.post('/submit_a_rescue_request', function(req, res, next) {
