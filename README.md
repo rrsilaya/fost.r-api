@@ -95,7 +95,7 @@
 | `/community/:post_uuid`                  | `POST`   | Add a comment                                                                                  |
 | `/community/:user/viewPosts`             | `GET`    | View all posts of a user                                                                       |
 | `/community/deleteAllMyPosts`            | `DELETE` | Delete all posts of user                                                                       |
-| `/community/viewAllComments/:post_uuid`  | `GET`    | View all comments in the post                                                                  |
+| `/community/viewAllComments/:post_uuid/page/:page_number`| `GET`| View all comments in the post by page; ordered by most to least votes (by 10 comments)|
 | `/community/:post_uuid/:comment_uuid`    | `GET`    | View a comment                                                                                 |
 | `/community/:post_uuid/:comment_uuid`    | `DELETE` | Delete a comment                                                                               |
 | `/community/:post_uuid/:comment_uuid`    | `PUT`    | Vote a comment                                                                                 |

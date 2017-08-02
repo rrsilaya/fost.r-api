@@ -229,9 +229,9 @@ view all post of a specific user/shelter ;
 'user' will be used for both user and shelter
 does not show comments on the post
 */
-router.get('/:user/viewPosts', function(req, res, next) {
+router.get('/:user/viewPosts/:page_number', function(req, res, next) {
   var user = req.params.user;
-  console.log(user);
+  var page_number = req.params.page_number;
   controller.viewPostsOf(user, function(err, posts) {
     if (err)
       return res.status(500).json(err); // server error
@@ -273,31 +273,31 @@ router.post('/addPost', function(req, res, next) {
       var image = req.files.photo;
       var name = post_uuid + '-attached-image-' + image.name;
       var url = __dirname + '/images_attached_to_posts/' + name;
-      var image_urlpath = '/community/images_attached_to_posts/'+name;
+      var image_urlpath = '/community/images_attached_to_posts/' + name;
       var mime = req.files.photo.mimetype;
       if (mime.substring(0, 5) === 'image') {
         image.mv(url, function(err) {
           if (err) {
-            url=null;
-            image_urlpath=null;
+            url = null;
+            image_urlpath = null;
             console.log('api err: not able to receive image');
           }
         });
       } else {
-        url=null;
-        image_urlpath=null;
+        url = null;
+        image_urlpath = null;
         console.log('file uploaded is not image');
       }
     } else if (!req.files.photo) {
-      var url=null;
+      var url = null;
       var image_urlpath = null;
     }
   } else {
-    var url=null;
+    var url = null;
     var image_urlpath = null;
     console.log('file is undefined');
   }
-  
+
   var newPost = {
     Posted_by: req.session.body.Username,
     post_title: req.body.post_title,
@@ -340,30 +340,30 @@ router.post('/:post_uuid', function(req, res, next) {
         var image = req.files.photo;
         var name = comment_uuid + '-attached-image-' + image.name;
         var url = __dirname + '/images_attached_to_comments/' + name;
-        var image_urlpath = '/community/images_attached_to_comments/'+name; 
+        var image_urlpath = '/community/images_attached_to_comments/' + name;
         var mime = req.files.photo.mimetype;
         if (mime.substring(0, 5) === 'image') {
           image.mv(url, function(err) {
             if (err) {
-              var url=null;
+              var url = null;
               image_urlpath = null;
               console.log('api err: not able to receive image');
             }
           });
         } else {
-          var url=null;
+          var url = null;
           image_urlpath = null;
           console.log('file uploaded is not image');
         }
       } else if (!req.files.photo) {
-          var url=null;
-          var image_urlpath = null;
-          console.log('user did not attached an image');
+        var url = null;
+        var image_urlpath = null;
+        console.log('user did not attached an image');
       }
     } else {
-        var url=null;
-        console.log('file is undefined');
-        var image_urlpath = null;
+      var url = null;
+      console.log('file is undefined');
+      var image_urlpath = null;
     }
     var newComment = {
       comment_title: comment_title,
@@ -420,13 +420,25 @@ router.post('/:post_uuid', function(req, res, next) {
   }
 });
 
-/* view all comments on a post given the post_uuid*/
-router.get('/viewAllComments/:post_uuid', function(req, res, next) {
-  console.log('viewing all comments');
+/* view all comments on a post given the post_uuid sorted by 5 comments*/
+router.get('/viewAllComments/:post_uuid/page/:page_number', function(
+  req,
+  res,
+  next
+) {
+  //console.log('viewing all comments');
   var post_uuid = req.params.post_uuid;
-  controller.viewAllComments(post_uuid, function(err, comments) {
-    if (err) return res.status(500).json(err); // server error
-    res.status(200).json(comments);
+  var page_number = req.params.page_number;
+  controller.countAllComments(post_uuid, function(err, count) {
+    if (err) res.status(500).json(err);
+    else {
+      count = parseInt(count);
+      count = Math.ceil(count / 10);
+      controller.viewAllComments(post_uuid, function(err, comments) {
+        if (err) return res.status(500).json(err); // server error
+        res.status(200).json(comments);
+      });
+    }
   });
 });
 
