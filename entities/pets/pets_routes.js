@@ -35,7 +35,7 @@ router.get('/shelters/viewAllPets/page/:page_number', function(req, res) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
-          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+          .json({ page : page_number}, {pageTotal: count}, {pets: pets }); // returns pets
       });
     }
   });
@@ -57,7 +57,8 @@ router.get('/shelters/viewPetsByKind/:page_number/:kind', function(req, res) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
-          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+          .json({ page : page_number}, {pageTotal: count}, {pets: pets }); // returns pets
+
       });
     }
   });
@@ -77,7 +78,8 @@ router.get('/shelters/viewPetsBySex/:page_number/:sex', function(req, res) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
-          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+          .json({ page : page_number}, {pageTotal: count}, {pets: pets }); // returns pets
+
       });
     }
   });
@@ -97,7 +99,8 @@ router.get('/users/viewPetsByKind/:page_number/:kind', function(req, res) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
-          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+          .json({ page : page_number}, {pageTotal: count}, {pets: pets }); // returns pets
+
       });
     }
   });
@@ -117,7 +120,8 @@ router.get('/users/viewPetsBySex/:page_number/:sex', function(req, res) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
-          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+          .json({ page : page_number}, {pageTotal: count}, {pets: pets }); // returns pets
+
       });
     }
   });
@@ -137,7 +141,8 @@ router.get('/adopt/page/:page_number', function(req, res) {
         else
           res
             .status(200)
-            .json((page: page_number), (pageTotal: count), (pets: pets));
+            .json({ page : page_number}, {pageTotal: count}, {pets: pets }); // returns pets
+
       });
     }
   });
@@ -239,7 +244,8 @@ router.get('/dates/page/:page_number', function(req, res) {
         else
           res
             .status(200)
-            .json((page: page_number), (pageTotal: count), (pets: pets));
+            .json({ page : page_number}, {pageTotal: count}, {pets: pets }); // returns pets
+
       });
     }
   });
@@ -268,7 +274,8 @@ router.get('/both/page/:page_number', function(req, res) {
         else
           res
             .status(200)
-            .json((page: page_number), (pageTotal: count), (pets: pets));
+            .json({ page : page_number}, {pageTotal: count}, {pets: pets }); // returns pets
+
       });
     }
   });
