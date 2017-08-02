@@ -262,7 +262,6 @@
 | width            | varchar(36)                       | YES  |     | NULL    |       |
 | height           | varchar(36)                       | YES  |     | NULL    |       |
 | shelter_Username | varchar(52)                       | NO   | MUL | NULL    |       |
-+------------------+-----------------------------------+------+-----+---------+-------+
 
 ### `posts`
 
