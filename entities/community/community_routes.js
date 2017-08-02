@@ -155,22 +155,8 @@ router.get('/:post_uuid', function(req, res, next) {
   controller.viewPost(post_uuid, function(err, post) {
     if (err) return res.status(500).json(err);
     else {
-      // server error
-      //res.send(post,comments);
-      if(post[0].comments==0) res.send(post);
-      else 
-      controller.viewAllComments(post_uuid, function(err, comments) {
-        if (err) return res.status(500).json(err);
-        else {
-          // server error
-          res.send([post,comments]);
-        }
-      });
-      controller.showAllVotesPost(post_uuid, function(err, votes) {
-        if (err) res.status(500).json(err);
-        console.log(votes);
-        //res.status(200).send([post, comments, votes]);
-      });
+      res.send(post);
+
     }
   });
 });
