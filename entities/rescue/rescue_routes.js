@@ -158,19 +158,19 @@ router.post('/submit_a_rescue_request', function(req, res, next) {
             if (mime.substring(0, 5) === 'image') {
               image.mv(rescue_imgurl, function(err) {
                 if (err) {
-                  imgurl = null;
+                  //imgurl = null;
                   console.log('api err: not able to receive image');
                 }
               });
             } else {
-              imgurl = null;
+              //imgurl = null;
               console.log('file uploaded is not image');
             }
           } else if (!req.files.photo) {
-              imgurl = null;
+              //imgurl = null;
           }
         } else {
-          imgurl=null;
+          //imgurl=null;
           console.log('file is undefined');
         }
         var newRescue = {
