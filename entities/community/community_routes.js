@@ -157,15 +157,19 @@ router.get('/:post_uuid', function(req, res, next) {
     else {
       // server error
       //res.send(post,comments);
+      if(post[0].comments==0) res.send(post);
+      else 
       controller.viewAllComments(post_uuid, function(err, comments) {
         if (err) return res.status(500).json(err);
         else {
           // server error
-          controller.showAllVotesPost(post_uuid, function(err, votes) {
-            if (err) res.status(500).json(err);
-            res.status(200).send([post, comments, votes]);
-          });
+          res.send([post,comments]);
         }
+      });
+      controller.showAllVotesPost(post_uuid, function(err, votes) {
+        if (err) res.status(500).json(err);
+        console.log(votes);
+        //res.status(200).send([post, comments, votes]);
       });
     }
   });
@@ -253,17 +257,6 @@ router.delete('/:post_uuid/', function(req, res, next) {
   });
 });
 
-/*delete all posts of user and comments on the posts
-router.delete('/deleteAllMyPosts', function(req, res, next) {
-  var user = req.session.body.Username;
-  controller.deleteAllPosts(user, function(err, results) {
-    if (err) return res.status(500).json(err);
-    else if (results.affectedRow == 0)
-      // server error
-      return res.status(500);
-    else return res.status(204).end();
-  });
-});*/
 
 router.post('/addPost', function(req, res, next) {
   var post_uuid = shortid.generate();

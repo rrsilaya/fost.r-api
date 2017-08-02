@@ -158,19 +158,7 @@ module.exports.sortByVotesAsc = function(page_number, callback) {
     }
   );
 };
-/*FOR NOW
-//deletes all posts of current user logged in
-module.exports.deleteAllPosts = function(user, callback) {
-  connection.query('DELETE FROM posts WHERE Posted_by = ?', user, function(
-    err,
-    results
-  ) {
-    if (err)
-      return callback(err); // some error with query
-    else return callback(null, results); // if successful
-  });
-};
-*/
+
 //delete a single post given its uuid
 module.exports.deletePost = function(post_uuid, user, callback) {
   //delete image attached to post
@@ -292,7 +280,7 @@ module.exports.showAllVotesPost = function(post_uuid, callback) {
       if (err) callback(err);
       else {
         console.log('showing votes for ' + post_uuid);
-        console.log(results);
+        console.log(results[0]);
         callback(null, results);
       }
     }
