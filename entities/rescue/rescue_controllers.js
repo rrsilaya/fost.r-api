@@ -64,18 +64,7 @@ module.exports.viewRequest = function(rescue_uuid, callback) {
     }
   );
 };
-/*view a request given its rescue_uuid*/
-module.exports.viewMyRequest = function(rescue_uuid, Username, callback) {
-  connection.query(
-    'SELECT * FROM rescue WHERE rescue_uuid = ? && sender_Username = ? ',
-    [rescue_uuid, Username],
-    function(err, results) {
-      if (err)
-        return callback(err); // some error with query
-      else return callback(null, results); // success
-    }
-  );
-};
+
 
 //delete a request given that the request is posted by the user and its rescue_uuid is specified*/
 
@@ -123,43 +112,17 @@ module.exports.updateRequest = function(
   );
 };
 
+
 /*see all request a user has submitted*/
 module.exports.viewUserRequests = function(Username, callback) {
   connection.query(
     'SELECT * FROM rescue WHERE sender_Username = ?',
     Username,
     function(err, results) {
-      if (err)
-        return callback(err); // some error with query
+      if (err)  return callback(err); // some error with query
       else return callback(null, results); // success
     }
   );
 };
-/*delete all my request
-does not work unless module.exports.deleteRequest is commented out */
-module.exports.deleteAllMyRequests=function(Username,callback){
-  //delete all images attached to photo
-  connection.query(
-    'SELECT * FROM rescue WHERE sender_Username = ?',
-    Username,
-    function(err,results){
-      if(results.affectedRows!==0){
-        for (var i = 0, len = results.length; i < len; i++) {
-          if(results.affectedRows!==0) 
-            fs.unlink(JSON.parse(JSON.stringify(results[i].rescue_abspath)),resultHandler);
-        }
-      }
-    }
-  );
-  
-  connection.query(
-    'DELETE FROM rescue WHERE sender_Username = ?',
-    Username,
-    function(err,results){
-    if (err) return callback(err);   // some error with query
-    else return callback(null, results); // success
-  });
-}
-
 
 
