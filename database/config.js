@@ -235,9 +235,16 @@ CREATE TABLE notifications (\
     ) ENGINE=InnoDB AUTO_INCREMENT=1  DEFAULT CHARSET=latin1;'
 );
 
+// delete notifications that are fifteen days older 
 connection.query(
   '\
 DELETE FROM notifications WHERE date_created < (CURDATE() - INTERVAL 15 DAY);'
+);
+
+// delete date requests that are one day older
+connection.query(
+  '\
+DELETE FROM dates WHERE date_created < (CURDATE() - INTERVAL 1 DAY);'
 );
 
 connection.end();

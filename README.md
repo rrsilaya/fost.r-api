@@ -73,7 +73,7 @@
 | `/pets/dates/:pet_uuid`                  | `POST`   | Process date request for :pet_uuid (if you're a user)                                          |
 | `/pets/dates/approve/:pet_uuid`          |  `PUT`   | Approve a date request; change its status to 'APPROVED'                                        |
 | `/pets/dates/reject/:pet_uuid`           |  `PUT`   | Reject a date request; change its status to 'REJECTED'                                         |
-| `/pets/dates/dateRequests`               | `GET`    | Show all date requests together with the user info of the one who adopted pet and pet's info   |
+| `/pets/dateRequests`                     | `GET`    | Show all date requests together with the user info of the one who adopted pet and pet's info   |
 | `/pets/both/page/:page_number`           | `GET`    | Show all pets (of shelters) that are allowed for adoption & dates by page                      |
 | `/pets/:owner/viewShelterPets`           | `GET`    | View pets of owner                                                                             |
 | `/pets/:owner/viewUserPets`              | `GET`    | View pets of owner                                                                             |
@@ -173,7 +173,7 @@
 | `/pets/dates/:pet_uuid`                  | `POST`   | 201           | json of time of the date submitted by the user                        |
 | `/pets/dates/approve/:pet_uuid`          |  `PUT`   | 201           | json of the updated date request                                      |
 | `/pets/dates/reject/:pet_uuid`           |  `PUT`   | 201           | json of the updated date request                                      |
-| `/pets/dates/dateRequests`               | `GET`    | 200           | json of requests together with user's info and pet's info             |
+| `/pets/dateRequests`                     | `GET`    | 200           | json of requests together with user's info and pet's info             |
 | `/pets/both/page/:page_number`           | `GET`    | 200           | json of page (number), pageTotal and pets for both adopt and dates    |
 | `/pets/:owner/viewShelterPets`           | `GET`    | 200           | json of pets of :owner                                                |
 | `/pets/:owner/viewUserPets`              | `GET`    | 200           | json of pets of :owner                                                |
