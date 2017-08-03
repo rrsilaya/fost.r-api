@@ -128,7 +128,7 @@ router.get('/sortByVotesDesc/page/:page_number', function(req, res) {
   });
 });
 
-// least to most voted
+// least to most voted 
 // where :page_number is an integer; will be used for pagination
 router.get('/sortByVotesAsc/page/:page_number', function(req, res) {
   var page_number = req.params.page_number;

@@ -538,17 +538,3 @@ module.exports.deleteComment = function(
   );
 };
 
-/* comments will automatically be deleted kasi foreign key si post_uuid  and it is set on cascade delete
-//delete all comments in a post
-
-module.exports.deleteAllComments = function(post_uuid, callback) {
-  connection.query(
-    'DELETE FROM comments_on_posts WHERE post_uuid = ? ',
-    post_uuid,
-    function(err, results) {
-      if (err)
-        return callback(err); // some error with query
-      else return callback(null, results); // success
-    }
-  );
-};*/

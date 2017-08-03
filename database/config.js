@@ -15,7 +15,7 @@ connection.query('USE ' + db.database + ';');
 connection.query(
   '\
 CREATE TABLE users (\
-    `Username` varchar(36) NOT NULL UNIQUE,\
+    `Username` varchar(36) NOT NULL UNIQUE  ,\
     `firstname` varchar(36) NOT NULL,\
     `lastname` varchar(36) NOT NULL,\
     `birthday` date DEFAULT NULL,\
@@ -36,7 +36,7 @@ CREATE TABLE users (\
 connection.query(
   '\
 CREATE TABLE shelters (\
-    `Username` varchar(52) NOT NULL UNIQUE,\
+    `Username` varchar(52) NOT NULL UNIQUE ,\
     `shelter_name` varchar(52) NOT NULL,\
     `address` varchar(236) NOT NULL,\
     `contactnum` varchar(20) NOT NULL,\

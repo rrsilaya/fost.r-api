@@ -22,6 +22,7 @@ module.exports.countAllSheltersPets = function(callback) {
   );
 };
 
+
 module.exports.countAllUsersPets = function(callback) {
   connection.query(
     'SELECT COUNT(*) as count FROM pets_of_users',
