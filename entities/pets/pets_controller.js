@@ -416,6 +416,18 @@ module.exports.approveDate = function(shelter, uuid, callback){
     else{
       connection.query('UPDATE dates SET ? WHERE dates_uuid = ?', [update, uuid], (err, results)=>{
         if (err) callback(err);
+        var newNotif = {
+                notif_for: results.user_Username,
+                notif_message:
+                  `${shelter} approved your request for dates with ${results.pet_uuid}`,
+                notif_url: null,
+                date_created: new Date()
+              };
+              //add to notifications table
+              notify.addNotif(newNotif, function(err, results) {
+                if (err) console.log(err);
+                else console.log(results.user_Username + 'will be notified');
+              });
         return callback(null, results); // mysql query results
       });
     }
@@ -433,6 +445,18 @@ module.exports.rejectDate = function(shelter, uuid, callback){
     else{
       connection.query('UPDATE dates SET ? WHERE dates_uuid = ?', [update, uuid], (err, results)=>{
         if (err) callback(err);
+        var newNotif = {
+          notif_for: results.user_Username,
+          notif_message:
+            `${shelter} approved your request for dates with ${results.pet_uuid}`,
+          notif_url: null,
+          date_created: new Date()
+        };
+        //add to notifications table
+        notify.addNotif(newNotif, function(err, results) {
+          if (err) console.log(err);
+          else console.log(results.user_Username + 'will be notified');
+        });
         return callback(null, results); // mysql query results
         
       });
