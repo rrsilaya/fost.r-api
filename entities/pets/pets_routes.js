@@ -155,7 +155,7 @@ router.post('/adopt/:pet_uuid', function(req, res) {
     controller.adoptPet(newAdopt, function(err, results) {
       console.log('results ' + results);
       if (err) res.status(500).json(err);
-      if (results) res.status(200).json(results);
+      if (results) res.status(200).json(newAdopt);
       else if (!results) {
         console.log('That pet is not for adopt.');
         res.status(404).end();
@@ -180,7 +180,7 @@ router.post('/dates/:pet_uuid', function(req, res) {
     controller.datePet(newDate, function(err, results) {
       console.log('results: ' + results);
       if (err) res.status(500).json(err);
-      if (results) res.status(200).json(results);
+      if (results) res.status(200).json(newDate);
       else if (!results) {
         console.log('That pet is not for dates.');
         res.status(404).send(null);
@@ -342,7 +342,7 @@ router.post('/myPets', function(req, res) {
             console.log('api err: not able to receive image');
             controller.addShelterPet(petInfo, function(err, results) {
               if (err) return res.status(500).json(err); // server error
-              res.status(201).json(results); // returns info of newly added pet
+              res.status(201).json(petInfo); // returns info of newly added pet
             });
           }
           petInfo.url = '/pets/photos/' + name;
@@ -352,7 +352,7 @@ router.post('/myPets', function(req, res) {
           petInfo.height = dimensions.height;
           controller.addShelterPet(petInfo, function(err, results) {
             if (err) return res.status(500).json(err); // server error
-            res.status(201).json(results); // returns info of newly added pet
+            res.status(201).json(petInfo); // returns info of newly added pet
           });
         });
       } else {
@@ -360,7 +360,7 @@ router.post('/myPets', function(req, res) {
         console.log('created pet but no image yet');
         controller.addShelterPet(petInfo, function(err, results) {
           if (err) return res.status(500).json(err); // server error
-          res.status(201).json(results); // returns info of newly added pet
+          res.status(201).json(petInfo); // returns info of newly added pet
         });
       }
     } else {
@@ -394,7 +394,7 @@ router.post('/myPets', function(req, res) {
             console.log('api err: not able to receive image');
             controller.addUserPet(petInfo, function(err, results) {
               if (err) return res.status(500).json(err); // server error
-              res.status(201).json(results); // returns info of newly added pet
+              res.status(201).json(petInfo); // returns info of newly added pet
             });
           }
           petInfo.url = '/pets/photos/' + name;
