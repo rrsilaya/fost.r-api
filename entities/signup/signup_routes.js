@@ -147,7 +147,7 @@ router.post('/shelter', function(req, res, next) {
             return res.status(400).json(err);
             break;
           case 'TAKEN_UN_USERS':
-            errors ='Username is already used by a shelter';
+            errors ='Username is already used by a user';
             console.log(errors);
             return res.status(400).json(callback);
             break;
@@ -278,7 +278,7 @@ router.post('/user', function(req, res, next) {
             return res.status(400).json(errors);
             break;
           case 'TAKEN_UN_SHELTERS':
-            errors ='Username is already used by a user';
+            errors ='Username is already used by a shelter';
             console.log(errors);
             return res.status(400).json(errors);
             break;

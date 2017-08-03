@@ -367,7 +367,7 @@ router.post('/myPets', function(req, res) {
       console.log('no image received');
       controller.addShelterPet(petInfo, function(err, results) {
         if (err) return res.status(500).json(err); // server error
-        res.status(201).json(results); // returns info of newly added pet
+        res.status(201).json(petInfo); // returns info of newly added pet
       });
     }
   } else if (req.session.body.accountType === 'user') {
