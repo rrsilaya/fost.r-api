@@ -47,13 +47,12 @@ router.get('/shelters/viewAllPets/page/:page_number', function(req, res) {
 router.get('/shelters/viewPetsByKind/:page_number/:kind', function(req, res) {
   var page_number = req.params.page_number;
   var kind = req.params.kind;
-  var type = 'pets_of_shelters';
-  controller.countAllPetsByKind(type, kind, function(err, count) {
+  controller.countAllSheltersPetsByKind(kind, function(err, count) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
       count = Math.ceil(count / 25);
-      controller.viewPetsByKind(type, page_number, kind, function(err, pets) {
+      controller.viewSheltersPetsByKind(page_number, kind, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
@@ -67,13 +66,12 @@ router.get('/shelters/viewPetsByKind/:page_number/:kind', function(req, res) {
 router.get('/shelters/viewPetsBySex/:page_number/:sex', function(req, res) {
   var page_number = req.params.page_number;
   var sex = req.params.sex;
-  var type = 'pets_of_shelters';
-  controller.countAllPetsBySex(type, sex, function(err, count) {
+  controller.countAllSheltersPetsBySex(sex, function(err, count) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
       count = Math.ceil(count / 25);
-      controller.viewPetsByKind(type, page_number, sex, function(err, pets) {
+      controller.viewSheltersPetsBySex(page_number, sex, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
@@ -87,13 +85,12 @@ router.get('/shelters/viewPetsBySex/:page_number/:sex', function(req, res) {
 router.get('/users/viewPetsByKind/:page_number/:kind', function(req, res) {
   var page_number = req.params.page_number;
   var kind = req.params.kind;
-  var type = 'pets_of_users';
-  controller.countAllPetsByKind(type, kind, function(err, count) {
+  controller.countAllUsersPetsByKind(kind, function(err, count) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
       count = Math.ceil(count / 25);
-      controller.viewPetsByKind(type, page_number, kind, function(err, pets) {
+      controller.viewUsersPetsByKind(page_number, kind, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
@@ -107,13 +104,12 @@ router.get('/users/viewPetsByKind/:page_number/:kind', function(req, res) {
 router.get('/users/viewPetsBySex/:page_number/:sex', function(req, res) {
   var page_number = req.params.page_number;
   var sex = req.params.sex;
-  var type = 'pets_of_users';
-  controller.countAllPetsBySex(type, sex, function(err, count) {
+  controller.countAllUsersPetsBySex(sex, function(err, count) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
       count = Math.ceil(count / 25);
-      controller.viewPetsByKind(type, page_number, sex, function(err, pets) {
+      controller.viewUsersPetsBySex(page_number, sex, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
@@ -133,11 +129,11 @@ router.get('/adopt/page/:page_number', function(req, res) {
       count = Math.ceil(count / 25);
       controller.viewAllPetsForAdopt(page_number, function(err, pets) {
         if (err) res.status(500).json(err);
-        if (pets) res.status(404).send(null);
-        else
+        if (pets.length > 0)
           res
             .status(200)
-            .json((page: page_number), (pageTotal: count), (pets: pets));
+            .json({ page: page_number, pageTotal: count, pets: pets });
+        else if (false) res.status(404).end();
       });
     }
   });
@@ -175,14 +171,15 @@ router.post('/dates/:pet_uuid', function(req, res) {
   if (req.session.body.accountType === 'user') {
     var today = new Date();
     var uuid = shortid.generate();
-    var newAdopt = {
+    var newDate = {
       user_Username: req.session.body.Username,
       pet_uuid: req.params.pet_uuid,
-      date_uuid: uuid,
+      dates_uuid: uuid,
       created_at: today,
       updated_at: today
     };
-    controller.datePet(newAdopt, function(err, results) {
+    controller.datePet(newDate, function(err, results) {
+      console.log('results: ' + results);
       if (err) res.status(500).json(err);
       if (results) res.status(200).json(results);
       else if (!results) {
@@ -235,11 +232,11 @@ router.get('/dates/page/:page_number', function(req, res) {
       count = Math.ceil(count / 25);
       controller.viewAllPetsForDates(page_number, function(err, pets) {
         if (err) res.status(500).json(err);
-        if (pets) res.status(404).send(null);
-        else
+        if (pets.length > 0)
           res
             .status(200)
-            .json((page: page_number), (pageTotal: count), (pets: pets));
+            .json({ page: page_number, pageTotal: count, pets: pets });
+        else if (false) res.status(404).end();
       });
     }
   });
@@ -264,11 +261,11 @@ router.get('/both/page/:page_number', function(req, res) {
       count = Math.ceil(count / 25);
       controller.viewAllPetsForBoth(page_number, function(err, pets) {
         if (err) res.status(500).json(err);
-        if (pets) res.status(404).send(null);
-        else
+        if (pets.length > 0)
           res
             .status(200)
-            .json((page: page_number), (pageTotal: count), (pets: pets));
+            .json({ page: page_number, pageTotal: count, pets: pets });
+        else if (false) res.status(404).end();
       });
     }
   });
@@ -440,14 +437,14 @@ router.post('/myPets', function(req, res) {
         console.log('created pet but no image yet');
         controller.addUserPet(petInfo, function(err, results) {
           if (err) return res.status(500).json(err); // server error
-          res.status(201).json(results); // returns info of newly added pet
+          res.status(201).json(petInfo); // returns info of newly added pet
         });
       }
     } else {
       console.log('no image received');
       controller.addUserPet(petInfo, function(err, results) {
         if (err) return res.status(500).json(err); // server error
-        res.status(201).json(results); // returns info of newly added pet
+        res.status(201).json(petInfo); // returns info of newly added pet
       });
     }
   }
@@ -466,23 +463,6 @@ router.get('/myPets', function(req, res) {
       if (err) return res.status(500).json(err);
       if (!results) return res.status(500);
       res.status(200).json(results);
-    });
-  }
-});
-
-router.delete('/myPets', function(req, res) {
-  var Username = req.session.body.Username;
-  if (req.session.body.accountType === 'user') {
-    controller.deleteAllUserPets(Username, function(err, results) {
-      if (err) return res.status(500).json(err);
-      if (!results) return res.status(500);
-      res.status(204).end();
-    });
-  } else if (req.session.body.accountType === 'shelter') {
-    controller.deleteAllShelterPets(Username, function(err, results) {
-      if (err) return res.status(500).json(err);
-      if (!results) return res.status(500);
-      res.status(204).end();
     });
   }
 });

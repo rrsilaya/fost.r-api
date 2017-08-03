@@ -61,10 +61,7 @@ module.exports.sortByTimeDesc = function(page_number, callback) {
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      console.log(results);
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      return callback(null, results); // success; has results on that page
     }
   );
 };
@@ -79,10 +76,8 @@ module.exports.sortByTimeAsc = function(page_number, callback) {
     'SELECT * FROM posts ORDER BY created_at LIMIT 15 OFFSET ?',
     offset,
     function(err, results) {
-      if (err) return callback(err); // some error with query
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      if (err) return callback(err); // some error with query\
+      return callback(null, results); // success; has results on that page
     }
   );
 };
@@ -98,9 +93,7 @@ module.exports.sortByCommentsDesc = function(page_number, callback) {
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      return callback(null, results); // success; has results on that page
     }
   );
 };
@@ -116,9 +109,7 @@ module.exports.sortByCommentsAsc = function(page_number, callback) {
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      return callback(null, results); // success; has results on that page
     }
   );
 };
@@ -134,9 +125,7 @@ module.exports.sortByVotesDesc = function(page_number, callback) {
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      return callback(null, results); // success; has results on that page
     }
   );
 };
@@ -152,25 +141,11 @@ module.exports.sortByVotesAsc = function(page_number, callback) {
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      return callback(null, results); // success; has results on that page
     }
   );
 };
-/*FOR NOW
-//deletes all posts of current user logged in
-module.exports.deleteAllPosts = function(user, callback) {
-  connection.query('DELETE FROM posts WHERE Posted_by = ?', user, function(
-    err,
-    results
-  ) {
-    if (err)
-      return callback(err); // some error with query
-    else return callback(null, results); // if successful
-  });
-};
-*/
+
 //delete a single post given its uuid
 module.exports.deletePost = function(post_uuid, user, callback) {
   //delete image attached to post
@@ -549,18 +524,3 @@ module.exports.deleteComment = function(
     }
   );
 };
-
-/* comments will automatically be deleted kasi foreign key si post_uuid  and it is set on cascade delete
-//delete all comments in a post
-
-module.exports.deleteAllComments = function(post_uuid, callback) {
-  connection.query(
-    'DELETE FROM comments_on_posts WHERE post_uuid = ? ',
-    post_uuid,
-    function(err, results) {
-      if (err)
-        return callback(err); // some error with query
-      else return callback(null, results); // success
-    }
-  );
-};*/
