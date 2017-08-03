@@ -143,18 +143,7 @@ router.get('/:post_uuid', function(req, res, next) {
   controller.viewPost(post_uuid, function(err, post) {
     if (err) return res.status(500).json(err);
     else {
-      // server error
-      //res.send(post,comments);
-      controller.viewAllComments(post_uuid, function(err, comments) {
-        if (err) return res.status(500).json(err);
-        else {
-          // server error
-          controller.showAllVotesPost(post_uuid, function(err, votes) {
-            if (err) res.status(500).json(err);
-            res.status(200).send([post, comments, votes]);
-          });
-        }
-      });
+      res.send(post);
     }
   });
 });

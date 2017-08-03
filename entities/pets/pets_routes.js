@@ -35,7 +35,7 @@ router.get('/shelters/viewAllPets/page/:page_number', function(req, res) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
-          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+          .json({ page: page_number }, { pageTotal: count }, { pets: pets }); // returns pets
       });
     }
   });
@@ -56,7 +56,7 @@ router.get('/shelters/viewPetsByKind/:page_number/:kind', function(req, res) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
-          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+          .json({ page: page_number }, { pageTotal: count }, { pets: pets }); // returns pets
       });
     }
   });
@@ -75,7 +75,7 @@ router.get('/shelters/viewPetsBySex/:page_number/:sex', function(req, res) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
-          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+          .json({ page: page_number }, { pageTotal: count }, { pets: pets }); // returns pets
       });
     }
   });
@@ -94,7 +94,7 @@ router.get('/users/viewPetsByKind/:page_number/:kind', function(req, res) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
-          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+          .json({ page: page_number }, { pageTotal: count }, { pets: pets }); // returns pets
       });
     }
   });
@@ -113,7 +113,7 @@ router.get('/users/viewPetsBySex/:page_number/:sex', function(req, res) {
         if (err) return res.status(500).json(err); // server error
         res
           .status(200)
-          .json({ page: page_number, pageTotal: count, pets: pets }); // returns pets
+          .json({ page: page_number }, { pageTotal: count }, { pets: pets }); // returns pets
       });
     }
   });
@@ -132,8 +132,7 @@ router.get('/adopt/page/:page_number', function(req, res) {
         if (pets.length > 0)
           res
             .status(200)
-            .json({ page: page_number, pageTotal: count, pets: pets });
-        else if (false) res.status(404).end();
+            .json({ page: page_number }, { pageTotal: count }, { pets: pets }); // returns pets
       });
     }
   });
@@ -235,8 +234,7 @@ router.get('/dates/page/:page_number', function(req, res) {
         if (pets.length > 0)
           res
             .status(200)
-            .json({ page: page_number, pageTotal: count, pets: pets });
-        else if (false) res.status(404).end();
+            .json({ page: page_number }, { pageTotal: count }, { pets: pets }); // returns pets
       });
     }
   });
@@ -264,8 +262,7 @@ router.get('/both/page/:page_number', function(req, res) {
         if (pets.length > 0)
           res
             .status(200)
-            .json({ page: page_number, pageTotal: count, pets: pets });
-        else if (false) res.status(404).end();
+            .json({ page: page_number }, { pageTotal: count }, { pets: pets }); // returns pets
       });
     }
   });
@@ -317,7 +314,9 @@ router.get('/:owner/viewUserPets', function(req, res) {
 
 /*  deletes all pets of <name> 
     ideally used during development
-*/
+
+
+
 router.delete('/:owner/deleteAllUserPets', function(req, res) {
   var owner = req.params.owner;
   controller.deleteAllUserPets(owner, function(err, results) {
@@ -335,7 +334,7 @@ router.delete('/:owner/deleteAllShelterPets', function(req, res) {
     res.status(204).end();
   });
 });
-
+*/
 /* add pets to database (only if logged in) */
 router.post('/myPets', function(req, res) {
   var owner = req.session.body.Username;
@@ -429,7 +428,7 @@ router.post('/myPets', function(req, res) {
           petInfo.height = dimensions.height;
           controller.addUserPet(petInfo, function(err, results) {
             if (err) return res.status(500).json(err); // server error
-            res.status(201).json(results); // returns info of newly added pet
+            res.status(201).json(petInfo); // returns info of newly added pet
           });
         });
       } else {

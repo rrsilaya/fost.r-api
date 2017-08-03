@@ -74,11 +74,8 @@
 | `/pets/both/page/:page_number`           | `GET`    | Show all pets (of shelters) that are allowed for adoption & dates by page                      |
 | `/pets/:owner/viewShelterPets`           | `GET`    | View pets of owner                                                                             |
 | `/pets/:owner/viewUserPets`              | `GET`    | View pets of owner                                                                             |
-| `/pets/:owner/deleteAllUserPets`         | `DELETE` | Delete all pets of a given user                                                                |
-| `/pets/:owner/deleteAllShelter`          | `DELETE` | Delete all pets of a given shelter                                                             |
 | `/pets/myPets`                           | `POST`   | Add a pet to db                                                                                |
 | `/pets/myPets`                           | `GET`    | View own pets                                                                                  |
-| `/pets/myPets`                           | `DELETE` | Delete all owned pets                                                                          |
 | `/pets/:pet_uuid`                        | `GET`    | View specific pet                                                                              |
 | `/pets/:pet_uuid`                        | `PUT`    | Update info of a pet  (could be used for ADOPT and DATES, set status to ADOPT, DATES, OR BOTH) |
 | `/pets/:pet_uuid`                        | `DELETE` | Delete a single pet given the pet_uuid                                                         |
@@ -94,7 +91,6 @@
 | `/community/:post_uuid`                  | `DELETE` | Delete a post given its uuid (iff post is posted by the user itself)                           |
 | `/community/:post_uuid`                  | `POST`   | Add a comment                                                                                  |
 | `/community/:user/viewPosts`             | `GET`    | View all posts of a user                                                                       |
-| `/community/deleteAllMyPosts`            | `DELETE` | Delete all posts of user                                                                       |
 | `/community/viewAllComments/:post_uuid/page/:page_number`| `GET`| View all comments in the post by page; ordered by most to least votes (by 10 comments)|
 | `/community/:post_uuid/:comment_uuid`    | `GET`    | View a comment                                                                                 |
 | `/community/:post_uuid/:comment_uuid`    | `DELETE` | Delete a comment                                                                               |
@@ -105,7 +101,6 @@
 | `/rescue/:rescue_uuid`                   | `DELETE` | Deletes :rescue_uuid of logged in user                                                         |
 | `/rescue/:user/viewAllRequests`          | `GET`    | View all rescue requests from a user                                                           |
 | `/rescue/:rescue_uuid/deleteRequest`     | `GET`    | Delete a rescue request                                                                        |
-| `/rescue/deleteAllMyRequests`            | `GET`    | Delete all rescue requests                                                                     |
 | `/rescue/:rescue_uuid/viewRescueRequest` | `GET`    | View a rescue request                                                                          |
 | `/rescue/submit_a_rescue_request`        | `POST`   | Submit a request for rescue                                                                    |
 | `/*`                                     | `GET`    | Redirects to `/feed` if logged in, otherwise redirect to `/`                                   |
@@ -158,6 +153,8 @@
 | `/accounts/MyAccount`                    | `GET`    | 200           | json of own account's info                                            |
 | `/accounts/MyAccount`                    | `PUT`    | 201           | json of mysql query                                                   |
 | `/accounts/MyAccount`                    | `DELETE` | 204           |                                                                       |
+| `/pets/users/viewAllPets/page/:page_number`| `GET`    | 200         | json of pets                                                          |
+| `/pets/shelters/viewAllPets/page/:page_number`| `GET`    | 200      | json of pets                                                          |
 | `/pets/shelters/viewPetsBySex/:page_number/:sex/`|`GET`| 200        | json of page (number), pageTotal and pets with specified sex          |
 | `/pets/shelters/viewPetsByKind/:page_number/:kind/`|`GET`| 200      | json of page (number), pageTotal and pets with specified kind         |
 | `/pets/shelters/viewAllPets/page/:page_number`| `GET`| 200          | json of page (number), pageTotal and pets                             |
@@ -176,7 +173,6 @@
 | `/pets/myPets`                           | `POST`   | 201           | json of mysql query                                                   |
 | `/pets/myPets`                           | `GET`    | 200           | json of own pets                                                      |
 | `/pets/:pet_uuid`                        | `GET`    | 200           | json of pet                                                           |
-| `/pets/:pet_uuid`                        | `PUT`    | 201           | json of mysql query                                                   |
 | `/pets/:pet_uuid`                        | `DELETE` | 204           |                                                                       |
 | `/community/sortByTimeDesc/page/:page_number`| `GET`| 200           | json of posts sorted by date (from newest to oldest)                  |
 | `/community/sortByTimeAsc/page/:page_number` | `GET`| 200           | json of posts sorted by date (from oldest to newest)                  |
@@ -190,7 +186,6 @@
 | `/community/:post_uuid`                  | `DELETE` | 204           |                                                                       |
 | `/community/:post_uuid`                  | `POST`   | 201           | json of newComment                                                    |
 | `/community/:user/viewPosts`             | `GET`    | 200           | json of posts by :user                                                |
-| `/community/deleteAllMyPosts`            | `DELETE` | 204           |                                                                       |
 | `/community/viewAllComments/:post_uuid`  | `GET`    | 200           | json of comments in :post_uuid                                        |
 | `/community/:post_uuid/:comment_uuid`    | `GET`    | 200           | json `comment_uuid` in `post_uuid`                                    |
 | `/community/:post_uuid/:comment_uuid`    | `DELETE` | 204           |                                                                       |
@@ -200,79 +195,86 @@
 | `/rescue/:rescue_uuid`                   | `GET`    | 200           | json of rescue                                                        |
 | `/rescue/:rescue_uuid`                   | `DELETE` | 204           |                                                                       |
 | `/rescue/:user/viewAllRequests`          | `GET`    | 200           | json of requests from :user (only for shelters)                       |
-| `/rescue/deleteAllMyRequests`            | `DELETE` | 204           |                                                                       |
 | `/rescue/:rescue_uuid/viewRescueRequest` | `GET`    | 200           | json of rescue where rescue_uuid = :rescue_uuid                       |
 | `/rescue/submit_a_rescue_request`        | `POST`   | 201           | json of newRescue                                                     |
 
 ## Tables
 ### `users`
 
-| Field         | Type         | Null | Key | Default |
-|:--------------|:-------------|:-----|:----|:--------|
-| `Username`    | varchar(36)  | NO   | PRI | NULL    |
-| `firstname`   | varchar(36)  | NO   |     | NULL    |
-| `lastname`    | varchar(36)  | NO   |     | NULL    |
-| `birthday`    | varchar(36)  | NO   |     | NULL    |
-| `address`     | varchar(236) | NO   |     | NULL    |
-| `contactnum`  | varchar(20)  | NO   |     | NULL    |
-| `email`       | varchar(36)  | NO   | PRI | NULL    |
-| `password`    | varchar(255) | NO   |     | NULL    |
-| `icon_url`    | varchar(255) | YES  |     | NULL    |
-| `icon_width`  | varchar(36)  | YES  |     | NULL    |
-| `icon_height` | varchar(36)  | YES  |     | NULL    |
-| `created_at`  | datetime     | NO   |     | NULL    |
-| `updated_at`  | datetime     | NO   |     | NULL    |
+| Field        | Type         | Null | Key | Default | Extra |
+|--------------|--------------|------|-----|---------|-------|
+| Username     | varchar(36)  | NO   | PRI | NULL    |       |
+| firstname    | varchar(36)  | NO   |     | NULL    |       |
+| lastname     | varchar(36)  | NO   |     | NULL    |       |
+| birthday     | date         | YES  |     | NULL    |       |
+| address      | varchar(236) | NO   |     | NULL    |       |
+| contactnum   | varchar(20)  | NO   |     | NULL    |       |
+| email        | varchar(36)  | NO   | PRI | NULL    |       |
+| password     | varchar(255) | NO   |     | NULL    |       |
+| icon_url     | varchar(255) | YES  |     | NULL    |       |
+| icon_abspath | varchar(255) | YES  |     | NULL    |       |
+| icon_width   | varchar(36)  | YES  |     | NULL    |       |
+| icon_height  | varchar(36)  | YES  |     | NULL    |       |
+| created_at   | datetime     | NO   |     | NULL    |       |
+| updated_at   | datetime     | NO   |     | NULL    |       |
+
 
 ### `shelters`
-| Field          | Type         | Null | Key | Default |
-|:---------------|:-------------|:----:|:---:|:-------:|
-| `Username`     | varchar(36)  |  NO  | PRI |         |
-| `shelter_name` | varchar(52)  |  NO  |     |  NULL   |
-| `address`      | varchar(236) |  NO  |     |  NULL   |
-| `contactnum`   | varchar(20)  |  NO  |     |  NULL   |
-| `email`        | varchar(36)  |  NO  | UNI |  NULL   |
-| `password`     | varchar(255) |  NO  |     |  NULL   |
-| `icon_url`     | varchar(255) | YES  |     |  NULL   |
-| `icon_width`   | varchar(36)  | YES  |     |  NULL   |
-| `icon_height`  | varchar(36)  | YES  |     |  NULL   |
-| `file_path`    | varchar(255) |  NO  |     |  NULL   |
-| `created_at`   | datetime     |  NO  |     |  NULL   |
-| `updated_at`   | datetime     |  NO  |     |  NULL   |
+| Field        | Type         | Null | Key | Default | Extra |
+|--------------|--------------|------|-----|---------|-------|
+| Username     | varchar(52)  | NO   | PRI | NULL    |       |
+| shelter_name | varchar(52)  | NO   |     | NULL    |       |
+| address      | varchar(236) | NO   |     | NULL    |       |
+| contactnum   | varchar(20)  | NO   |     | NULL    |       |
+| email        | varchar(36)  | NO   | PRI | NULL    |       |
+| password     | varchar(255) | NO   |     | NULL    |       |
+| icon_url     | varchar(255) | YES  |     | NULL    |       |
+| icon_abspath | varchar(255) | YES  |     | NULL    |       |
+| icon_width   | varchar(36)  | YES  |     | NULL    |       |
+| icon_height  | varchar(36)  | YES  |     | NULL    |       |
+| file_path    | varchar(255) | NO   |     | NULL    |       |
+| absfile_path | varchar(255) | NO   |     | NULL    |       |
+| created_at   | datetime     | NO   |     | NULL    |       |
+| updated_at   | datetime     | NO   |     | NULL    |       |
+
 
 ### `pets_of_users`
-| Field           | Type                                 | Null | Key | Default |
-|:----------------|:-------------------------------------|:----:|:---:|:-------:|
-| `name`          | varchar(52)                          |  NO  |     |  NULL   |
-| `kind`          | enum("DOG", "CAT", "BIRD", "OTHERS") |  NO  |     |  NULL   |
-| `breed`         | varchar(36)                          |  NO  |     |  NULL   |
-| `sex`           | enum("MALE", "FEMALE")               |  NO  |     |  NULL   |
-| `birthday`      | varchar(36)                          |  NO  |     |  NULL   |
-| `description`   | varchar(200)                         | YES  |     |  NULL   |
-| `user_Username` | varchar(36)                          |  NO  | MUL |  NULL   |
-| `created_at`    | datetime                             |  NO  |     |  NULL   |
-| `updated_at`    | datetime                             |  NO  |     |  NULL   |
-| `uuid`          | varchar(36)                          |  NO  | PRI |  NULL   |
-| `url`           | varchar(255)                         | YES  |     |  NULL   |
-| `width`         | varchar(36)                          | YES  |     |  NULL   |
-| `height`        | varchar(36)                          | YES  |     |  NULL   |
+
+| Field         | Type                              | Null | Key | Default | Extra |
+|---------------|-----------------------------------|------|-----|---------|-------|
+| name          | varchar(52)                       | NO   |     | NULL    |       |
+| kind          | enum('DOG','CAT','BIRD','OTHERS') | NO   |     | NULL    |       |
+| breed         | varchar(36)                       | NO   |     | NULL    |       |
+| sex           | enum('MALE','FEMALE')             | NO   |     | NULL    |       |
+| birthday      | date                              | YES  |     | NULL    |       |
+| description   | varchar(200)                      | YES  |     | NULL    |       |
+| created_at    | datetime                          | NO   |     | NULL    |       |
+| updated_at    | datetime                          | NO   |     | NULL    |       |
+| uuid          | varchar(36)                       | NO   | PRI | NULL    |       |
+| url           | varchar(255)                      | YES  |     | NULL    |       |
+| abspath       | varchar(255)                      | YES  |     | NULL    |       |
+| width         | varchar(36)                       | YES  |     | NULL    |       |
+| height        | varchar(36)                       | YES  |     | NULL    |       |
+| user_Username | varchar(36)                       | NO   | MUL | NULL    |       |
 
 ### `pets_of_shelters`
-| Field              | Type                                 | Null | Key | Default |
-|:-------------------|:-------------------------------------|:----:|:---:|:-------:|
-| `name`             | varchar(52)                          |  NO  |     |  NULL   |
-| `kind`             | enum("DOG", "CAT", "BIRD", "OTHERS") |  NO  |     |  NULL   |
-| `breed`            | varchar(36)                          |  NO  |     |  NULL   |
-| `sex`              | enum("MALE", "FEMALE")               |  NO  |     |  NULL   |
-| `birthday`         | varchar(36)                          |  NO  |     |  NULL   |
-| `description`      | varchar(200)                         | YES  |     |  NULL   | 
-| `status`           | enum("DATES", "ADOPT", "BOTH")       | YES  |     |  NULL   |
-| `shelter_Username` | varchar(52)                          |  NO  | MUL |  NULL   |
-| `created_at`       | datetime                             |  NO  |     |  NULL   |
-| `updated_at`       | datetime                             |  NO  |     |  NULL   |
-| `uuid`             | varchar(36)                          |  NO  | PRI |  NULL   |
-| `url`              | varchar(255)                         | YES  |     |  NULL   |
-| `width`            | varchar(36)                          | YES  |     |  NULL   |
-| `height`           | varchar(36)                          | YES  |     |  NULL   |
+| Field            | Type                              | Null | Key | Default | Extra |
+|------------------|-----------------------------------|------|-----|---------|-------|
+| name             | varchar(52)                       | NO   |     | NULL    |       |
+| kind             | enum('DOG','CAT','BIRD','OTHERS') | NO   |     | NULL    |       |
+| breed            | varchar(36)                       | NO   |     | NULL    |       |
+| sex              | enum('MALE','FEMALE')             | NO   |     | NULL    |       |
+| birthday         | varchar(36)                       | NO   |     | NULL    |       |
+| description      | varchar(200)                      | YES  |     | NULL    |       |
+| status           | enum('DATES','ADOPT','BOTH')      | YES  |     | NULL    |       |
+| created_at       | datetime                          | NO   |     | NULL    |       |
+| updated_at       | datetime                          | NO   |     | NULL    |       |
+| uuid             | varchar(36)                       | NO   | PRI | NULL    |       |
+| url              | varchar(255)                      | YES  |     | NULL    |       |
+| abspath          | varchar(255)                      | YES  |     | NULL    |       |
+| width            | varchar(36)                       | YES  |     | NULL    |       |
+| height           | varchar(36)                       | YES  |     | NULL    |       |
+| shelter_Username | varchar(52)                       | NO   | MUL | NULL    |       |
 
 ### `adopts`
 | Field              | Type                                 | Null | Key | Default |
@@ -294,49 +296,56 @@
 
 
 ### `posts`
-| Field           | Type         | Null | Key | Default |
-|:----------------|:-------------|:----:|:---:|:-------:|
-| `Posted_by`     | varchar(52)  |  NO  | MUL |  NULL   |
-| `post_title`    | varchar(255) |  NO  |     |  NULL   |
-| `text_post`     | TEXT         |  NO  |     |  NULL   |
-| `votes`         | int(6)       |  NO  |     |  NULL   |
-| `comments`      | int(6)       |  NO  |     |  NULL   |
-| `image_urlpath` | varchar(255) | YES  | UNI |  NULL   |
-| `post_uuid`     | varchar(36)  |  NO  | PRI |  NULL   |
-| `created_at`    | datetime     |  NO  |     |  NULL   |
-| `updated_at`    | datetime     |  NO  |     |  NULL   |
+
+| Field         | Type         | Null | Key | Default | Extra |
+|---------------|--------------|------|-----|---------|-------|
+| Posted_by     | varchar(52)  | NO   |     | NULL    |       |
+| post_title    | varchar(255) | NO   |     | NULL    |       |
+| text_post     | text         | NO   |     | NULL    |       |
+| votes         | int(6)       | NO   |     | NULL    |       |
+| comments      | int(6)       | NO   |     | NULL    |       |
+| image_urlpath | varchar(255) | YES  | UNI | NULL    |       |
+| img_abspath   | varchar(255) | YES  | UNI | NULL    |       |
+| post_uuid     | varchar(36)  | NO   | PRI | NULL    |       |
+| created_at    | datetime     | NO   |     | NULL    |       |
+| updated_at    | datetime     | NO   |     | NULL    |       |
 
 ### `comments_on_posts`
-| Field           | Type         | Null | Key | Default |
-|:----------------|:-------------|:-----|:----|:--------|
-| `comment_title` | varchar(36)  | NO   |     | NULL    |
-| `comment_uuid`  | varchar(36)  | NO   | PRI | NULL    |
-| `commented_by`  | varchar(52)  | NO   |     | NULL    |
-| `comment_body`  | varchar(255) | NO   |     | NULL    |
-| `votes`         | int(6)       | NO   |     | NULL    |
-| `image_urlpath` | varchar(255) | YES  | UNI | NULL    |
-| `created_at`    | datetime     | NO   |     | NULL    |
-| `updated_at`    | datetime     | NO   |     | NULL    |
-| `post_uuid`     | varchar(36)  | NO   | MUL | NULL    |
+| Field         | Type         | Null | Key | Default | Extra |
+|---------------|--------------|------|-----|---------|-------|
+| comment_title | varchar(36)  | NO   |     | NULL    |       |
+| comment_uuid  | varchar(36)  | NO   | PRI | NULL    |       |
+| commented_by  | varchar(52)  | NO   |     | NULL    |       |
+| comment_body  | varchar(255) | NO   |     | NULL    |       |
+| votes         | int(6)       | NO   |     | NULL    |       |
+| img_abspath   | varchar(255) | YES  | UNI | NULL    |       |
+| image_urlpath | varchar(255) | YES  | UNI | NULL    |       |
+| created_at    | datetime     | NO   |     | NULL    |       |
+| updated_at    | datetime     | NO   |     | NULL    |       |
+| post_uuid     | varchar(36)  | NO   | MUL | NULL    |       |
+
 
 
 ### `rescue`
-| Field               | Type         | Null | Key | Default |
-|:--------------------|:-------------|:-----|:----|:--------|
-| `rescue_uuid`       | varchar(36)  | NO   | PRI | NULL    |
-| `rescue_body`       | varchar(255) | NO   |     | NULL    |
-| `rescue_imgurl`     | varchar(255) | YES  | UNI | NULL    |
-| `date_submitted`    | datetime     | NO   |     | NULL    |
-| `updated_on`        | datetime     | NO   |     | NULL    |
-| `contactnum_sender` | int(11)      | NO   |     | NULL    |
-| `email_sender`      | varchar(36)  | NO   |     | NULL    |
-| `address_sender`    | varchar(236) | NO   |     | NULL    |
-| `sender_Username`   | varchar(52)  | NO   | MUL | NULL    |
+
+| Field             | Type         | Null | Key | Default | Extra |
+|-------------------|--------------|------|-----|---------|-------|
+| rescue_uuid       | varchar(36)  | NO   | PRI | NULL    |       |
+| rescue_body       | text         | NO   |     | NULL    |       |
+| rescue_abspath    | varchar(255) | YES  | UNI | NULL    |       |
+| rescue_imgurl     | varchar(255) | YES  | UNI | NULL    |       |
+| date_submitted    | datetime     | NO   |     | NULL    |       |
+| updated_on        | datetime     | NO   |     | NULL    |       |
+| contactnum_sender | int(11)      | NO   |     | NULL    |       |
+| email_sender      | varchar(36)  | NO   |     | NULL    |       |
+| address_sender    | varchar(236) | NO   |     | NULL    |       |
+| sender_Username   | varchar(52)  | NO   | MUL | NULL    |       |
+
 
 ### `notifications`
 
 | Field         | Type         | Null | Key | Default | Extra          |
-|:--------------|:-------------|:-----|:----|:--------|:---------------|
+|---------------|--------------|------|-----|---------|----------------|
 | notif_id      | int(11)      | NO   | PRI | NULL    | auto_increment |
 | notif_for     | varchar(36)  | NO   | MUL | NULL    |                |
 | notif_message | varchar(255) | NO   |     | NULL    |                |

@@ -267,7 +267,7 @@ module.exports.showAllVotesPost = function(post_uuid, callback) {
       if (err) callback(err);
       else {
         console.log('showing votes for ' + post_uuid);
-        console.log(results);
+        console.log(results[0]);
         callback(null, results);
       }
     }
@@ -468,7 +468,7 @@ module.exports.viewAllComments = function(page_number, post_uuid, callback) {
   else offset = number * 10;
 
   connection.query(
-    'SELECT * FROM comments_on_posts WHERE post_uuid = ? ORDER BY votes LIMIT 10 OFFSET ?',
+    'SELECT * FROM comments_on_posts WHERE post_uuid = ? ORDER BY votes LIMIT 10 OFFSET ',
     [post_uuid, offset],
     function(err, results) {
       console.log(results);
