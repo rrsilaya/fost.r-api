@@ -35,9 +35,8 @@
 2. Install dependencies with `npm install`.
 3. Configure database by editing `database/db.js` and `database/connection.js` with your MySQL credentials.
 4. Create database with `node ./database/config.js`.
-5. Populate with test data by running `npm populate`.
-6. Start the server with `npm run devstart`.
-7. Access the api through `http://localhost:3000/api/`.
+5. Start the server with `npm run devstart`.
+6. Access the api through `http://localhost:3000/api/`.
 
 ## Routes
 
