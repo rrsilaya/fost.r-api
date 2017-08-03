@@ -368,19 +368,20 @@ module.exports.viewSpecificAdoptRequest = function(uuid, shelter, callback) {
     [uuid, shelter])
 };*/
 
-module.exports.datePet = function(newDateRequest, callback) {
-  var pet = newDateRequest.pet_uuid;
-  var status = 'DATES';
+module.exports.datePet = function(newDate, callback) {
+  var pet = newDate.pet_uuid;
+  var status = 'ADOPT';
   var both = 'BOTH';
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ?&& uuid = ?',
+    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? && uuid = ?',
     [status, both, pet],
     (err, results) => {
+      console.log(newDate);
       if (err) return callback(err);
       else if (results.length > 0) {
         connection.query(
           'INSERT INTO dates SET ?',
-          newDateRequest,
+          newDate,
           (err, query) => {
             if (err) callback(err);
             if (query) callback(null, true);
@@ -391,6 +392,44 @@ module.exports.datePet = function(newDateRequest, callback) {
     }
   );
 };
+
+module.exports.viewSpecificDate
+
+module.exports.approveDate = function(shelter, uuid, callback){
+  var today = new Date();
+  var update = {
+    status:'APPROVED',
+    updated_at:today
+  }
+  connection.query('SELECT * FROM pets_of_shelters where shelter_Username = ? && uuid = ?', [shelter, uuid], (err, results)=>{
+    if (err) callback(err);
+    else{
+      connection.query('UPDATE dates SET ? WHERE dates_uuid = ?', [update, uuid], (err, results)=>{
+        if (err) callback(err);
+        return callback(null, results); // mysql query results
+      });
+    }
+  });
+};
+
+module.exports.rejectDate = function(shelter, uuid, callback){
+  var today = new Date();
+  var update = {
+    status:'REJECTED',
+    updated_at:today
+  }
+  connection.query('SELECT * FROM pets_of_shelters where shelter_Username = ? && uuid = ?', [shelter, uuid], (err, results)=>{
+    if (err) callback(err);
+    else{
+      connection.query('UPDATE dates SET ? WHERE dates_uuid = ?', [update, uuid], (err, results)=>{
+        if (err) callback(err);
+        return callback(null, results); // mysql query results
+        
+      });
+    }
+  });
+};
+
 
 module.exports.viewDateRequests = function(shelter, callback) {
   connection.query(
@@ -403,16 +442,12 @@ module.exports.viewDateRequests = function(shelter, callback) {
   );
 };
 
-module.exports.viewSpecificDateRequest = function(uuid, shelter, callback) {
+module.exports.viewSpecificDateRequest = function(uuid, callback) {
   connection.query(
-    'SELECT * FROM pets_of_shelters RIGHT OUTER JOIN dates on pets_of_shelters.uuid = adopts.pet_uuid where shelter_Username = ? && dates_uuid = ?'[
-      (shelter, uuid)
-    ],
+    'SELECT * FROM dates WHERE dates_uuid = ?', uuid,
     (err, results) => {
       if (err) return callback(err);
-      else if (results.length > 0) {  
-        callback(null, results);
-      }
+      return callback(null, results);
     }
   );
 };

@@ -174,16 +174,45 @@ router.post('/dates/:pet_uuid', function(req, res) {
       pet_uuid: req.params.pet_uuid,
       status:'PENDING',
       dates_uuid: uuid,
+      date:req.body.date,
       created_at: today,
       updated_at: today
     };
     controller.datePet(newDate, function(err, results) {
-      console.log('results: ' + results);
       if (err) res.status(500).json(err);
-      if (results) res.status(200).json(newDate);
-      else if (!results) {
-        console.log('That pet is not for dates.');
-        res.status(404).send(null);
+      if(results) res.status(201).json({date: newDate.date});
+      else res.status(404).send(null)
+    });
+  }
+});
+
+router.put('/dates/approve/:pet_uuid', function(req, res){
+  if(req.session.body.accountType === 'shelter'){
+    var shelter = req.session.body.Username;
+    var uuid = req.params.pet_uuid;
+    controller.approveDate(shelter, uuid, function(err, results){
+      if (err) res.status(500).json(err);
+      if (results.changedRows){
+        controller.viewSpecificDateRequest(uuid, function(err, request){
+          if (err) res.status(500).json(err);
+          res.status(201).json(request);
+        });
+      }
+    });
+  }
+});
+
+router.put('/dates/reject/:pet_uuid', function(req, res){
+  if(req.session.body.accountType === 'shelter'){
+    var shelter = req.session.body.Username;
+    var uuid = req.params.pet_uuid;
+    controller.rejectDate(shelter, uuid, function(err, results){
+      if (err) res.status(500).json(err);
+      if (results.changedRows){
+        controller.viewSpecificDateRequest(uuid, function(err, request){
+          if (err) res.status(500).json(err);
+          res.status(201).json(request);
+        });
       }
     });
   }
