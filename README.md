@@ -22,6 +22,8 @@
   * [`shelters`](#shelters)
   * [`pets_of_users`](#pets_of_users)
   * [`pets_of_shelters`](#pets_of_shelters)
+  * [`adopts`](#adopts)
+  * [`dates`](#dates)
   * [`posts`](#posts)
   * [`comments_on_posts`](#comments_on_posts)
   * [`rescue`](#rescue)
@@ -88,7 +90,7 @@
 | `/community/:post_uuid`                  | `PUT`    | Vote a post given its uuid                                                                     |
 | `/community/:post_uuid`                  | `DELETE` | Delete a post given its uuid (iff post is posted by the user itself)                           |
 | `/community/:post_uuid`                  | `POST`   | Add a comment                                                                                  |
-| `/community/:user/viewPosts`             | `GET`    | View all posts of a user                                                                       |
+| `/community/:user/viewPosts/page/:page_number`| `GET`    | View all posts of a user (shelter or user) by page         |
 | `/community/viewAllComments/:post_uuid/page/:page_number`| `GET`| View all comments in the post by page; ordered by most to least votes (by 10 comments)|
 | `/community/:post_uuid/:comment_uuid`    | `GET`    | View a comment                                                                                 |
 | `/community/:post_uuid/:comment_uuid`    | `DELETE` | Delete a comment                                                                               |
@@ -131,6 +133,10 @@
 | `/pets/myPets`                    | `POST` | <ul><li>name</li><li>kind *(DOG, CAT, BIRD, or OTHERS)*</li><li>breed</li><li>sex *(MALE or FEMALE)*</li><li>birthday</li></ul>                  | <ul><li>photo</li></ul> |
 | `/accounts/MyAccount`             | `PUT`  | refer to `signup/` route depending on account type                                                                                               |                         |
 | `/pets/:pet_uuid`                 | `PUT`  | refer to `pets/myPets` route                                                                                                                     |                         |
+| `/pets/adopt/:pet_uuid`           | `POST`  |  route                                                                                                                     |                         |
+| `/pets/dates/:pet_uuid`           | `POST` |  date                            |                         |
+| `/pets/dates/approve/:pet_uuid`   | `PUT`  |                              |                         |
+| `/pets/dates/reject/:pet_uuid`    | `PUT`  |                              |                         |
 | `/community/addPost`              | `POST` | <ul><li>post_title</li><li>text_post</li></ul>                                                                                                   | <ul><li>photo</li></ul> |
 | `/community/:post_uuid`           | `POST` | <ul><li>comment_body</li><li>comment_title</li></ul>                                                                                                                   | <ul><li>photo</li></ul> |
 | `/rescue/submit_a_rescue_request` | `POST` | <ul><li>rescue_body</li></ul>                                                                                                                    | <ul><li>photo</li></ul> |
@@ -161,7 +167,9 @@
 | `/pets/adopt/:pet_uuid`                  | `POST`   | 201           | json of true or false if submitted                                    |
 | `/pets/dates/page/:page_number`          | `GET`    | 200           | json of page (number), pageTotal and pets for dates                   |
 | `/pets/dates/:owner`                     | `GET`    | 200           | json of pets for dates owned by :owner                                |
-| `/pets/dates/:pet_uuid`                  | `POST`   | 201           | json of true or false if submitted                                    |
+| `/pets/dates/:pet_uuid`                  | `POST`   | 201           | json of time of the date submitted by the user                        |
+| `/pets/dates/approve/:pet_uuid`          |  `PUT`   | 201           | json of the updated date request                                      |
+| `/pets/dates/reject/:pet_uuid`           |  `PUT`   | 201           | json of the updated date request                                      |
 | `/pets/both/page/:page_number`           | `GET`    | 200           | json of page (number), pageTotal and pets for both adopt and dates    |
 | `/pets/:owner/viewShelterPets`           | `GET`    | 200           | json of pets of :owner                                                |
 | `/pets/:owner/viewUserPets`              | `GET`    | 200           | json of pets of :owner                                                |
@@ -287,7 +295,8 @@
 |:-------------------|:-------------------------------------|:----:|:---:|:-------:|
 | `user_Username`    | varchar(36)                          |  NO  | MUL |  NULL   |
 | `pet_uuid`         | varchar(36)                          |  NO  | MUL |  NULL   | 
-| `adopt_uuid`       | varchar(36)                          |  No  |     |  NULL   |
+| `status`           | enum('PENDING', 'APPROVED', 'REJECTED')|  NO|     |  NULL   |
+| `dates_uuid`       | varchar(36)                          |  No  |     |  NULL   |
 | `created_at`       | datetime                             |  NO  |     |  NULL   |
 | `updated_at`       | datetime                             |  NO  |     |  NULL   |
 

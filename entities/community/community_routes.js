@@ -206,14 +206,20 @@ view all post of a specific user/shelter ;
 'user' will be used for both user and shelter
 does not show comments on the post
 */
-router.get('/:user/viewPosts/:page_number', function(req, res, next) {
+router.get('/:user/viewPosts/page/:page_number', function(req, res, next) {
   var user = req.params.user;
   var page_number = req.params.page_number;
-  controller.viewPostsOf(user, function(err, posts) {
+  controller.countPostsOf(page_number, function(err, count){
+    if (err) res.status(500).json(err);
+    else{
+      controller.viewPostsOf(page_number, user, function(err, posts) {
     if (err)
       return res.status(500).json(err); // server error
-    else res.json(posts); // returns posts of specified user
+    else res.status(200).json({page:page_number, pageTotal:count, posts:posts}); // returns posts of specified user
   });
+    }
+  });
+  
 });
 
 /*delete a post given its uuid*/
@@ -398,7 +404,7 @@ router.get('/viewAllComments/:post_uuid/page/:page_number', function(
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 10);
+      count = Math.ceil(count / 5);
       controller.viewAllComments(page_number, post_uuid, function(
         err,
         comments

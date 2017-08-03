@@ -128,7 +128,9 @@ connection.query(
 CREATE TABLE dates(\
     `user_Username` varchar(36) NOT NULL,\
     `pet_uuid` varchar(36) NOT NULL,\
+    `status` enum("PENDING", "APPROVED", "REJECTED") NOT NULL,\
     `dates_uuid` varchar(36) NOT NULL PRIMARY KEY,\
+    `date` date NOT NULL,\
     `created_at` datetime NOT NULL,\
     `updated_at` datetime NOT NULL,\
     CONSTRAINT dates_users_fk FOREIGN KEY (user_Username)\
