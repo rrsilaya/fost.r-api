@@ -61,10 +61,8 @@ module.exports.countAllSheltersPetsByKind = function(kind, callback) {
 
 module.exports.viewUsersPetsByKind = function(page_number, kind, callback) {
   var kind = kind.toUpperCase();
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 25;
+  var offset = (number-1 )* 10;
 
   connection.query(
     'SELECT * FROM pets_of_users WHERE kind = ? LIMIT 25 OFFSET ?',
@@ -78,10 +76,8 @@ module.exports.viewUsersPetsByKind = function(page_number, kind, callback) {
 
 module.exports.viewSheltersPetsByKind = function(page_number, kind, callback) {
   var kind = kind.toUpperCase();
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 25;
+  var offset = (number-1 )* 10;
 
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE kind = ? LIMIT 25 OFFSET ?',
@@ -121,10 +117,9 @@ module.exports.countAllSheltersPetsBySex = function(sex, callback) {
 
 module.exports.viewUsersPetsBySex = function(page_number, sex, callback) {
   var sex = sex.toUpperCase();
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 25;
+  var offset = (number-1 )* 10;
+
   connection.query(
     'SELECT * FROM pets_of_users WHERE sex = ? LIMIT 25 OFFSET ?',
     [sex, offset],
@@ -137,10 +132,9 @@ module.exports.viewUsersPetsBySex = function(page_number, sex, callback) {
 
 module.exports.viewSheltersPetsBySex = function(page_number, sex, callback) {
   var sex = sex.toUpperCase();
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 25;
+  var offset = (number-1 )* 10;
+
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE sex = ? LIMIT 25 OFFSET ?',
     [sex, offset],
@@ -165,10 +159,9 @@ module.exports.viewSheltersPetsBySex = function(page_number, sex, callback) {
 
 /* view all shelter  pets */
 module.exports.viewAllShelterPets = function(page_number, callback) {
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 25;
+  var offset = (number-1 )* 10;
+
   connection.query(
     'SELECT * FROM pets_of_shelters LIMIT 25 OFFSET ?',
     offset,
@@ -195,10 +188,9 @@ module.exports.countAllPetsForDates = function(callback) {
 module.exports.viewAllPetsForDates = function(page_number, callback) {
   var status = 'DATES';
   var both = 'BOTH';
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 25;
+  var offset = (number-1 )* 10;
+
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? LIMIT 25 OFFSET ?',
     [status, both, offset],
@@ -226,11 +218,8 @@ module.exports.countAllPetsForAdopt = function(callback) {
 module.exports.viewAllPetsForAdopt = function(page_number, callback) {
   var status = 'ADOPT';
   var both = 'BOTH';
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 25;
-  console.log('offset : ' + offset + ' ' + status + ' ' + both);
+  var offset = (number-1 )* 10;
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? LIMIT 25 OFFSET ?',
     [status, both, offset],
@@ -255,10 +244,9 @@ module.exports.countAllPetsForBoth = function(callback) {
 
 module.exports.viewAllPetsForBoth = function(page_number, callback) {
   var status = 'BOTH';
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 25;
+  var offset = (number-1 )* 10;
+
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE status = ? LIMIT 25 OFFSET ?',
     [status, offset],
@@ -270,10 +258,8 @@ module.exports.viewAllPetsForBoth = function(page_number, callback) {
 };
 
 module.exports.viewAllUserPets = function(page_number, callback) {
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 25;
+  var offset = (number-1 )* 10;
   connection.query(
     'SELECT * FROM pets_of_users LIMIT 25 OFFSET ?',
     offset,

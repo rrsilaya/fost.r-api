@@ -51,11 +51,8 @@ module.exports.countAllPosts = function(callback) {
 
 // newest to oldest
 module.exports.sortByTimeDesc = function(page_number, callback) {
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 10;
-
+  var offset = (number-1 )* 10;
   connection.query(
     'SELECT * FROM posts ORDER BY created_at DESC LIMIT 10 OFFSET ?',
     offset,
@@ -68,10 +65,8 @@ module.exports.sortByTimeDesc = function(page_number, callback) {
 
 // oldest to newest
 module.exports.sortByTimeAsc = function(page_number, callback) {
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 10;
+  var offset = (number-1 )* 10;
   connection.query(
     'SELECT * FROM posts ORDER BY created_at LIMIT 10 OFFSET ?',
     offset,
@@ -84,10 +79,8 @@ module.exports.sortByTimeAsc = function(page_number, callback) {
 
 // most to least commented
 module.exports.sortByCommentsDesc = function(page_number, callback) {
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 10;
+  var offset = (number-1 )* 10;
   connection.query(
     'SELECT * FROM posts ORDER BY comments DESC LIMIT 10 OFFSET ?',
     offset,
@@ -100,10 +93,8 @@ module.exports.sortByCommentsDesc = function(page_number, callback) {
 
 // least to most commented
 module.exports.sortByCommentsAsc = function(page_number, callback) {
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 10;
+  var offset = (number-1 )* 10;
   connection.query(
     'SELECT * FROM posts ORDER BY comments LIMIT 10 OFFSET ?',
     offset,
@@ -116,10 +107,8 @@ module.exports.sortByCommentsAsc = function(page_number, callback) {
 
 // most to least voted
 module.exports.sortByVotesDesc = function(page_number, callback) {
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 10;
+  var offset = (number-1 )* 10;
   connection.query(
     'SELECT * FROM posts ORDER BY votes DESC LIMIT 10 OFFSET ?',
     offset,
@@ -132,10 +121,8 @@ module.exports.sortByVotesDesc = function(page_number, callback) {
 
 // least to most voted
 module.exports.sortByVotesAsc = function(page_number, callback) {
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 10;
+  var offset = (number-1 )* 10;
   connection.query(
     'SELECT * FROM posts ORDER BY votes LIMIT 10 OFFSET ?',
     offset,
@@ -462,11 +449,8 @@ module.exports.countAllComments = function(post_uuid, callback) {
 
 //view all comments in a post
 module.exports.viewAllComments = function(page_number, post_uuid, callback) {
-  var offset;
   var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 10;
-
+  var offset = (number-1 )* 10;
   connection.query(
     'SELECT * FROM comments_on_posts WHERE post_uuid = ? ORDER BY votes LIMIT 10 OFFSET ?',
     [post_uuid, offset],

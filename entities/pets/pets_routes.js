@@ -172,6 +172,7 @@ router.post('/dates/:pet_uuid', function(req, res) {
     var newDate = {
       user_Username: req.session.body.Username,
       pet_uuid: req.params.pet_uuid,
+      status:'PENDING',
       dates_uuid: uuid,
       created_at: today,
       updated_at: today

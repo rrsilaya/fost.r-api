@@ -287,7 +287,8 @@
 |:-------------------|:-------------------------------------|:----:|:---:|:-------:|
 | `user_Username`    | varchar(36)                          |  NO  | MUL |  NULL   |
 | `pet_uuid`         | varchar(36)                          |  NO  | MUL |  NULL   | 
-| `adopt_uuid`       | varchar(36)                          |  No  |     |  NULL   |
+| `status`           | enum('PENDING', 'APPROVED', 'REJECTED')|  NO|     |  NULL   |
+| `dates`            | varchar(36)                          |  No  |     |  NULL   |
 | `created_at`       | datetime                             |  NO  |     |  NULL   |
 | `updated_at`       | datetime                             |  NO  |     |  NULL   |
 
