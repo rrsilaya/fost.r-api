@@ -22,6 +22,8 @@
   * [`shelters`](#shelters)
   * [`pets_of_users`](#pets_of_users)
   * [`pets_of_shelters`](#pets_of_shelters)
+  * [`adopts`](#adopts)
+  * [`dates`](#dates)
   * [`posts`](#posts)
   * [`comments_on_posts`](#comments_on_posts)
   * [`rescue`](#rescue)
