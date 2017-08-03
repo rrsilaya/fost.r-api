@@ -62,10 +62,6 @@ router.get('/notifications', function(req, res, next) {
   });
 });
 
-router.get('/feed', function(req, res, next) {
-  console.log('Feed');
-  res.status(200).end();
-});
 
 router.get('/logout', function(req, res, next) {
   req.session.destroy();

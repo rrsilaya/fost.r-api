@@ -63,7 +63,7 @@ router.post('/shelter', function(req, res, next) {
 });
 
 router.get('*', function(req, res, next) {
-  if (req.session.body) res.redirect('/api/feed');
+  if (req.session.body) res.redirect('/api/');
 });
 
 module.exports = router;

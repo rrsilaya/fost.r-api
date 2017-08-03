@@ -44,16 +44,15 @@
 | :--------------------------------------- | :------- | :--------------------------------------------------------------------------------------------- |
 | `/`                                      | `GET`    | Displays message(temp)                                                                         |
 | `/session`                               | `GET`    | Returns the account type (if logged in)                                                        |
-| `/login/user`                            | `POST`   | Redirects to `/feed` if logged in                                                              |
-| `/login/shelter`                         | `POST`   | Redirects to `/feed` if logged in                                                              |
+| `/login/user`                            | `POST`   | Redirects to `/` if logged in                                                                  |
+| `/login/shelter`                         | `POST`   | Redirects to `/` if logged in                                                                  |
 | `/logout`                                | `GET`    | Redirects to `/` after user logged out                                                         |
 | `/signup/userUsername`                   | `POST`   | Checks if entered username is already taken (users)                                            |
 | `/signup/userEmail`                      | `POST`   | Checks if entered email is already taken (users)                                               |
 | `/signup/shelterUsername`                | `POST`   | Checks if username is already taken (shelters)                                                 |
 | `/signup/shelterUsername`                | `POST`   | Checks if entered email is already taken (shelters)                                            |
-| `/signup/user`                           | `POST`   | Redirects to `/feed` if logged in                                                              |
-| `/signup/shelter`                        | `POST`   | Redirects to `/feed` if logged in                                                              |
-| `/feed `                                 | `GET`    | Displays message (temp)                                                                        |
+| `/signup/user`                           | `POST`   | Redirects to `/` if logged in                                                                  |
+| `/signup/shelter`                        | `POST`   | Redirects to `/` if logged in                                                                  |
 | `/notifications`                         | `GET`    | View all notifications                                                                         |
 | `/accounts/viewShelters/page/:page_number`| `GET`   | View all shelter accounts by page                                                              |
 | `/accounts/viewUsers/page/:page_number`  | `GET`    | View all user accounts by page                                                                 |
@@ -102,7 +101,7 @@
 | `/rescue/:rescue_uuid/deleteRequest`     | `GET`    | Delete a rescue request                                                                        |
 | `/rescue/:rescue_uuid/viewRescueRequest` | `GET`    | View a rescue request                                                                          |
 | `/rescue/submit_a_rescue_request`        | `POST`   | Submit a request for rescue                                                                    |
-| `/*`                                     | `GET`    | Redirects to `/feed` if logged in, otherwise redirect to `/`                                   |
+| `/*`                                     | `GET`    | redirect to `/`                                                                                |
 
 
 
@@ -146,7 +145,6 @@
 | `/signup/user`                           | `POST`   | 201           | json of newUser                                                       |
 | `/signup/shelter`                        | `POST`   | 201           | json of newShelter                                                    |
 | `/notifications`                         | `GET`    | 200           | json of notifications                                                 |
-| `/feed `                                 | `GET`    | 200           |                                                                       |
 | `/accounts/viewShelters`                 | `GET`    | 200           | json of shelters                                                      |
 | `/accounts/viewUsers`                    | `GET`    | 200           | json of users                                                         |
 | `/accounts/MyAccount`                    | `GET`    | 200           | json of own account's info                                            |

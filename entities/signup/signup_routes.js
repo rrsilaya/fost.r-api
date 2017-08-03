@@ -86,7 +86,6 @@ router.post('/shelter', function(req, res, next) {
         created_at: today,
         updated_at: today
       };
-
       if (req.files.icon) {
         const icon = req.files.icon; //use later for file-upload
         var mime = req.files.icon.mimetype;
@@ -101,17 +100,20 @@ router.post('/shelter', function(req, res, next) {
               var dimensions = sizeOf(url);
               newShelter.icon_width = dimensions.width;
               newShelter.icon_height = dimensions.height;
-              newShelter.absfile_path=uploadpath;
             }
           });
         } else console.log('image only for icons');
-      }
+      }else newShelter.icon_url=newShelter.icon_height=newShelter.icon_width=null;
       file.mv(uploadpath, function(err) {
         if (err) {
           console.log(err);
           console.log('File not uploaded, please try again');
           res.status(500).redirect('/api/signup');
-        } else newShelter.file_path ='/signup/shelter_docs/' + proofname;
+        } else {
+          newShelter.file_path ='/signup/shelter_docs/' + proofname;
+          newShelter.absfile_path=uploadpath;
+        }
+
       });
       controller.registerShelter(newShelter, function(err, callback) {
         if (err) {
@@ -289,7 +291,7 @@ router.post('/user', function(req, res, next) {
 });
 
 router.get('*', function(req, res, next) {
-  if (req.session.body) res.redirect('/api/feed');
+  if (req.session.body) res.redirect('/api/');
 });
 
 module.exports = router;
