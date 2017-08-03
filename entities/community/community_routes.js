@@ -31,7 +31,7 @@ router.get('/sortByTimeDesc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.sortByTimeDesc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
         res
@@ -50,7 +50,7 @@ router.get('/sortByTimeAsc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.sortByTimeAsc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
         res
@@ -69,7 +69,7 @@ router.get('/sortByCommentsDesc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.sortByCommentsDesc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
         res
@@ -88,7 +88,7 @@ router.get('/sortByCommentsAsc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.sortByCommentsAsc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
         res
@@ -107,7 +107,7 @@ router.get('/sortByVotesDesc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.sortByVotesDesc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
         res
@@ -126,7 +126,7 @@ router.get('/sortByVotesAsc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.sortByVotesAsc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
         res
