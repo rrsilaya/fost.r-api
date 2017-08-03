@@ -1,8 +1,8 @@
 # database files
-entities/*.jpg
-entities/*.png
-entities/*.gif
-entities/*.pdf
+entities/**/*.jpg
+entities/**/*.png
+entities/**/*.gif
+entities/**/*.pdf
 
 # Logs
 *.log
