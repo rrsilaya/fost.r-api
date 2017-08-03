@@ -234,6 +234,16 @@ router.put('/dates/reject/:pet_uuid', function(req, res){
   }
 });
 
+router.get('/dateRequests', function(req, res){
+  if (req.session.body.accountType === 'shelter'){
+    var shelter = req.session.body.Username;
+    controller.viewDateRequests(shelter, function(err, results){
+      if (err) res.status(500).json(err);
+      res.status(200).json(results);
+    });
+  }
+});
+
 router.get('/adoptRequests', function(req, res) {
   if (req.session.body.accountType === 'shelter') {
     var Username = req.session.body.Username;
