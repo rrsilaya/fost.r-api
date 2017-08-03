@@ -90,7 +90,7 @@
 | `/community/:post_uuid`                  | `PUT`    | Vote a post given its uuid                                                                     |
 | `/community/:post_uuid`                  | `DELETE` | Delete a post given its uuid (iff post is posted by the user itself)                           |
 | `/community/:post_uuid`                  | `POST`   | Add a comment                                                                                  |
-| `/community/:user/viewPosts`             | `GET`    | View all posts of a user                                                                       |
+| `/community/:user/viewPosts/page/:page_number`| `GET`    | View all posts of a user (shelter or user) by page         |
 | `/community/viewAllComments/:post_uuid/page/:page_number`| `GET`| View all comments in the post by page; ordered by most to least votes (by 10 comments)|
 | `/community/:post_uuid/:comment_uuid`    | `GET`    | View a comment                                                                                 |
 | `/community/:post_uuid/:comment_uuid`    | `DELETE` | Delete a comment                                                                               |

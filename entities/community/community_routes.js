@@ -206,7 +206,7 @@ view all post of a specific user/shelter ;
 'user' will be used for both user and shelter
 does not show comments on the post
 */
-router.get('/:user/viewPosts/:page_number', function(req, res, next) {
+router.get('/:user/viewPosts/page/:page_number', function(req, res, next) {
   var user = req.params.user;
   var page_number = req.params.page_number;
   controller.countPostsOf(page_number, function(err, count){
