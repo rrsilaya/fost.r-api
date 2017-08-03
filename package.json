@@ -8,7 +8,6 @@
     "devstart": "nodemon server.js",
     "build": "mysql -u root -p > ./database/schema.sql",
     "prettify": "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write \"./entities/**/*.js\" \"./database/*.js\"",
-    "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.js": [

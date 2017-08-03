@@ -204,9 +204,7 @@ module.exports.viewAllPetsForDates = function(page_number, callback) {
     [status, both, offset],
     function(err, results) {
       if (err) callback(err); // some error with query
-      if (results.length > 0)
         callback(null, results); // found results on that page
-      else callback(null, false); // no results on that page
     }
   );
 };
@@ -238,9 +236,7 @@ module.exports.viewAllPetsForAdopt = function(page_number, callback) {
     [status, both, offset],
     (err, results) => {
       if (err) callback(err); // some error with query
-      if (results.length > 0)
         callback(null, results); // found results on that page
-      else callback(null, false); // no results on that page
     }
   );
 };
@@ -268,9 +264,7 @@ module.exports.viewAllPetsForBoth = function(page_number, callback) {
     [status, offset],
     function(err, results) {
       if (err) return callback(err); // some error with query
-      if (results.length > 0)
         return callback(null, results); // found results on that page
-      else callback(null, false); // no results on that page
     }
   );
 };
@@ -372,18 +366,7 @@ module.exports.viewSpecificAdoptRequest = function(uuid, shelter, callback) {
     ],
     (err, results) => {
       if (err) return callback(err);
-      else if (results.length > 0) {
-        console.log(
-          'The adopt request ' +
-            uuid +
-            ' for ' +
-            shelter +
-            "'s pet " +
-            results.pet_uuid +
-            ' exists.'
-        );
         callback(null, results);
-      }
     }
   );
 };
@@ -441,16 +424,7 @@ module.exports.viewSpecificDateRequest = function(uuid, shelter, callback) {
     ],
     (err, results) => {
       if (err) return callback(err);
-      else if (results.length > 0) {
-        console.log(
-          'The date request ' +
-            uuid +
-            ' for ' +
-            shelter +
-            "'s pet " +
-            results.pet_uuid +
-            ' exists.'
-        );
+      else if (results.length > 0) {  
         callback(null, results);
       }
     }
