@@ -54,17 +54,14 @@ module.exports.sortByTimeDesc = function(page_number, callback) {
   var offset;
   var number = parseInt(page_number);
   if (number === 1) offset = 0;
-  else offset = number * 15;
+  else offset = number * 10;
 
   connection.query(
-    'SELECT * FROM posts ORDER BY created_at DESC LIMIT 15 OFFSET ?',
+    'SELECT * FROM posts ORDER BY created_at DESC LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      console.log(results);
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      return callback(null, results); // success; has results on that page
     }
   );
 };
@@ -74,15 +71,13 @@ module.exports.sortByTimeAsc = function(page_number, callback) {
   var offset;
   var number = parseInt(page_number);
   if (number === 1) offset = 0;
-  else offset = number * 15;
+  else offset = number * 10;
   connection.query(
-    'SELECT * FROM posts ORDER BY created_at LIMIT 15 OFFSET ?',
+    'SELECT * FROM posts ORDER BY created_at LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
-      if (err) return callback(err); // some error with query
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      if (err) return callback(err); // some error with query\
+      return callback(null, results); // success; has results on that page
     }
   );
 };
@@ -92,15 +87,13 @@ module.exports.sortByCommentsDesc = function(page_number, callback) {
   var offset;
   var number = parseInt(page_number);
   if (number === 1) offset = 0;
-  else offset = number * 15;
+  else offset = number * 10;
   connection.query(
-    'SELECT * FROM posts ORDER BY comments DESC LIMIT 15 OFFSET ?',
+    'SELECT * FROM posts ORDER BY comments DESC LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      return callback(null, results); // success; has results on that page
     }
   );
 };
@@ -110,15 +103,13 @@ module.exports.sortByCommentsAsc = function(page_number, callback) {
   var offset;
   var number = parseInt(page_number);
   if (number === 1) offset = 0;
-  else offset = number * 15;
+  else offset = number * 10;
   connection.query(
-    'SELECT * FROM posts ORDER BY comments LIMIT 15 OFFSET ?',
+    'SELECT * FROM posts ORDER BY comments LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      return callback(null, results); // success; has results on that page
     }
   );
 };
@@ -128,15 +119,13 @@ module.exports.sortByVotesDesc = function(page_number, callback) {
   var offset;
   var number = parseInt(page_number);
   if (number === 1) offset = 0;
-  else offset = number * 15;
+  else offset = number * 10;
   connection.query(
-    'SELECT * FROM posts ORDER BY votes DESC LIMIT 15 OFFSET ?',
+    'SELECT * FROM posts ORDER BY votes DESC LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      return callback(null, results); // success; has results on that page
     }
   );
 };
@@ -146,15 +135,13 @@ module.exports.sortByVotesAsc = function(page_number, callback) {
   var offset;
   var number = parseInt(page_number);
   if (number === 1) offset = 0;
-  else offset = number * 15;
+  else offset = number * 10;
   connection.query(
-    'SELECT * FROM posts ORDER BY votes LIMIT 15 OFFSET ?',
+    'SELECT * FROM posts ORDER BY votes LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
-      if (results.length > 0)
-        return callback(null, results); // success; has results on that page
-      else return callback(null, null);
+      return callback(null, results); // success; has results on that page
     }
   );
 };

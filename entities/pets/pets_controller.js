@@ -33,13 +33,13 @@ module.exports.countAllUsersPets = function(callback) {
   );
 };
 
-/** Sorting Pets **/
+/********************************* F I L T E R I N G *********************************/
 
-module.exports.countAllPetsByKind = function(type, kind, callback) {
+module.exports.countAllUsersPetsByKind = function(kind, callback) {
   var kind = kind.toUpperCase();
   connection.query(
-    'SELECT COUNT(*) as count FROM ? WHERE kind = ?',
-    [type, sex],
+    'SELECT COUNT(*) as count FROM pets_of_users WHERE kind = ?',
+    kind,
     (err, count) => {
       if (err) callback(err);
       callback(null, count[0].count); // this will return an integer of the count of all the posts
@@ -47,28 +47,11 @@ module.exports.countAllPetsByKind = function(type, kind, callback) {
   );
 };
 
-module.exports.viewPetsByKind = function(type, page_number, kind, callback) {
+module.exports.countAllSheltersPetsByKind = function(kind, callback) {
   var kind = kind.toUpperCase();
-  var offset;
-  var number = parseInt(page_number);
-  if (number === 1) offset = 0;
-  else offset = number * 25;
-
   connection.query(
-    'SELECT * FROM ? WHERE kind = ? LIMIT 25 OFFSET ?',
-    [type, kind, offset],
-    (err, results) => {
-      if (err) return callback(err); // some error with query
-      return callback(null, results); // successful
-    }
-  );
-};
-
-module.exports.countAllPetsBySex = function(type, sex, callback) {
-  var sex = sex.toUpperCase();
-  connection.query(
-    'SELECT COUNT(*) as count FROM ? WHERE sex = ?',
-    [type, sex],
+    'SELECT COUNT(*) as count FROM pets_of_shelters WHERE kind = ?',
+    kind,
     (err, count) => {
       if (err) callback(err);
       callback(null, count[0].count); // this will return an integer of the count of all the posts
@@ -76,22 +59,98 @@ module.exports.countAllPetsBySex = function(type, sex, callback) {
   );
 };
 
-module.exports.viewPetsBySex = function(type, page_number, sex, callback) {
-  var sex = sex.toUpperCase();
+module.exports.viewUsersPetsByKind = function(page_number, kind, callback) {
+  var kind = kind.toUpperCase();
   var offset;
   var number = parseInt(page_number);
   if (number === 1) offset = 0;
   else offset = number * 25;
 
   connection.query(
-    'SELECT * FROM ? WHERE kind = ? LIMIT 25 OFFSET ?',
-    [type, kind, offset],
+    'SELECT * FROM pets_of_users WHERE kind = ? LIMIT 25 OFFSET ?',
+    [kind, offset],
     (err, results) => {
       if (err) return callback(err); // some error with query
       return callback(null, results); // successful
     }
   );
 };
+
+module.exports.viewSheltersPetsByKind = function(page_number, kind, callback) {
+  var kind = kind.toUpperCase();
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 25;
+
+  connection.query(
+    'SELECT * FROM pets_of_shelters WHERE kind = ? LIMIT 25 OFFSET ?',
+    [kind, offset],
+    (err, results) => {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // successful
+    }
+  );
+};
+
+module.exports.countAllUsersPetsBySex = function(sex, callback) {
+  var sex = sex.toUpperCase();
+  connection.query(
+    'SELECT COUNT(*) as count FROM pets_of_users WHERE sex = ?',
+    sex,
+    (err, count) => {
+      if (err) callback(err);
+      console.log('count ' + count);
+      callback(null, count[0].count); // this will return an integer of the count of all the posts
+    }
+  );
+};
+
+module.exports.countAllSheltersPetsBySex = function(sex, callback) {
+  var sex = sex.toUpperCase();
+  connection.query(
+    'SELECT COUNT(*) as count FROM pets_of_shelters WHERE sex = ?',
+    sex,
+    (err, count) => {
+      if (err) callback(err);
+      console.log('count ' + count);
+      callback(null, count[0].count); // this will return an integer of the count of all the posts
+    }
+  );
+};
+
+module.exports.viewUsersPetsBySex = function(page_number, sex, callback) {
+  var sex = sex.toUpperCase();
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 25;
+  connection.query(
+    'SELECT * FROM pets_of_users WHERE sex = ? LIMIT 25 OFFSET ?',
+    [sex, offset],
+    (err, results) => {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // successful
+    }
+  );
+};
+
+module.exports.viewSheltersPetsBySex = function(page_number, sex, callback) {
+  var sex = sex.toUpperCase();
+  var offset;
+  var number = parseInt(page_number);
+  if (number === 1) offset = 0;
+  else offset = number * 25;
+  connection.query(
+    'SELECT * FROM pets_of_shelters WHERE sex = ? LIMIT 25 OFFSET ?',
+    [sex, offset],
+    (err, results) => {
+      if (err) return callback(err); // some error with query
+      return callback(null, results); // successful
+    }
+  );
+};
+
 /*
   module.exports.countAllPetsByAge = function(age, callback){
     var counter;
@@ -101,7 +160,10 @@ module.exports.viewPetsBySex = function(type, page_number, sex, callback) {
 
  }
 */
-/* view all pets */
+
+/********************************* F I L T E R I N G *********************************/
+
+/* view all shelter  pets */
 module.exports.viewAllShelterPets = function(page_number, callback) {
   var offset;
   var number = parseInt(page_number);
@@ -119,9 +181,10 @@ module.exports.viewAllShelterPets = function(page_number, callback) {
 
 module.exports.countAllPetsForDates = function(callback) {
   var status = 'DATES';
+  var both = 'BOTH';
   connection.query(
-    'SELECT COUNT(*) as count FROM pets_of_shelters WHERE status = ?',
-    status,
+    'SELECT COUNT(*) as count FROM pets_of_shelters WHERE status = ? OR status = ?',
+    [status, both],
     (err, count) => {
       if (err) callback(err);
       callback(null, count[0].count); // this will return an integer of the count of all the posts
@@ -131,48 +194,53 @@ module.exports.countAllPetsForDates = function(callback) {
 
 module.exports.viewAllPetsForDates = function(page_number, callback) {
   var status = 'DATES';
+  var both = 'BOTH';
   var offset;
   var number = parseInt(page_number);
   if (number === 1) offset = 0;
   else offset = number * 25;
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ? LIMIT 25 OFFSET ?',
-    [status, offset],
+    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? LIMIT 25 OFFSET ?',
+    [status, both, offset],
     function(err, results) {
-      if (err) return callback(err); // some error with query
+      if (err) callback(err); // some error with query
       if (results.length > 0)
-        return callback(null, results); // found results on that page
-      else return callback(null, null); // no results on that page
+        callback(null, results); // found results on that page
+      else callback(null, false); // no results on that page
     }
   );
 };
 
 module.exports.countAllPetsForAdopt = function(callback) {
   var status = 'ADOPT';
+  var both = 'BOTH';
   connection.query(
-    'SELECT COUNT(*) as count FROM pets_of_shelters WHERE status = ?',
-    status,
+    'SELECT COUNT(*) as count FROM pets_of_shelters WHERE status = ? OR status = ?',
+    [status, both],
     (err, count) => {
+      console.log('There are a total of ' + count[0].count + ' pets valid.');
       if (err) callback(err);
-      callback(null, count[0].count); // this will return an integer of the count of all the posts
+      else callback(null, count[0].count); // this will return an integer of the count of all the posts
     }
   );
 };
 
 module.exports.viewAllPetsForAdopt = function(page_number, callback) {
   var status = 'ADOPT';
+  var both = 'BOTH';
   var offset;
   var number = parseInt(page_number);
   if (number === 1) offset = 0;
   else offset = number * 25;
+  console.log('offset : ' + offset + ' ' + status + ' ' + both);
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ? LIMIT 25 OFFSET ?',
-    status,
-    function(err, results) {
-      if (err) return callback(err); // some error with query
+    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? LIMIT 25 OFFSET ?',
+    [status, both, offset],
+    (err, results) => {
+      if (err) callback(err); // some error with query
       if (results.length > 0)
-        return callback(null, results); // found results on that page
-      else return callback(null, null); // no results on that page
+        callback(null, results); // found results on that page
+      else callback(null, false); // no results on that page
     }
   );
 };
@@ -197,12 +265,12 @@ module.exports.viewAllPetsForBoth = function(page_number, callback) {
   else offset = number * 25;
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE status = ? LIMIT 25 OFFSET ?',
-    status,
+    [status, offset],
     function(err, results) {
       if (err) return callback(err); // some error with query
       if (results.length > 0)
         return callback(null, results); // found results on that page
-      else return callback(null, null); // no results on that page
+      else callback(null, false); // no results on that page
     }
   );
 };
@@ -223,6 +291,8 @@ module.exports.viewAllUserPets = function(page_number, callback) {
 };
 
 /* view pets of specific user/shelter */
+
+// returns all pets of <shelter>
 module.exports.viewShelterPetsOf = function(shelter_Username, callback) {
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE shelter_Username = ?',
@@ -236,9 +306,10 @@ module.exports.viewShelterPetsOf = function(shelter_Username, callback) {
 
 module.exports.viewShelterPetsForDates = function(shelter_Username, callback) {
   var status = 'DATES';
+  var both = 'BOTH';
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE  status = ? && shelter_Username = ?',
-    [status, shelter_Username],
+    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? && shelter_Username = ?',
+    [status, both, shelter_Username],
     function(err, results) {
       if (err) return callback(err); // some error with query
       return callback(null, results); // if successful
@@ -248,9 +319,10 @@ module.exports.viewShelterPetsForDates = function(shelter_Username, callback) {
 
 module.exports.viewShelterPetsForAdopt = function(shelter_Username, callback) {
   var status = 'ADOPT';
+  var both = 'BOTH';
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ? && shelter_Username = ?',
-    [status, shelter_Username],
+    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? && shelter_Username = ?',
+    [status, both, shelter_Username],
     function(err, results) {
       if (err) return callback(err); // some error with query
       return callback(null, results); // if successful
@@ -261,9 +333,10 @@ module.exports.viewShelterPetsForAdopt = function(shelter_Username, callback) {
 module.exports.adoptPet = function(newAdoptRequest, callback) {
   var pet = newAdoptRequest.pet_uuid;
   var status = 'ADOPT';
+  var both = 'BOTH';
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ? && uuid = ?',
-    [status, pet],
+    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? && uuid = ?',
+    [status, both, pet],
     (err, results) => {
       if (err) return callback(err);
       else if (results.length > 0) {
@@ -292,18 +365,53 @@ module.exports.viewAdoptRequests = function(shelter, callback) {
   );
 };
 
+module.exports.viewSpecificAdoptRequest = function(uuid, shelter, callback) {
+  connection.query(
+    'SELECT * FROM pets_of_shelters RIGHT OUTER JOIN adopts on pets_of_shelters.uuid = adopts.pet_uuid where shelter_Username = ? && adopt_uuid = ?'[
+      (shelter, uuid)
+    ],
+    (err, results) => {
+      if (err) return callback(err);
+      else if (results.length > 0) {
+        console.log(
+          'The adopt request ' +
+            uuid +
+            ' for ' +
+            shelter +
+            "'s pet " +
+            results.pet_uuid +
+            ' exists.'
+        );
+        callback(null, results);
+      }
+    }
+  );
+};
+
+/*module.exports.acceptDateRequest = function(uuid, shelter, callback){
+  // logged in shelter is shelter
+  // uuid is in req.params
+  // 1. check if there really is an adoption request
+  // 2. delete pet from shelter.
+  // 3. add pet to user
+  connection.query(
+    '',
+    [uuid, shelter])
+};*/
+
 module.exports.datePet = function(newDateRequest, callback) {
   var pet = newDateRequest.pet_uuid;
   var status = 'DATES';
+  var both = 'BOTH';
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ? && uuid = ?',
-    [status, pet],
+    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ?&& uuid = ?',
+    [status, both, pet],
     (err, results) => {
       if (err) return callback(err);
       else if (results.length > 0) {
         connection.query(
           'INSERT INTO dates SET ?',
-          newAdoptRequest,
+          newDateRequest,
           (err, query) => {
             if (err) callback(err);
             if (query) callback(null, true);
@@ -326,11 +434,34 @@ module.exports.viewDateRequests = function(shelter, callback) {
   );
 };
 
+module.exports.viewSpecificDateRequest = function(uuid, shelter, callback) {
+  connection.query(
+    'SELECT * FROM pets_of_shelters RIGHT OUTER JOIN dates on pets_of_shelters.uuid = adopts.pet_uuid where shelter_Username = ? && dates_uuid = ?'[
+      (shelter, uuid)
+    ],
+    (err, results) => {
+      if (err) return callback(err);
+      else if (results.length > 0) {
+        console.log(
+          'The date request ' +
+            uuid +
+            ' for ' +
+            shelter +
+            "'s pet " +
+            results.pet_uuid +
+            ' exists.'
+        );
+        callback(null, results);
+      }
+    }
+  );
+};
+
 module.exports.viewShelterPetsForBoth = function(shelter_Username, callback) {
   var status = 'BOTH';
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE shelter_Username = ? && status = ?',
-    [status, shelter_Username],
+    [shelter_Username, status],
     function(err, results) {
       if (err) return callback(err); // some error with query
       return callback(null, results); // if successful
@@ -408,7 +539,7 @@ module.exports.updateUserPet = function(uuid, changes, callback) {
 
 module.exports.updateShelterPet = function(uuid, changes, callback) {
   connection.query(
-    'INSERT INTO pets_of_shelters SET ? WHERE uuid = ?',
+    'UPDATE pets_of_shelters SET ? WHERE uuid = ?',
     [changes, uuid],
     function(err, results) {
       if (err) return callback(err); // some error with query

@@ -153,13 +153,26 @@
 | `/accounts/MyAccount`                    | `GET`    | 200           | json of own account's info                                            |
 | `/accounts/MyAccount`                    | `PUT`    | 201           | json of mysql query                                                   |
 | `/accounts/MyAccount`                    | `DELETE` | 204           |                                                                       |
-| `/pets/viewAllPets`                      | `GET`    | 200           | json of pets                                                          |
-| `/pets/:owner/viewShelterPets`           | `GET`    | 200           | json of pets                                                          |
-| `/pets/:owner/viewUserPets`              | `GET`    | 200           | json of pets                                                          |
+| `/pets/users/viewAllPets/page/:page_number`| `GET`    | 200         | json of pets                                                          |
+| `/pets/shelters/viewAllPets/page/:page_number`| `GET`    | 200      | json of pets                                                          |
+| `/pets/shelters/viewPetsBySex/:page_number/:sex/`|`GET`| 200        | json of page (number), pageTotal and pets with specified sex          |
+| `/pets/shelters/viewPetsByKind/:page_number/:kind/`|`GET`| 200      | json of page (number), pageTotal and pets with specified kind         |
+| `/pets/shelters/viewAllPets/page/:page_number`| `GET`| 200          | json of page (number), pageTotal and pets                             |
+| `/pets/users/viewAllPets/page/:page_number`| `GET`  | 200           | json of page (number), pageTotal and pets                             |
+| `/pets/adopt/page/:page_number`          | `GET`    | 200           | json of page (number), pageTotal and pets for adopt                   |
+| `/pets/adopt/:owner`                     | `GET`    | 200           | json of pets for adopt owned by :owner                                |
+| `/pets/adopt/:pet_uuid`                  | `POST`   | 201           | json of true or false if submitted                                    |
+| `/pets/dates/page/:page_number`          | `GET`    | 200           | json of page (number), pageTotal and pets for dates                   |
+| `/pets/dates/:owner`                     | `GET`    | 200           | json of pets for dates owned by :owner                                |
+| `/pets/dates/:pet_uuid`                  | `POST`   | 201           | json of true or false if submitted                                    |
+| `/pets/both/page/:page_number`           | `GET`    | 200           | json of page (number), pageTotal and pets for both adopt and dates    |
+| `/pets/:owner/viewShelterPets`           | `GET`    | 200           | json of pets of :owner                                                |
+| `/pets/:owner/viewUserPets`              | `GET`    | 200           | json of pets of :owner                                                |
+| `/pets/:owner/deleteAllUserPets`         | `DELETE` | 204           |                                                                       |
+| `/pets/:owner/deleteAllShelter`          | `DELETE` | 204           |                                                                       |
 | `/pets/myPets`                           | `POST`   | 201           | json of mysql query                                                   |
-| `/pets/myPets`                           | `GET`    | 200           | json of owned pets                                                    |
-| `/pets/:pet_uuid`                        | `GET`    | 200           | json of pet's info                                                    |
-| `/pets/:pet_uuid`                        | `PUT`    | 201           | json of mysql query                                                   |
+| `/pets/myPets`                           | `GET`    | 200           | json of own pets                                                      |
+| `/pets/:pet_uuid`                        | `GET`    | 200           | json of pet                                                           |
 | `/pets/:pet_uuid`                        | `DELETE` | 204           |                                                                       |
 | `/community/sortByTimeDesc/page/:page_number`| `GET`| 200           | json of posts sorted by date (from newest to oldest)                  |
 | `/community/sortByTimeAsc/page/:page_number` | `GET`| 200           | json of posts sorted by date (from oldest to newest)                  |
@@ -262,6 +275,25 @@
 | width            | varchar(36)                       | YES  |     | NULL    |       |
 | height           | varchar(36)                       | YES  |     | NULL    |       |
 | shelter_Username | varchar(52)                       | NO   | MUL | NULL    |       |
+
+### `adopts`
+| Field              | Type                                 | Null | Key | Default |
+|:-------------------|:-------------------------------------|:----:|:---:|:-------:|
+| `user_Username`    | varchar(36)                          |  NO  | MUL |  NULL   |
+| `pet_uuid`         | varchar(36)                          |  NO  | MUL |  NULL   | 
+| `adopt_uuid`       | varchar(36)                          |  No  |     |  NULL   |
+| `created_at`       | datetime                             |  NO  |     |  NULL   |
+| `updated_at`       | datetime                             |  NO  |     |  NULL   |
+
+### `dates`
+| Field              | Type                                 | Null | Key | Default |
+|:-------------------|:-------------------------------------|:----:|:---:|:-------:|
+| `user_Username`    | varchar(36)                          |  NO  | MUL |  NULL   |
+| `pet_uuid`         | varchar(36)                          |  NO  | MUL |  NULL   | 
+| `adopt_uuid`       | varchar(36)                          |  No  |     |  NULL   |
+| `created_at`       | datetime                             |  NO  |     |  NULL   |
+| `updated_at`       | datetime                             |  NO  |     |  NULL   |
+
 
 ### `posts`
 

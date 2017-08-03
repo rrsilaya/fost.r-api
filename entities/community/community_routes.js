@@ -31,14 +31,12 @@ router.get('/sortByTimeDesc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.sortByTimeDesc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
-        if (!posts) res.status(404).send(null);
-        else
-          res
-            .status(200)
-            .json({ page: page_number, pageTotal: count, posts: posts });
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, posts: posts });
       });
     }
   });
@@ -52,14 +50,12 @@ router.get('/sortByTimeAsc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.sortByTimeAsc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
-        if (!posts) res.status(404).send(null);
-        else
-          res
-            .status(200)
-            .json({ page: page_number, pageTotal: count, posts: posts });
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, posts: posts });
       });
     }
   });
@@ -73,14 +69,12 @@ router.get('/sortByCommentsDesc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.sortByCommentsDesc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
-        if (!posts) res.status(404).send(null);
-        else
-          res
-            .status(200)
-            .json({ page: page_number, pageTotal: count, posts: posts });
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, posts: posts });
       });
     }
   });
@@ -94,14 +88,12 @@ router.get('/sortByCommentsAsc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
-      controller.sortByCommentsAsc(function(err, posts) {
+      count = Math.ceil(count / 10);
+      controller.sortByCommentsAsc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
-        if (!posts) res.status(404).send(null);
-        else
-          res
-            .status(200)
-            .json({ page: page_number, pageTotal: count, posts: posts });
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, posts: posts });
       });
     }
   });
@@ -115,14 +107,12 @@ router.get('/sortByVotesDesc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.sortByVotesDesc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
-        if (!posts) res.status(404).send(null);
-        else
-          res
-            .status(200)
-            .json({ page: page_number, pageTotal: count, posts: posts });
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, posts: posts });
       });
     }
   });
@@ -136,14 +126,12 @@ router.get('/sortByVotesAsc/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.sortByVotesAsc(page_number, function(err, posts) {
         if (err) res.status(500).json(err);
-        if (!posts) res.status(404).send(null);
-        else
-          res
-            .status(200)
-            .json({ page: page_number, pageTotal: count, posts: posts });
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, posts: posts });
       });
     }
   });
@@ -156,7 +144,6 @@ router.get('/:post_uuid', function(req, res, next) {
     if (err) return res.status(500).json(err);
     else {
       res.send(post);
-
     }
   });
 });
@@ -243,7 +230,6 @@ router.delete('/:post_uuid/', function(req, res, next) {
   });
 });
 
-
 router.post('/addPost', function(req, res, next) {
   var post_uuid = shortid.generate();
   var today = new Date();
@@ -289,12 +275,11 @@ router.post('/addPost', function(req, res, next) {
     created_at: today,
     updated_at: today
   };
-  console.log(newPost);
   controller.addPost(newPost, function(err, results) {
     if (err) res.status(500).send(err);
     else {
       //server error
-      res.status(201).json(results); // returns info of newly added post
+      res.status(201).json(newPost); // returns info of newly added post
       console.log('POSTED!!!!');
     }
   });
@@ -450,7 +435,7 @@ router.put('/:post_uuid/:comment_uuid', function(req, res) {
       /*notify the user */
       //define query
       var query = 'SELECT * FROM comments_on_posts WHERE comment_uuid = ?';
-      //returns Username of user who owns the post
+      //returns Username of user who owns the posts
       notify.getUser(query, comment_uuid, function(err, results) {
         if (err) console.log(err);
         else if (

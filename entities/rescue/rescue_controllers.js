@@ -22,11 +22,15 @@ module.exports.getUser = function(Username, callback) {
 };
 
 /*get details of the sender*/
-module.exports.getSender = function(rescue_uuid,callback){
-  connection.query('SELECT * FROM rescue WHERE rescue_uuid = ?',rescue_uuid,function(err,sender){
-    if(err) return callback(err);
-    else return callback(null,sender);
-  });
+module.exports.getSender = function(rescue_uuid, callback) {
+  connection.query(
+    'SELECT * FROM rescue WHERE rescue_uuid = ?',
+    rescue_uuid,
+    function(err, sender) {
+      if (err) return callback(err);
+      else return callback(null, sender);
+    }
+  );
 };
 
 /* add a request for rescue to db*/
@@ -65,19 +69,27 @@ module.exports.viewRequest = function(rescue_uuid, callback) {
   );
 };
 
-
 //delete a request given that the request is posted by the user and its rescue_uuid is specified*/
 
-module.exports.deleteRequest=function(rescue_uuid,sender_Username,callback){
-  //delete the file 
+module.exports.deleteRequest = function(
+  rescue_uuid,
+  sender_Username,
+  callback
+) {
+  //delete the file
   var link;
   connection.query(
     'SELECT * FROM rescue WHERE rescue_uuid = ? && sender_Username = ? ',
-    [rescue_uuid,sender_Username],
-    function(err,results){
-      if (results.affectedRows!==0 && (typeof results[0].rescue_abspath!==undefined))  
-        fs.unlink(JSON.parse(JSON.stringify(results[0].rescue_abspath)),resultHandler);
-
+    [rescue_uuid, sender_Username],
+    function(err, results) {
+      if (
+        results.affectedRows !== 0 &&
+        typeof results[0].rescue_abspath !== undefined
+      )
+        fs.unlink(
+          JSON.parse(JSON.stringify(results[0].rescue_abspath)),
+          resultHandler
+        );
     }
   );
 
@@ -92,7 +104,6 @@ module.exports.deleteRequest=function(rescue_uuid,sender_Username,callback){
     }
   );
 };
-
 
 /*update a request given that the request is posted by the user and its rescue_uuid is specified*/
 module.exports.updateRequest = function(
@@ -112,17 +123,15 @@ module.exports.updateRequest = function(
   );
 };
 
-
 /*see all request a user has submitted*/
 module.exports.viewUserRequests = function(Username, callback) {
   connection.query(
     'SELECT * FROM rescue WHERE sender_Username = ?',
     Username,
     function(err, results) {
-      if (err)  return callback(err); // some error with query
+      if (err)
+        return callback(err); // some error with query
       else return callback(null, results); // success
     }
   );
 };
-
-

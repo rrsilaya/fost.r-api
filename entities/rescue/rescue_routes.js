@@ -11,10 +11,8 @@ shortid.characters(
 var controller = require('./rescue_controllers');
 var notify = require('./../notifications/notifications_controllers');
 
-
 router.use(validator()); // express-validator
 router.use(fileUpload()); // express-fileupload
-
 
 //display all requests for rescue
 router.get('/', function(req, res, next) {
@@ -24,20 +22,26 @@ router.get('/', function(req, res, next) {
         return res.status(500).json(err); // server error
       else res.status(200).json(requests); // returns all posts
     });
-  }else if(req.session.body.accountType === 'user'){
-  
-    controller.viewUserRequests(req.session.body.Username,function(err,requests){
-      if (err) return res.status(500).json(err);  // server error
+  } else if (req.session.body.accountType === 'user') {
+    controller.viewUserRequests(req.session.body.Username, function(
+      err,
+      requests
+    ) {
+      if (err)
+        return res.status(500).json(err); // server error
       else res.status(200).json(requests); // returns request
     });
   }
-
 });
 //view all request a user has submitted
 router.get('/viewMyRequests', function(req, res, next) {
   if (req.session.body.accountType === 'user') {
-    controller.viewUserRequests(req.session.body.Username,function(err,requests){
-      if (err) return res.status(500).json(err);  // server error
+    controller.viewUserRequests(req.session.body.Username, function(
+      err,
+      requests
+    ) {
+      if (err)
+        return res.status(500).json(err); // server error
       else res.status(200).json(requests); // returns request
     });
   }
@@ -53,38 +57,38 @@ router.get('/:rescue_uuid', function(req, res, next) {
       if (err) return res.status(500).json(err); // server error
       res.status(200).json(request); // returns specific post
     });
-  }else if(req.session.body.accountType === 'user'){
+  } else if (req.session.body.accountType === 'user') {
     //user can only view a request he/she posted
-    controller.getSender(rescue_uuid,function(err,sender){
+    controller.getSender(rescue_uuid, function(err, sender) {
       if (err) res.status(403).end();
-      else if(sender){
-
+      else if (sender) {
         var newNotif = {
-                notif_for: sender[0].sender_Username,
-                notif_message: req.session.body.Username + ' resolved your request for animal rescue. ',
-                notif_url: 'api/rescue/' + rescue_uuid,
-                date_created: new Date()
-              };
-              //add to notifications table
-              //when 'notif_for' is logged in,he/she will received this notification
-              notify.addNotif(newNotif, function(err, results) {
-                if (err) console.log(err);
-                else console.log(sender[0].sender_Username + 'will be notified');
-              });
-        if(sender[0].sender_Username === req.session.body.Username){
+          notif_for: sender[0].sender_Username,
+          notif_message:
+            req.session.body.Username +
+            ' resolved your request for animal rescue. ',
+          notif_url: 'api/rescue/' + rescue_uuid,
+          date_created: new Date()
+        };
+        //add to notifications table
+        //when 'notif_for' is logged in,he/she will received this notification
+        notify.addNotif(newNotif, function(err, results) {
+          if (err) console.log(err);
+          else console.log(sender[0].sender_Username + 'will be notified');
+        });
+        if (sender[0].sender_Username === req.session.body.Username) {
           controller.viewRequest(rescue_uuid, function(err, request) {
             if (err) return res.status(500).json(err); // server error
             res.status(200).json(request); // returns specific post
           });
-        }else res.status(403).json(null);
+        } else res.status(403).json(null);
       }
     });
   }
 });
 
-
 //delete a request
-router.delete('/:rescue_uuid', function(req, res,next) {
+router.delete('/:rescue_uuid', function(req, res, next) {
   var rescue_uuid = req.params.rescue_uuid;
 
   if (req.session.body.accountType === 'user') {
@@ -99,25 +103,29 @@ router.delete('/:rescue_uuid', function(req, res,next) {
         console.log('unable to delete request');
       } else res.status(204).end(); // deleted request
     });
-  }else if (req.session.body.accountType === 'shelter') {//if shelter resolved the request
+  } else if (req.session.body.accountType === 'shelter') {
+    //if shelter resolved the request
     //get sender username
-    controller.getSender(rescue_uuid,function(err,sender){
+    controller.getSender(rescue_uuid, function(err, sender) {
       if (err) res.status(403).end();
-      else if(sender){
-        //notify sender 
+      else if (sender) {
+        //notify sender
 
         //delete request
-        controller.deleteRequest(rescue_uuid, sender[0].sender_Username, function(err,results) {
-          if (err) return res.status(500).json(err);
-          else if (results.affectedRows == 0) {
-            // server error
-            return res.status(500);
-            console.log('unable to delete request');
-          } else res.status(204).end(); // deleted request
-        });
+        controller.deleteRequest(
+          rescue_uuid,
+          sender[0].sender_Username,
+          function(err, results) {
+            if (err) return res.status(500).json(err);
+            else if (results.affectedRows == 0) {
+              // server error
+              return res.status(500);
+              console.log('unable to delete request');
+            } else res.status(204).end(); // deleted request
+          }
+        );
       }
     });
-    
   }
 });
 
@@ -138,8 +146,7 @@ router.post('/submit_a_rescue_request', function(req, res, next) {
   if (req.body.rescue_body && req.session.body.accountType === 'user') {
     var today = new Date();
     var rescue_uuid = shortid.generate();
-    var rescue_imgurl,imgurl;
-
+    var rescue_imgurl, imgurl;
 
     //select user details
     controller.getUser(req.session.body.Username, function(err, user) {
@@ -154,7 +161,7 @@ router.post('/submit_a_rescue_request', function(req, res, next) {
             var image = req.files.photo;
             var name = rescue_uuid + '_' + image.name;
             rescue_imgurl = __dirname + '/rescue-images/' + name;
-            imgurl='/rescue/rescue-images/'+name;
+            imgurl = '/rescue/rescue-images/' + name;
             var mime = req.files.photo.mimetype;
             if (mime.substring(0, 5) === 'image') {
               image.mv(rescue_imgurl, function(err) {
@@ -168,7 +175,7 @@ router.post('/submit_a_rescue_request', function(req, res, next) {
               console.log('file uploaded is not image');
             }
           } else if (!req.files.photo) {
-              //imgurl = null;
+            //imgurl = null;
           }
         } else {
           //imgurl=null;
