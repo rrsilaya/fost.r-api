@@ -312,29 +312,6 @@ router.get('/:owner/viewUserPets', function(req, res) {
   });
 });
 
-/*  deletes all pets of <name> 
-    ideally used during development
-
-
-
-router.delete('/:owner/deleteAllUserPets', function(req, res) {
-  var owner = req.params.owner;
-  controller.deleteAllUserPets(owner, function(err, results) {
-    if (err) return res.status(500).json(err); // server error
-    if (!results) return res.status(500);
-    res.status(204).end();
-  });
-});
-
-router.delete('/:owner/deleteAllShelterPets', function(req, res) {
-  var owner = req.params.owner;
-  controller.deleteAllShelterPets(owner, function(err, results) {
-    if (err) return res.status(500).json(err); // server error
-    if (!results) return res.status(500);
-    res.status(204).end();
-  });
-});
-*/
 /* add pets to database (only if logged in) */
 router.post('/myPets', function(req, res) {
   var owner = req.session.body.Username;
