@@ -25,7 +25,7 @@ router.post('/shelterUsername', function(req, res) {
       res.status(500).json(err);
     }
     if (!results) res.status(200).send(null);
-    else if (results) res.status(400).send(null);
+    else if (results) res.status(409).send(null);
   });
 });
 
@@ -37,7 +37,7 @@ router.post('/shelterEmail', function(req, res) {
       res.status(500).json(err);
     }
     if (!results) res.status(200).send(null);
-    else if (results) res.status(400).send(null);
+    else if (results) res.status(409).send(null);
   });
 });
 
@@ -134,22 +134,22 @@ router.post('/shelter', function(req, res, next) {
             errors =
               'Sorry, the email and username you entered are already taken.';
             console.log(errors);
-            return res.status(400).json(callback);
+            return res.status(409).json(callback);
             break;
           case 'TAKEN_EA':
             errors = 'Sorry, the email address you entered is already taken';
             console.log(errors);
-            return res.status(400).json(err);
+            return res.status(409).json(err);
             break;
           case 'TAKEN_UN':
             errors = 'Sorry, the username you entered is already taken.';
             console.log(errors);
-            return res.status(400).json(err);
+            return res.status(409).json(err);
             break;
           case 'TAKEN_UN_USERS':
             errors ='Username is already used by a user';
             console.log(errors);
-            return res.status(400).json(callback);
+            return res.status(409).json(callback);
             break;
         }
       });
@@ -165,7 +165,7 @@ router.post('/userUsername', function(req, res) {
       res.status(500).json(err);
     }
     if (!results) res.status(200).send(null);
-    else if (results) res.status(400).send(null);
+    else if (results) res.status(409).send(null);
   });
 });
 
@@ -177,7 +177,7 @@ router.post('/userEmail', function(req, res) {
       res.status(500).json(err);
     }
     if (!results) res.status(200).send(null);
-    else if (results) res.status(400).send(null);
+    else if (results) res.status(409).send(null);
   });
 });
 router.post('/user', function(req, res, next) {
@@ -259,28 +259,28 @@ router.post('/user', function(req, res, next) {
           case 'QUERRY_ERR':
             errors = 'Sorry, there was some error in the query.';
             console.log(errors);
-            return res.status(400).json(errors);
+            return res.status(409).json(errors);
             break;
           case 'TAKEN_BOTH_ERR':
             errors =
               'Sorry, the email and username you entered are already taken.';
             console.log(errors);
-            return res.status(400).json(errors);
+            return res.status(409).json(errors);
             break;
           case 'TAKEN_EA':
             errors = 'Sorry, the email address you entered is already taken.';
             console.log(errors);
-            return res.status(400).json(errors);
+            return res.status(409).json(errors);
             break;
           case 'TAKEN_UN':
             errors = 'Sorry, the username you entered is already taken.';
             console.log(errors);
-            return res.status(400).json(errors);
+            return res.status(409).json(errors);
             break;
           case 'TAKEN_UN_SHELTERS':
             errors ='Username is already used by a shelter';
             console.log(errors);
-            return res.status(400).json(errors);
+            return res.status(409).json(errors);
             break;
         }
       });
