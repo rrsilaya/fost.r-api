@@ -137,6 +137,22 @@ router.get('/adopt/page/:page_number', function(req, res) {
   });
 });
 
+
+//delete adopt request 
+// if status === 'cancel' : user can forfeit his/her request for animal adoption
+//if status === 'approve' :  it will be deleted on adopts table along with the pet adopted
+// if status === 'decline': delete adopt request but not the pet
+
+router.delete('/:status/:adopt_uuid',function(req,res){
+  var adopt_uuid=req.params.adopt_uuid;
+  var status=req.params.status;
+  controller.deleteAdoptRequest(status,adopt_uuid,req.session.body.Username,function(err,result){
+    if(err) res.status(500).json(err);
+    else res.status(204).json(result);
+  })
+});
+
+
 // adopt pet; only for pets_of_shelters
 // used by accountType = user
 router.post('/adopt/:pet_uuid', function(req, res) {
@@ -199,11 +215,6 @@ router.get('/adoptRequests', function(req, res) {
   }
 });
 
-// delete request for adoption
-// router.delete('/adopt/:pet_uuid', function(req, res) {
-//   var pet = pet_uuid;
-
-// });
 
 // // delete request for dates
 // router.delete('/dates/:pet_uuid', function(req, res) {
@@ -332,10 +343,9 @@ router.post('/myPets', function(req, res) {
       var petDP = req.files.photo;
       var mime = req.files.photo.mimetype;
       var name = petInfo.uuid + '-dp-' + petDP.name;
-      var url = __dirname + '/photos/' + name;
-
+      var abspath = __dirname + '/photos/' + name;
       if (mime.substring(0, 5) === 'image') {
-        petDP.mv(url, function(err) {
+        petDP.mv(abspath, function(err) {
           if (err) {
             console.log('api err: not able to receive image');
             controller.addShelterPet(petInfo, function(err, results) {
@@ -343,9 +353,10 @@ router.post('/myPets', function(req, res) {
               res.status(201).json(petInfo); // returns info of newly added pet
             });
           }
-          petInfo.url = '/pets/photos/' + name;
-          console.log(petInfo.url);
-          var dimensions = sizeOf(url);
+          petInfo.url='/pets/photos/' + name;
+          petInfo.abspath = abspath
+          console.log(petInfo.abspath);
+          var dimensions = sizeOf(abspath);
           petInfo.width = dimensions.width;
           petInfo.height = dimensions.height;
           controller.addShelterPet(petInfo, function(err, results) {
@@ -383,11 +394,12 @@ router.post('/myPets', function(req, res) {
     if (typeof req.files !== 'undefined') {
       var petDP = req.files.photo;
       var name = petInfo.uuid + '-dp-' + petDP.name;
-      var url = __dirname + '/photos/' + name;
+      var abspath = __dirname + '/photos/' + name;
+
       console.log('uploading to.. ' + url);
       var mime = req.files.photo.mimetype;
       if (mime.substring(0, 5) === 'image') {
-        petDP.mv(url, function(err) {
+        petDP.mv(abspath, function(err) {
           if (err) {
             console.log('api err: not able to receive image');
             controller.addUserPet(petInfo, function(err, results) {
@@ -396,9 +408,9 @@ router.post('/myPets', function(req, res) {
             });
           }
           petInfo.url = '/pets/photos/' + name;
-
+          petInfo.abspath=abspath;
           console.log('in db: ' + petInfo.url);
-          var dimensions = sizeOf(url);
+          var dimensions = sizeOf(abspath);
           petInfo.width = dimensions.width;
           petInfo.height = dimensions.height;
           controller.addUserPet(petInfo, function(err, results) {
@@ -492,7 +504,7 @@ router.delete('/:pet_uuid', function(req, res) {
 });
 
 router.get('*', function(req, res, next) {
-  res.status(302).redirect('/api/feed');
+  res.status(302).redirect('/api/');
 });
 
 module.exports = router;
