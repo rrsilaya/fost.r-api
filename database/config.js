@@ -226,7 +226,7 @@ CREATE TABLE notifications (\
     `notif_id` INT NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,\
     `notif_for` varchar(36) NOT NULL,\
     `notif_message` varchar(255) NOT NULL,\
-    `notif_url` varchar(255)  NOT NULL,\
+    `notif_url` varchar(255)  DEFAULT NULL,\
     `date_created` datetime NOT NULL,\
     CONSTRAINT notifications_fk FOREIGN KEY(notif_for)\
     REFERENCES users(Username)\

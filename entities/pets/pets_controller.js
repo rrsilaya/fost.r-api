@@ -1,4 +1,6 @@
 const connection = require('./../../database/connection');
+const notify = require('./../notifications/notifications_controllers');
+
 //https://stackoverflow.com/questions/36659612/how-does-node-js-fs-unlink-works
 
 const fs = require('fs');
@@ -468,17 +470,19 @@ module.exports.viewSpecificDateRequest = function(uuid, callback) {
 module.exports.deleteAdoptRequest = function(status,adopt_uuid,user,callback){
 
   connection.query( 'SELECT * FROM adopts WHERE adopt_uuid = ?' , adopt_uuid,function(err,adopt){
-    if(adopt[0].user_Username === user && status==='CANCEL') {//for users
+    //console.log(adopt[0].user_Username);
+    if( status==='CANCEL') {//for users
       connection.query('DELETE FROM adopts WHERE adopt_uuid = ? && user_Username = ?',[adopt_uuid,user],function(err,result){
         if(err) callback(err);
         else {
           callback(null,result);
-          console.log('CANCELLED')
+          console.log('CANCELLED');
+          
         }
       });
     }else if (err){callback(err);
     }else{//for shelters
-      connection.query('SELECT * FROM pets_of_shelters WHERE pet_uuid = ? && shelter_Username = ?',[adopt[0].pet_uuid,user],function(err,pet){
+      connection.query('SELECT * FROM pets_of_shelters WHERE pet_uuid = ? && shelter_Username = ?',[adopt.pet_uuid,user],function(err,pet){
 
         if( status ==='DECLINE'){
 
@@ -487,15 +491,44 @@ module.exports.deleteAdoptRequest = function(status,adopt_uuid,user,callback){
             else{
               callback(null,result);
               console.log('DECLINED');
-
+              //notify user
+              var newNotif = {
+                notif_for: adopt.user_Username,
+                notif_message:
+                  user +
+                  ' declined your request for adoption of pet ' + adopt_uuid,
+                notif_url: null,
+                date_created: new Date()
+              };
+              //add to notifications table
+              //when 'notif_for' is logged in,he/she will received this notification
+              notify.addNotif(newNotif, function(err, results) {
+                if (err) console.log(err);
+                else console.log(adopt.user_Username + 'will be notified');
+              });
             }
           });
         }else if( status ==='APPROVE'){
-          module.exports.deleteShelterPet(user,adopt[0].pet_uuid,function(err,result){
+          module.exports.deleteShelterPet(user,adopt.pet_uuid,function(err,result){
             if(err) callback(err);
             else{
               callback(null,result);
               console.log('APPROVED');
+              //notify user
+              var newNotif = {
+                notif_for: adopt.user_Username,
+                notif_message:
+                  user+
+                  ' approved your request for adoption of pet ' + adopt_uuid + ' Please contact the shelter for inquiries.',
+                notif_url: null,
+                date_created: new Date()
+              };
+              //add to notifications table
+              //when 'notif_for' is logged in,he/she will received this notification
+              notify.addNotif(newNotif, function(err, results) {
+                if (err) console.log(err);
+                else console.log(adopt.user_Username + 'will be notified');
+              });
             }
           })
         }else if(err) callback(err);
