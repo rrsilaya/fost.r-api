@@ -455,7 +455,7 @@ module.exports.countAllComments = function(post_uuid, callback) {
     'SELECT COUNT(*) as count FROM comments_on_posts',
     (err, count) => {
       if (err) callback(err);
-      callback(null, count[0].count); // this will return an integer of the count of all the comments in post_uuid
+      return callback(null, count[0].count); // this will return an integer of the count of all the comments in post_uuid
     }
   );
 };
@@ -468,10 +468,9 @@ module.exports.viewAllComments = function(page_number, post_uuid, callback) {
   else offset = number * 10;
 
   connection.query(
-    'SELECT * FROM comments_on_posts WHERE post_uuid = ? ORDER BY votes LIMIT 10 OFFSET ',
+    'SELECT * FROM comments_on_posts WHERE post_uuid = ? ORDER BY votes LIMIT 10 OFFSET ?',
     [post_uuid, offset],
     function(err, results) {
-      console.log(results);
       if (err) return callback(err); // some error with query
       return callback(null, results); // success
     }

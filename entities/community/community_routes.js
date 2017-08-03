@@ -390,17 +390,23 @@ router.get('/viewAllComments/:post_uuid/page/:page_number', function(
   res,
   next
 ) {
-  //console.log('viewing all comments');
+  // console.log('viewing all comments');
   var post_uuid = req.params.post_uuid;
   var page_number = req.params.page_number;
+
   controller.countAllComments(post_uuid, function(err, count) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
       count = Math.ceil(count / 10);
-      controller.viewAllComments(post_uuid, function(err, comments) {
+      controller.viewAllComments(page_number, post_uuid, function(
+        err,
+        comments
+      ) {
         if (err) return res.status(500).json(err); // server error
-        res.status(200).json(comments);
+        res
+          .status(200)
+          .json({ page: page_number, pageTotal: count, comments: comments });
       });
     }
   });
