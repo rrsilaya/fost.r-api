@@ -398,7 +398,7 @@ router.get('/viewAllComments/:post_uuid/page/:page_number', function(
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 10);
+      count = Math.ceil(count / 5);
       controller.viewAllComments(page_number, post_uuid, function(
         err,
         comments

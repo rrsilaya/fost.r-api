@@ -25,7 +25,7 @@ router.get('/viewShelters/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.viewAllShelters(function(err, shelters) {
         if (err) return res.status(500).json(err); // server error
         res
@@ -42,7 +42,7 @@ router.get('/viewUsers/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 15);
+      count = Math.ceil(count / 10);
       controller.viewAllUsers(function(err, users) {
         if (err) return res.status(500).json(err); // server error
         res

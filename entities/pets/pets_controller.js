@@ -62,10 +62,10 @@ module.exports.countAllSheltersPetsByKind = function(kind, callback) {
 module.exports.viewUsersPetsByKind = function(page_number, kind, callback) {
   var kind = kind.toUpperCase();
   var number = parseInt(page_number);
-  var offset = (number-1 )* 10;
+  var offset = (number-1 )* 15;
 
   connection.query(
-    'SELECT * FROM pets_of_users WHERE kind = ? LIMIT 25 OFFSET ?',
+    'SELECT * FROM pets_of_users WHERE kind = ? LIMIT 15 OFFSET ?',
     [kind, offset],
     (err, results) => {
       if (err) return callback(err); // some error with query
@@ -77,10 +77,10 @@ module.exports.viewUsersPetsByKind = function(page_number, kind, callback) {
 module.exports.viewSheltersPetsByKind = function(page_number, kind, callback) {
   var kind = kind.toUpperCase();
   var number = parseInt(page_number);
-  var offset = (number-1 )* 10;
+  var offset = (number-1 )* 15;
 
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE kind = ? LIMIT 25 OFFSET ?',
+    'SELECT * FROM pets_of_shelters WHERE kind = ? LIMIT 15 OFFSET ?',
     [kind, offset],
     (err, results) => {
       if (err) return callback(err); // some error with query
@@ -118,10 +118,10 @@ module.exports.countAllSheltersPetsBySex = function(sex, callback) {
 module.exports.viewUsersPetsBySex = function(page_number, sex, callback) {
   var sex = sex.toUpperCase();
   var number = parseInt(page_number);
-  var offset = (number-1 )* 10;
+  var offset = (number-1 )* 15;
 
   connection.query(
-    'SELECT * FROM pets_of_users WHERE sex = ? LIMIT 25 OFFSET ?',
+    'SELECT * FROM pets_of_users WHERE sex = ? LIMIT 15 OFFSET ?',
     [sex, offset],
     (err, results) => {
       if (err) return callback(err); // some error with query
@@ -133,10 +133,10 @@ module.exports.viewUsersPetsBySex = function(page_number, sex, callback) {
 module.exports.viewSheltersPetsBySex = function(page_number, sex, callback) {
   var sex = sex.toUpperCase();
   var number = parseInt(page_number);
-  var offset = (number-1 )* 10;
+  var offset = (number-1 )* 15;
 
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE sex = ? LIMIT 25 OFFSET ?',
+    'SELECT * FROM pets_of_shelters WHERE sex = ? LIMIT 15 OFFSET ?',
     [sex, offset],
     (err, results) => {
       if (err) return callback(err); // some error with query
@@ -160,10 +160,10 @@ module.exports.viewSheltersPetsBySex = function(page_number, sex, callback) {
 /* view all shelter  pets */
 module.exports.viewAllShelterPets = function(page_number, callback) {
   var number = parseInt(page_number);
-  var offset = (number-1 )* 10;
+  var offset = (number-1 )* 15;
 
   connection.query(
-    'SELECT * FROM pets_of_shelters LIMIT 25 OFFSET ?',
+    'SELECT * FROM pets_of_shelters LIMIT 15 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
@@ -189,10 +189,10 @@ module.exports.viewAllPetsForDates = function(page_number, callback) {
   var status = 'DATES';
   var both = 'BOTH';
   var number = parseInt(page_number);
-  var offset = (number-1 )* 10;
+  var offset = (number-1 )* 15;
 
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? LIMIT 25 OFFSET ?',
+    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? LIMIT 15 OFFSET ?',
     [status, both, offset],
     function(err, results) {
       if (err) callback(err); // some error with query
@@ -219,9 +219,9 @@ module.exports.viewAllPetsForAdopt = function(page_number, callback) {
   var status = 'ADOPT';
   var both = 'BOTH';
   var number = parseInt(page_number);
-  var offset = (number-1 )* 10;
+  var offset = (number-1 )* 15;
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? LIMIT 25 OFFSET ?',
+    'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? LIMIT 15 OFFSET ?',
     [status, both, offset],
     (err, results) => {
       if (err) callback(err); // some error with query
@@ -245,10 +245,10 @@ module.exports.countAllPetsForBoth = function(callback) {
 module.exports.viewAllPetsForBoth = function(page_number, callback) {
   var status = 'BOTH';
   var number = parseInt(page_number);
-  var offset = (number-1 )* 10;
+  var offset = (number-1 )* 15;
 
   connection.query(
-    'SELECT * FROM pets_of_shelters WHERE status = ? LIMIT 25 OFFSET ?',
+    'SELECT * FROM pets_of_shelters WHERE status = ? LIMIT 15 OFFSET ?',
     [status, offset],
     function(err, results) {
       if (err) return callback(err); // some error with query
@@ -259,9 +259,9 @@ module.exports.viewAllPetsForBoth = function(page_number, callback) {
 
 module.exports.viewAllUserPets = function(page_number, callback) {
   var number = parseInt(page_number);
-  var offset = (number-1 )* 10;
+  var offset = (number-1 )* 15;
   connection.query(
-    'SELECT * FROM pets_of_users LIMIT 25 OFFSET ?',
+    'SELECT * FROM pets_of_users LIMIT 15 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query

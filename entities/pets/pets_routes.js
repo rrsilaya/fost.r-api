@@ -30,7 +30,7 @@ router.get('/shelters/viewAllPets/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 25);
+      count = Math.ceil(count / 15);
       controller.viewAllShelterPets(page_number, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
@@ -51,7 +51,7 @@ router.get('/shelters/viewPetsByKind/:page_number/:kind', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 25);
+      count = Math.ceil(count / 15);
       controller.viewSheltersPetsByKind(page_number, kind, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
@@ -70,7 +70,7 @@ router.get('/shelters/viewPetsBySex/:page_number/:sex', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 25);
+      count = Math.ceil(count / 15);
       controller.viewSheltersPetsBySex(page_number, sex, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
@@ -89,7 +89,7 @@ router.get('/users/viewPetsByKind/:page_number/:kind', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 25);
+      count = Math.ceil(count / 15);
       controller.viewUsersPetsByKind(page_number, kind, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
@@ -108,7 +108,7 @@ router.get('/users/viewPetsBySex/:page_number/:sex', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 25);
+      count = Math.ceil(count / 15);
       controller.viewUsersPetsBySex(page_number, sex, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
@@ -126,7 +126,7 @@ router.get('/adopt/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 25);
+      count = Math.ceil(count / 15);
       controller.viewAllPetsForAdopt(page_number, function(err, pets) {
         if (err) res.status(500).json(err);
           res
@@ -228,7 +228,7 @@ router.get('/dates/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 25);
+      count = Math.ceil(count / 15);
       controller.viewAllPetsForDates(page_number, function(err, pets) {
         if (err) res.status(500).json(err);
           res
@@ -256,7 +256,7 @@ router.get('/both/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 25);
+      count = Math.ceil(count / 15);
       controller.viewAllPetsForBoth(page_number, function(err, pets) {
         if (err) res.status(500).json(err);
           res
@@ -283,7 +283,7 @@ router.get('/users/viewAllPets/page/:page_number', function(req, res) {
     if (err) res.status(500).json(err);
     else {
       count = parseInt(count);
-      count = Math.ceil(count / 25);
+      count = Math.ceil(count / 15);
       controller.viewAllUserPets(page_number, function(err, pets) {
         if (err) return res.status(500).json(err); // server error
         res
