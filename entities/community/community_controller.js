@@ -1,5 +1,5 @@
 const connection = require('./../../database/connection');
-//https://stackoverflow.com/questions/36659612/how-does-node-js-fs-unlink-works
+//https://stackoverflow.com/questions/366109612/how-does-node-js-fs-unlink-works
 
 const fs = require('fs');
 const resultHandler = function(err) {
@@ -23,18 +23,27 @@ module.exports.viewPost = function(post_uuid, callback) {
       else {
         // some error with query
         console.log('showing post: ' + post_uuid);
-        console.log(results);
         return callback(null, results); // success
       }
     }
   );
 };
 
+/* count posts of a specific user*/
+module.exports.countPostsOf = function(user, callback) {
+  connection.query('SELECT COUNT(*) as count FROM posts where Posted_by = ?', user, (err, count) => {
+    if (err) callback(err);
+    callback(null, count[0].count); // this will return an integer of the count of all the posts
+  });
+};
+
 /* view posts of a specific user*/
-module.exports.viewPostsOf = function(user, callback) {
+module.exports.viewPostsOf = function(page_number, user, callback) {
+  var number = parseInt(page_number);
+  var offset = (number-1 )* 10;
   connection.query(
-    'SELECT * FROM posts WHERE Posted_by = ? ORDER BY created_at DESC',
-    user,
+    'SELECT * FROM posts WHERE Posted_by = ? ORDER BY created_at DESC LIMIT 10 OFFSET ?',
+    [user, offset],
     function(err, results) {
       if (err) return callback(err); // some error with query
       return callback(null, results); // success
@@ -52,9 +61,9 @@ module.exports.countAllPosts = function(callback) {
 // newest to oldest
 module.exports.sortByTimeDesc = function(page_number, callback) {
   var number = parseInt(page_number);
-  var offset = (number-1 )* 5;
+  var offset = (number-1 )* 10;
   connection.query(
-    'SELECT * FROM posts ORDER BY created_at DESC LIMIT 5 OFFSET ?',
+    'SELECT * FROM posts ORDER BY created_at DESC LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
@@ -66,9 +75,9 @@ module.exports.sortByTimeDesc = function(page_number, callback) {
 // oldest to newest
 module.exports.sortByTimeAsc = function(page_number, callback) {
   var number = parseInt(page_number);
-  var offset = (number-1 )* 5;
+  var offset = (number-1 )* 10;
   connection.query(
-    'SELECT * FROM posts ORDER BY created_at LIMIT 5 OFFSET ?',
+    'SELECT * FROM posts ORDER BY created_at LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query\
@@ -80,9 +89,9 @@ module.exports.sortByTimeAsc = function(page_number, callback) {
 // most to least commented
 module.exports.sortByCommentsDesc = function(page_number, callback) {
   var number = parseInt(page_number);
-  var offset = (number-1 )* 5;
+  var offset = (number-1 )* 10;
   connection.query(
-    'SELECT * FROM posts ORDER BY comments DESC LIMIT 5 OFFSET ?',
+    'SELECT * FROM posts ORDER BY comments DESC LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
@@ -94,9 +103,9 @@ module.exports.sortByCommentsDesc = function(page_number, callback) {
 // least to most commented
 module.exports.sortByCommentsAsc = function(page_number, callback) {
   var number = parseInt(page_number);
-  var offset = (number-1 )* 5;
+  var offset = (number-1 )* 10;
   connection.query(
-    'SELECT * FROM posts ORDER BY comments LIMIT 5 OFFSET ?',
+    'SELECT * FROM posts ORDER BY comments LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
@@ -108,9 +117,9 @@ module.exports.sortByCommentsAsc = function(page_number, callback) {
 // most to least voted
 module.exports.sortByVotesDesc = function(page_number, callback) {
   var number = parseInt(page_number);
-  var offset = (number-1 )* 5;
+  var offset = (number-1 )* 10;
   connection.query(
-    'SELECT * FROM posts ORDER BY votes DESC LIMIT 5 OFFSET ?',
+    'SELECT * FROM posts ORDER BY votes DESC LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
@@ -122,9 +131,9 @@ module.exports.sortByVotesDesc = function(page_number, callback) {
 // least to most voted
 module.exports.sortByVotesAsc = function(page_number, callback) {
   var number = parseInt(page_number);
-  var offset = (number-1 )* 5;
+  var offset = (number-1 )* 10;
   connection.query(
-    'SELECT * FROM posts ORDER BY votes LIMIT 5 OFFSET ?',
+    'SELECT * FROM posts ORDER BY votes LIMIT 10 OFFSET ?',
     offset,
     function(err, results) {
       if (err) return callback(err); // some error with query
@@ -452,7 +461,7 @@ module.exports.viewAllComments = function(page_number, post_uuid, callback) {
   var number = parseInt(page_number);
   var offset = (number-1 )* 5;
   connection.query(
-    'SELECT * FROM comments_on_posts WHERE post_uuid = ? ORDER BY votes LIMIT 5 OFFSET ?',
+    'SELECT * FROM comments_on_posts WHERE post_uuid = ? ORDER BY votes LIMIT 10 OFFSET ?',
     [post_uuid, offset],
     function(err, results) {
       if (err) return callback(err); // some error with query
