@@ -333,7 +333,7 @@ module.exports.adoptPet = function(newAdoptRequest, callback) {
     }
   );
 };
-
+/*
 module.exports.viewAdoptRequests = function(shelter, callback) {
   connection.query(
     'SELECT * FROM pets_of_shelters RIGHT OUTER JOIN adopts on pets_of_shelters.uuid = adopts.pet_uuid where shelter_Username = ? ORDER BY updated_at',
@@ -344,7 +344,17 @@ module.exports.viewAdoptRequests = function(shelter, callback) {
     }
   );
 };
-
+*/
+module.exports.viewAdoptRequests = function(shelter, callback) {
+  connection.query(
+    'SELECT * FROM pets_of_shelters RIGHT OUTER JOIN adopts on pets_of_shelters.uuid = adopts.pet_uuid where shelter_Username = ? ORDER BY updated_at',
+    shelter,
+    (err, results) => {
+      if (err) callback(err);
+      callback(null, results);
+    }
+  );
+};
 module.exports.viewSpecificAdoptRequest = function(uuid, shelter, callback) {
   connection.query(
     'SELECT * FROM pets_of_shelters RIGHT OUTER JOIN adopts on pets_of_shelters.uuid = adopts.pet_uuid where shelter_Username = ? && adopt_uuid = ?'[
@@ -450,6 +460,46 @@ module.exports.viewSpecificDateRequest = function(uuid, callback) {
   );
 };
 
+
+module.exports.deleteAdoptRequest = function(status,adopt_uuid,user,callback){
+
+  connection.query( 'SELECT * FROM adopts WHERE adopt_uuid = ?' , adopt_uuid,function(err,adopt){
+    if(adopt[0].user_Username === user && status==='CANCEL') {//for users
+      connection.query('DELETE FROM adopts WHERE adopt_uuid = ? && user_Username = ?',[adopt_uuid,user],function(err,result){
+        if(err) callback(err);
+        else {
+          callback(null,result);
+          console.log('CANCELLED')
+        }
+      });
+    }else if (err){callback(err);
+    }else{//for shelters
+      connection.query('SELECT * FROM pets_of_shelters WHERE pet_uuid = ? && shelter_Username = ?',[adopt[0].pet_uuid,user],function(err,pet){
+
+        if( status ==='DECLINE'){
+
+          connection.query('DELETE FROM adopts WHERE adopt_uuid = ?',adopt_uuid,function(err,result){
+            if(err) callback(err);
+            else{
+              callback(null,result);
+              console.log('DECLINED');
+
+            }
+          });
+        }else if( status ==='APPROVE'){
+          module.exports.deleteShelterPet(user,adopt[0].pet_uuid,function(err,result){
+            if(err) callback(err);
+            else{
+              callback(null,result);
+              console.log('APPROVED');
+            }
+          })
+        }else if(err) callback(err);
+      });
+    }
+  })
+}
+
 module.exports.viewShelterPetsForBoth = function(shelter_Username, callback) {
   var status = 'BOTH';
   connection.query(
@@ -495,6 +545,7 @@ module.exports.searchPet = function(uuid, callback) {
     }
   );
 };
+
 
 /* adding a pet */
 module.exports.addShelterPet = function(petInfo, callback) {
@@ -548,8 +599,8 @@ module.exports.deleteUserPet = function(Username, uuid, callback) {
     'SELECT * FROM pets_of_users where user_Username = ? and uuid = ?',
     [Username, uuid],
     function(err, results) {
-      if (results.affectedRows !== 0 && typeof results[0].url !== undefined)
-        fs.unlink(JSON.parse(JSON.stringify(results[0].url)), resultHandler);
+      if (results.affectedRows !== 0 && typeof results[0].abspath !== undefined)
+        fs.unlink(JSON.parse(JSON.stringify(results[0].abspath)), resultHandler);
     }
   );
   connection.query(
@@ -569,8 +620,8 @@ module.exports.deleteShelterPet = function(Username, uuid, callback) {
     'SELECT * FROM pets_of_shelters where shelter_Username = ? and uuid = ?',
     [Username, uuid],
     function(err, results) {
-      if (results.affectedRows !== 0 && typeof results[0].url !== undefined)
-        fs.unlink(JSON.parse(JSON.stringify(results[0].url)), resultHandler);
+      if (results.affectedRows !== 0 &&  results[0].abspath !== null)
+        fs.unlink(JSON.parse(JSON.stringify(results[0].abspath)), resultHandler);
     }
   );
   connection.query(
@@ -578,7 +629,6 @@ module.exports.deleteShelterPet = function(Username, uuid, callback) {
     [Username, uuid],
     function(err, results) {
       if (err) return callback(err); // some error with query
-      console.log(results);
       return callback(null, results); // if successful
     }
   );
