@@ -444,7 +444,7 @@ module.exports.rejectDate = function(shelter, uuid, callback){
 module.exports.viewDateRequests = function(shelter, callback) {
   connection.query(
     'SELECT dates.dates_uuid, dates.status, users.Username, users.firstname, users.lastname, users.address, users.contactnum, users.email,\
-    pets_of_shelters.name, pets_of_shelters.kind, pets_of_shelters.breed, pets_of_shelters.sex FROM users\
+    pets_of_shelters.name, pets_of_shelters.uuid, pets_of_shelters.kind, pets_of_shelters.breed, pets_of_shelters.sex FROM users\
     LEFT OUTER JOIN dates ON (users.Username = dates.user_Username)\
     LEFT OUTER JOIN pets_of_shelters ON (dates.pet_uuid = pets_of_shelters.uuid)\
     WHERE pets_of_shelters.shelter_Username = ?',
