@@ -382,7 +382,7 @@ module.exports.viewSpecificAdoptRequest = function(uuid, shelter, callback) {
 
 module.exports.datePet = function(newDate, callback) {
   var pet = newDate.pet_uuid;
-  var status = 'ADOPT';
+  var status = 'DATES';
   var both = 'BOTH';
   connection.query(
     'SELECT * FROM pets_of_shelters WHERE status = ? OR status = ? && uuid = ?',
@@ -404,8 +404,6 @@ module.exports.datePet = function(newDate, callback) {
     }
   );
 };
-
-module.exports.viewSpecificDate
 
 module.exports.approveDate = function(shelter, uuid, callback){
   var today = new Date();
