@@ -84,7 +84,8 @@ module.exports.deleteRequest = function(
     function(err, results) {
       if (
         results.affectedRows !== 0 &&
-        typeof results[0].rescue_abspath !== undefined
+        typeof results[0].rescue_abspath !== undefined 
+        && results[0].rescue_abspath !== null
       )
         fs.unlink(
           JSON.parse(JSON.stringify(results[0].rescue_abspath)),

@@ -151,13 +151,17 @@ module.exports.deletePost = function(post_uuid, user, callback) {
     function(err, results) {
       if (
         results.affectedRows !== 0 &&
-        typeof results[0].img_abspath !== 'undefined'
+        typeof results[0].img_abspath !== 'undefined' && results[0].img_abspath!== null
       ) {
         fs.unlink(
           JSON.parse(JSON.stringify(results[0].img_abspath)),
           resultHandler
         );
-        connection.query(
+      }
+    }
+  );
+
+  connection.query(
           'DELETE FROM posts WHERE post_uuid = ? && Posted_by = ?',
           [post_uuid, user],
           function(err, results) {
@@ -170,9 +174,6 @@ module.exports.deletePost = function(post_uuid, user, callback) {
             }
           }
         );
-      }
-    }
-  );
 };
 
 //add posts to 'post' table in 'fostr' db
@@ -484,7 +485,7 @@ module.exports.deleteComment = function(
     function(err, results) {
       if (
         results.affectedRows !== 0 &&
-        typeof results[0].img_abspath !== undefined
+        typeof results[0].img_abspath !== undefined && results[0].img_abspath !== null
       ) {
         fs.unlink(
           JSON.parse(JSON.stringify(results[0].img_abspath)),

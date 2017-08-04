@@ -42,7 +42,6 @@ router.post('/shelterEmail', function(req, res) {
 });
 
 router.post('/shelter', function(req, res, next) {
-  // console.log(req.files);
   if (
     typeof req.body.Username !== 'undefined' &&
     typeof req.body.shelter_name !== 'undefined' &&
@@ -182,6 +181,9 @@ router.post('/userEmail', function(req, res) {
     else if (results) res.status(409).send(null);
   });
 });
+
+
+
 router.post('/user', function(req, res, next) {
   if (
     typeof req.body.Username !== 'undefined' &&
@@ -232,13 +234,13 @@ router.post('/user', function(req, res, next) {
         var mime = req.files.icon.mimetype;
         var name = newUser.Username + '-' + icon.name;
         var url = __dirname + '/icons/users/' + name;
-        console.log('here');
         if (mime.substring(0, 5) === 'image') {
           icon.mv(url, function(err) {
             if (err) {
               console.log('api err: not able to receive image');
             } else {
               newUser.icon_url = '/signup/icons/users/' +name;
+              newUser.icon_abspath= url;
               var dimensions = sizeOf(url);
               newUser.icon_width = dimensions.width;
               newUser.icon_height = dimensions.height;
