@@ -495,8 +495,8 @@ module.exports.viewSpecificDateRequest = function(uuid, callback) {
 
 module.exports.deleteAdoptRequest = function(status,adopt_uuid,user,callback){
   connection.query( 'SELECT * FROM adopts WHERE adopt_uuid = ?' , adopt_uuid,function(err,adopt){
-      var adopt_details=adopt[0];
-      console.log(adopt_details)
+    var adopt_details=adopt[0];
+    console.log(adopt_details)
     if( status==='CANCEL') {//for users
       connection.query('DELETE FROM adopts WHERE adopt_uuid = ? && user_Username = ?',[adopt_uuid,user],function(err,result){
         if(err) callback(err);
@@ -508,7 +508,7 @@ module.exports.deleteAdoptRequest = function(status,adopt_uuid,user,callback){
       });
     }else if (err){callback(err);
     }else{//for shelters
-      connection.query('SELECT * FROM pets_of_shelters WHERE pet_uuid = ? && shelter_Username = ?',[adopt.pet_uuid,user],function(err,pet){
+      connection.query('SELECT * FROM pets_of_shelters WHERE pet_uuid = ? && shelter_Username = ?',[adopt_details.pet_uuid,user],function(err,pet){
 
         if( status ==='DECLINE'){
          
@@ -537,7 +537,7 @@ module.exports.deleteAdoptRequest = function(status,adopt_uuid,user,callback){
         }else if( status ==='APPROVE'){
           
           
-          module.exports.deleteShelterPet(user,adopt.pet_uuid,function(err,result){
+          module.exports.deleteShelterPet(user,adopt_details.pet_uuid,function(err,result){
             if(err) callback(err);
             else{
               var newNotif = {
