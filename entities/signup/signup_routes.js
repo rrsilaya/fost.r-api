@@ -181,6 +181,9 @@ router.post('/userEmail', function(req, res) {
     else if (results) res.status(409).send(null);
   });
 });
+
+
+
 router.post('/user', function(req, res, next) {
   if (
     typeof req.body.Username !== 'undefined' &&

@@ -494,8 +494,9 @@ module.exports.viewSpecificDateRequest = function(uuid, callback) {
 
 
 module.exports.deleteAdoptRequest = function(status,adopt_uuid,user,callback){
-
   connection.query( 'SELECT * FROM adopts WHERE adopt_uuid = ?' , adopt_uuid,function(err,adopt){
+      var adopt_details=adopt[0];
+      console.log(adopt_details)
     if( status==='CANCEL') {//for users
       connection.query('DELETE FROM adopts WHERE adopt_uuid = ? && user_Username = ?',[adopt_uuid,user],function(err,result){
         if(err) callback(err);
@@ -510,10 +511,13 @@ module.exports.deleteAdoptRequest = function(status,adopt_uuid,user,callback){
       connection.query('SELECT * FROM pets_of_shelters WHERE pet_uuid = ? && shelter_Username = ?',[adopt.pet_uuid,user],function(err,pet){
 
         if( status ==='DECLINE'){
-          /*
+         
+          connection.query('DELETE FROM adopts WHERE adopt_uuid = ?',adopt_uuid,function(err,result){
+            if(err) callback(err);
+            else{
               //notify user
               var newNotif = {
-                notif_for: adopt.user_Username,
+                notif_for: adopt_details.user_Username,
                 notif_message:
                   user +
                   ' declined your request for adoption of pet ' + adopt_uuid,
@@ -523,35 +527,32 @@ module.exports.deleteAdoptRequest = function(status,adopt_uuid,user,callback){
               //when 'notif_for' is logged in,he/she will received this notification
               notify.addNotif(newNotif, function(err, results) {
                 if (err) console.log(err);
-                else console.log(adopt.user_Username + 'will be notified');
-              });*/
-          connection.query('DELETE FROM adopts WHERE adopt_uuid = ?',adopt_uuid,function(err,result){
-            if(err) callback(err);
-            else{
-              
+                else console.log(adopt_details.user_Username + 'will be notified');
+              });
               callback(null,result);
               console.log('DECLINED');
               
             }
           });
         }else if( status ==='APPROVE'){
-          /*
-          var newNotif = {
-            notif_for: adopt.user_Username,
-            notif_message:
-            user+
-              ' approved your request for adoption of pet ' + adopt_uuid + ' Please contact the shelter for inquiries.',
-              date_created: new Date()
-          };
-            //add to notifications table
-            //when 'notif_for' is logged in,he/she will received this notification
-          notify.addNotif(newNotif, function(err, results) {
-            if (err) console.log(err);
-            else console.log(adopt.user_Username + 'will be notified');
-          });*/
+          
+          
           module.exports.deleteShelterPet(user,adopt.pet_uuid,function(err,result){
             if(err) callback(err);
             else{
+              var newNotif = {
+                notif_for: adopt_details.user_Username,
+                notif_message:
+                user+
+                  ' approved your request for adoption of pet ' + adopt_uuid + ' Please contact the shelter for inquiries.',
+                date_created: new Date()
+              };
+                //add to notifications table
+                //when 'notif_for' is logged in,he/she will received this notification
+              notify.addNotif(newNotif, function(err, results) {
+                if (err) console.log(err);
+                else console.log(adopt_details.user_Username + ' will be notified');
+              });
               callback(null,result);
               console.log('APPROVED');
               
