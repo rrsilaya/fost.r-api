@@ -485,7 +485,7 @@ module.exports.deleteComment = function(
     function(err, results) {
       if (
         results.affectedRows !== 0 &&
-        typeof results[0].img_abspath !== undefined && esults[0].img_abspath !== null
+        typeof results[0].img_abspath !== undefined && results[0].img_abspath !== null
       ) {
         fs.unlink(
           JSON.parse(JSON.stringify(results[0].img_abspath)),
