@@ -163,8 +163,9 @@ connection.query(
 connection.query(
   '\
 CREATE TABLE votes_for_posts(\
-    `voted_by` varchar(52) NOT NULL,\
+    `voted_by` varchar(52) UNIQUE NOT NULL,\
     `post_uuid` varchar(36) NOT NULL,\
+    `action` enum("UPVOTE","DOWNVOTE") NOT NULL,\
     CONSTRAINT votes_for_posts_fk FOREIGN KEY(post_uuid)\
     REFERENCES posts(post_uuid)\
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'
@@ -193,8 +194,9 @@ CREATE TABLE comments_on_posts (\
 connection.query(
   '\
 CREATE TABLE votes_for_comments(\
-    `voted_by` varchar(52) NOT NULL,\
+    `voted_by` varchar(52) UNIQUE NOT NULL,\
     `comment_uuid` varchar(36) NOT NULL,\
+    `action` enum("UPVOTE","DOWNVOTE") NOT NULL,\
     CONSTRAINT votes_for_comments_fk FOREIGN KEY(comment_uuid)\
     REFERENCES comments_on_posts(comment_uuid)\
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1;'

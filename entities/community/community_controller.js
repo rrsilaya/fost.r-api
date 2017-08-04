@@ -184,14 +184,19 @@ module.exports.addPost = function(newPost, callback) {
   });
 };
 
+
+
 // vote a post
-module.exports.voteToPost = function(User, post_uuid, callback) {
+module.exports.voteToPost = function(action,User, post_uuid, callback) {
   var today = new Date(); // updated_at which could be useful for notifications later on
   var vote = {
     voted_by: User,
-    post_uuid: post_uuid
+    post_uuid: post_uuid,
+    action: action,
   };
-  connection.query(
+
+  if(action === 'UPVOTE'){
+    connection.query(
     'UPDATE posts SET votes = votes+1 WHERE post_uuid = ?',
     post_uuid,
     (err, results) => {
@@ -224,35 +229,149 @@ module.exports.voteToPost = function(User, post_uuid, callback) {
           }
         );
       }
-    }
-  );
-};
-
-//unvote a post
-module.exports.unvoteToPost = function(User, post_uuid, callback) {
-  var today = new Date();
-  connection.query(
+    });
+  }else if(action === 'DOWNVOTE'){
+    connection.query(
     'UPDATE posts SET votes = votes-1 WHERE post_uuid = ?',
     post_uuid,
-    function(err, results) {
+    (err, results) => {
       if (err) {
-        console.log('unvoteToPost err');
-        callback(err);
+        console.log('voteToPost error');
+        return callback(err); // some error with query
       } else {
         connection.query(
-          'DELETE FROM votes_for_posts WHERE voted_by = ? && post_uuid = ?',
-          [User, post_uuid],
-          function(err, results) {
+          'UPDATE posts SET updated_at = ? WHERE post_uuid =?',
+          [today, post_uuid],
+          (err, results) => {
             if (err) {
-              console.log('unvotePost err');
-              callback(err);
+              console.log('error upon updating updated_at');
+              return callback(err);
+            } else {
+              console.log('updated updated_at');
+              console.log('inserting INTO votes table');
+              connection.query(
+                'INSERT INTO votes_for_posts SET ?',
+                vote,
+                function(err, results) {
+                  if (err) {
+                    console.log('votePost err!');
+                    callback(err);
+                  }
+                  callback(null, results); // mysql query; successful
+                }
+              );
             }
-            callback(null, results); // mysql query; successful
           }
         );
       }
-    }
-  );
+    });
+  }
+  
+};
+
+//unvote a post
+module.exports.unvoteToPost = function(action,User, post_uuid, callback) {
+  var today = new Date();
+
+  connection.query(
+    'SELECT * FROM votes_for_posts WHERE post_uuid = ? && voted_by = ?',
+    [post_uuid, User],
+    function(err, results) {
+
+      if(err) console.log(err);
+      else if(results.affectedRows!==0){
+        var prev_action=results[0].action;
+        if(prev_action === 'UPVOTE' && action === 'UPVOTE '){
+          connection.query(
+            'UPDATE posts SET votes = votes-1 WHERE post_uuid = ?',
+            post_uuid,
+            function(err, results) {
+              if (err) {
+                console.log('unvoteToPost err');
+                callback(err);
+              } else {
+                connection.query(
+                  'DELETE FROM votes_for_posts WHERE voted_by = ? && post_uuid = ?',
+                  [User, post_uuid],
+                  function(err, results) {
+                    if (err) {
+                      console.log('unvotePost err');
+                      callback(err);
+                    }
+                    callback(null, results); // mysql query; successful
+                  }
+                );
+              }
+          });
+        }else if(prev_action === 'UPVOTE ' && action === 'DOWNVOTE '){
+          connection.query(
+            'UPDATE votes_for_posts SET action = "DOWNVOTE" WHERE post_uuid = ?',
+            post_uuid,
+            function(err, results) {
+              if (err) {
+                console.log('unvoteToPost err');
+                callback(err);
+              } else {
+                connection.query(
+                  'DELETE FROM votes_for_posts WHERE voted_by = ? && post_uuid = ?',
+                  [User, post_uuid],
+                  function(err, results) {
+                    if (err) {
+                      console.log('unvotePost err');
+                      callback(err);
+                    }
+                    callback(null, results); // mysql query; successful
+                  }
+                );
+              }
+          });
+        }else if(prev_action === 'DOWNVOTE ' && action === 'UPVOTE'){
+          connection.query(
+            'UPDATE posts SET votes = votes+1 WHERE post_uuid = ?',
+            post_uuid,
+            function(err, results) {
+              if (err) {
+                console.log('unvoteToPost err');
+                callback(err);
+              } else {
+                connection.query(
+                  'UPDATE votes_for_posts SET action = "UPVOTE" WHERE voted_by = ? && post_uuid = ?',
+                  [User, post_uuid],
+                  function(err, results) {
+                    if (err) {
+                      console.log('unvotePost err');
+                      callback(err);
+                    }
+                    callback(null, results); // mysql query; successful
+                  }
+                );
+              }
+            });
+        }else if(prev_action === 'DOWNVOTE ' && action === 'DOWNVOTE'){
+          connection.query(
+            'UPDATE posts SET votes = votes+1 WHERE post_uuid = ?',
+            post_uuid,
+            function(err, results) {
+              if (err) {
+                console.log('unvoteToPost err');
+                callback(err);
+              } else {
+                connection.query(
+                  'DELETE FROM votes_for_posts WHERE voted_by = ? && post_uuid = ?',
+                  [User, post_uuid],
+                  function(err, results) {
+                    if (err) {
+                      console.log('unvotePost err');
+                      callback(err);
+                    }
+                    callback(null, results); // mysql query; successful
+                  }
+                );
+              }
+            });
+        }
+      }
+  }); 
 };
 
 /***** controllers for votes_for_posts **********/
@@ -280,10 +399,10 @@ module.exports.checkIfVotedPost = function(User, post_uuid, callback) {
       if (err) callback(err);
       else if (results.length > 0) {
         console.log(User + ' has already voted ' + post_uuid);
-        callback(null, results);
+        callback(null, 'ALREADY_VOTED');
       } else {
         console.log(User + ' has not yet voted ' + post_uuid);
-        callback(null, null);
+        callback(null, 'NOT_YET');
       }
     }
   );

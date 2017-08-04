@@ -148,56 +148,73 @@ router.get('/:post_uuid', function(req, res, next) {
   });
 });
 
-router.put('/:post_uuid', function(req, res) {
+
+router.put('/:action/:post_uuid', function(req, res) {
   // will only be used for votes
   var post_uuid = req.params.post_uuid;
   var User = req.session.body.Username;
+  var action = req.params.action;
   controller.checkIfVotedPost(User, post_uuid, function(err, rows) {
     if (err) {
       res.status(500).send(err);
       console.log('checkIfVotedPost some err');
-    } else if (!rows) {
-      controller.voteToPost(User, post_uuid, function(err, rows2) {
-        if (err) {
-          console.log('voteToPost err');
-          res.status(500).send(err);
-        } else if (rows2) {
-          /*notify the user */
-          var query = 'SELECT * FROM posts WHERE post_uuid = ?';
-          //returns Username of user who owns the post
-          notify.getUser(query, post_uuid, function(err, results) {
-            if (err) console.log(err);
-            else if (
-              results.affectedRows !== 0 &&
-              results[0].Posted_by !== req.session.body.Username
-            ) {
-              var newNotif = {
-                notif_for: results[0].Posted_by,
-                notif_message: req.session.body.Username + ' voted your post. ',
-                notif_url: 'api/community/' + post_uuid,
-                date_created: new Date()
-              };
-              //add to notifications table
-              //when 'notif_for' is logged in,he/she will received this notification
-              notify.addNotif(newNotif, function(err, results) {
-                if (err) console.log(err);
-                //else if(results.affectedRows!==0) //res.status(200).send(newComment);
-              });
+    } else if (rows) {
+
+      switch(rows){
+        case 'ALREADY_VOTED' :
+          console.log('UNVOTING');
+
+          controller.unvoteToPost(action,User, post_uuid, function(err, rows2) {
+            if (err) {
+              console.log('unvoteToPost err');
+              res.status(500).send(err);
+            } else if (rows2) {
+              res.status(201).send(null);
             }
           });
-          res.status(201).send(null);
-        }
-      });
-    } else if (rows) {
-      controller.unvoteToPost(User, post_uuid, function(err, rows2) {
-        if (err) {
-          console.log('unvoteToPost err');
-          res.status(500).send(err);
-        } else if (rows2) {
-          res.status(201).send(null);
-        }
-      });
+          res.status(200)
+          break;
+        case 'NOT_YET' : 
+          console.log('VOTING');
+          controller.voteToPost(action,User, post_uuid, function(err, rows2) {
+            if (err) {
+              console.log('voteToPost err');
+              res.status(500).send(err);
+            } else if (rows2) {
+              /*notify the user */
+              var query = 'SELECT * FROM posts WHERE post_uuid = ?';
+              //returns Username of user who owns the post
+              notify.getUser(query, post_uuid, function(err, results) {
+                if (err) console.log(err);
+                else if (
+                  results.affectedRows !== 0 &&
+                  results[0].Posted_by !== req.session.body.Username
+                ) {
+                  var newNotif = {
+                    notif_for: results[0].Posted_by,
+                    notif_message: req.session.body.Username + action +' your post. ',
+                    notif_url: 'api/community/' + post_uuid,
+                    date_created: new Date()
+                  };
+                  //add to notifications table
+                  //when 'notif_for' is logged in,he/she will received this notification
+                  notify.addNotif(newNotif, function(err, results) {
+                    if (err) console.log(err);
+                    //else if(results.affectedRows!==0) //res.status(200).send(newComment);
+                  });
+                }
+              });
+              res.status(201).send(null);
+            }
+          });
+          res.status(200)
+
+          break;
+
+
+      }
     }
+ 
   });
 });
 
