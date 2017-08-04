@@ -14,6 +14,7 @@ shortid.characters(
 
 var controller = require('./pets_controller');
 //serve static files
+const notify = require('./../notifications/notifications_controllers');
 
 router.use(validator()); // express-validator
 router.use(fileUpload()); // express-fileupload
@@ -202,32 +203,70 @@ router.post('/dates/:pet_uuid', function(req, res) {
   }
 });
 
-router.put('/dates/approve/:pet_uuid', function(req, res){
+router.put('/dates/approve/:dates_uuid', function(req, res){
   if(req.session.body.accountType === 'shelter'){
     var shelter = req.session.body.Username;
-    var uuid = req.params.pet_uuid;
-    controller.approveDate(shelter, uuid, function(err, results){
+    var uuid = req.params.dates_uuid;
+    controller.getPetUUID(uuid, function(err, results){
       if (err) res.status(500).json(err);
-      if (results.changedRows){
-        controller.viewSpecificDateRequest(uuid, function(err, request){
+      else{
+        controller.approveDate(shelter, results.pet_uuid, function(err, results){
           if (err) res.status(500).json(err);
-          res.status(201).json(request);
+          if (results){
+            controller.getPetUUID(uuid, function(err, request){
+              if (err) res.status(500).json(err);
+              var User = request.user_Username; 
+              console.log(User);
+              var newNotif = {
+                notif_for:User,
+                notif_message:
+                  `${shelter} approved your request for dates with ${request.pet_uuid}`,
+                notif_url:`dateRequests/${request.dates_uuid}`,
+                date_created: new Date()
+              };
+              //add to notifications table
+              notify.addNotif(newNotif, function(err, results) {
+                if (err) console.log(err);
+                console.log(newNotif.notif_for + 'will be notified');
+              });
+              res.status(201).json(request);
+            });
+          }
         });
       }
     });
   }
 });
 
-router.put('/dates/reject/:pet_uuid', function(req, res){
+router.put('/dates/reject/:dates_uuid', function(req, res){
   if(req.session.body.accountType === 'shelter'){
     var shelter = req.session.body.Username;
-    var uuid = req.params.pet_uuid;
-    controller.rejectDate(shelter, uuid, function(err, results){
+    var uuid = req.params.dates_uuid;
+    controller.getPetUUID(uuid, function(err, results){
       if (err) res.status(500).json(err);
-      if (results.changedRows){
-        controller.viewSpecificDateRequest(uuid, function(err, request){
+      else{
+        controller.rejectDate(shelter, results.pet_uuid, function(err, results){
           if (err) res.status(500).json(err);
-          res.status(201).json(request);
+          if (results){
+            controller.getPetUUID(uuid, function(err, request){
+              if (err) res.status(500).json(err);
+              var User = request.user_Username; 
+              console.log(User);
+              var newNotif = {
+                notif_for:User,
+                notif_message:
+                  `${shelter} rejected your request for dates with ${request.pet_uuid}`,
+                notif_url:`dateRequests/${request.dates_uuid}`,
+                date_created: new Date()
+              };
+              //add to notifications table
+              notify.addNotif(newNotif, function(err, results) {
+                if (err) console.log(err);
+                console.log(newNotif.notif_for + 'will be notified');
+              });
+              res.status(201).json(request);
+            });
+          }
         });
       }
     });
@@ -238,6 +277,28 @@ router.get('/dateRequests', function(req, res){
   if (req.session.body.accountType === 'shelter'){
     var shelter = req.session.body.Username;
     controller.viewDateRequests(shelter, function(err, results){
+      if (err) res.status(500).json(err);
+      res.status(200).json(results);
+    });
+  }else if (req.session.body.accountType === 'user'){
+    var user = req.session.body.Username;
+    controller.viewDateRequestForUser(user, function(err, results){
+      if (err) res.status(500).json(err);
+      res.status(200).json(results);
+    });
+  }
+});
+
+router.get('/dateRequests/:date_uuid', function(req, res){
+  if (req.session.body.accountType === 'shelter'){
+    var shelter = req.session.body.Username;
+    controller.viewDateRequests(shelter, function(err, results){
+      if (err) res.status(500).json(err);
+      res.status(200).json(results);
+    });
+  }else if (req.session.body.accountType === 'user'){
+    var user = req.session.body.Username;
+    controller.viewDateRequestForUser(user, function(err, results){
       if (err) res.status(500).json(err);
       res.status(200).json(results);
     });
