@@ -60,13 +60,18 @@ router.get('/MyAccount', function(req, res) {
   if (req.session.body.accountType == 'user') {
     controller.viewUserInfo(Username, function(err, results) {
       if (err) return res.status(500).json(err); // server error
-      res.status(200).json(results); // returns accounts of users
+      controller.countAllUserPets(Username, function(err, count){
+        if (err) res.status(500).json(err);
+        res.status(200).json({info:results, petCount:count}); // returns accounts of users
+      });
     });
   } else if (req.session.body.accountType == 'shelter') {
     controller.viewShelterInfo(Username, function(err, results) {
       if (err) return res.status(500).json(err); // server error
-      res.status(200).json(results); // returns accounts of users
-    });
+      controller.countAllShelterPets(Username, function(err, count){
+        if (err) res.status(500).json(err);
+        res.status(200).json({info:results, petCount:count}); // returns accounts of users
+      });
   }
 });
 

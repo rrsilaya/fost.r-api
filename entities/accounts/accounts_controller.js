@@ -25,6 +25,29 @@ module.exports.countAllShelters = function(callback) {
   });
 };
 
+/* counts pets */
+
+module.exports.countAllShelterPets = function(Username, callback){
+  connection.query(
+     'SELECT COUNT(*) as count FROM pets_of_users WHERE shelter_Username = ?', Username,
+    (err, count) => {
+      if (err) callback(err);
+      callback(null, count[0].count); // this will return an integer of the count of all the posts
+    }
+  );
+};
+
+module.exports.countAllUserPets = function(Username, callback){
+  connection.query(
+     'SELECT COUNT(*) as count FROM pets_of_users WHERE user_Username = ?', Username,
+    (err, count) => {
+      if (err) callback(err);
+      callback(null, count[0].count); // this will return an integer of the count of all the posts
+    }
+  );
+};
+
+
 /* viewing all accounts (users or shelters)*/
 module.exports.viewAllUsers = function(page_number, callback) {
   var number = parseInt(page_number);
