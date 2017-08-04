@@ -19,7 +19,7 @@ module.exports.viewNotif = function(user, callback) {
     user,
     function(err, results) {
       if (err) return callback(err);
-      else return callback(null, results);
+      return callback(null, results);
     }
   );
 };
