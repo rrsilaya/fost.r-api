@@ -435,7 +435,7 @@ router.post('/myPets', function(req, res) {
       kind: req.body.kind,
       breed: req.body.breed,
       sex: req.body.sex,
-      status: req.body.status,
+      status:'BOTH',
       birthday: req.body.birthday,
       created_at: today,
       updated_at: today,
