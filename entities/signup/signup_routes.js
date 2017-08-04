@@ -240,6 +240,7 @@ router.post('/user', function(req, res, next) {
               console.log('api err: not able to receive image');
             } else {
               newUser.icon_url = '/signup/icons/users/' +name;
+              newUser.icon_abspath= url;
               var dimensions = sizeOf(url);
               newUser.icon_width = dimensions.width;
               newUser.icon_height = dimensions.height;

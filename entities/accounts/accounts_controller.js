@@ -96,7 +96,7 @@ module.exports.deleteUserAccount = function(Username, callback) {
     err,
     results
   ) {
-    if (results[0].icon_url) fs.unlink(results[0].icon_url, resultHandler);
+    if (results[0].icon_abspath) fs.unlink(results[0].icon_abspath, resultHandler);
   });
   connection.query('DELETE FROM users WHERE Username = ?', Username, function(
     err,
@@ -114,9 +114,9 @@ module.exports.deleteShelterAccount = function(Username, callback) {
     'SELECT * FROM shelters where Username = ?',
     Username,
     function(err, results) {
-      if (results.affectedRows !== 0) {
-        fs.unlink(results[0].icon_url, resultHandler);
-        fs.unlink(results[0].file_path, resultHandler);
+      if (results.affectedRows !== 0 && results[0].icon_abspath !== null) {
+        fs.unlink(results[0].icon_abspath, resultHandler);
+        fs.unlink(results[0].file_absath, resultHandler);
       }
     }
   );
