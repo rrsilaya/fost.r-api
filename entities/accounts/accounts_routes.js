@@ -72,10 +72,7 @@ router.get('/MyAccount', function(req, res) {
         if (err) res.status(500).json(err);
         res.status(200).json({info:results, petCount:count}); // returns accounts of users
       });
-<<<<<<< HEAD
-  });
-=======
->>>>>>> d708940a57c126ddcdab6ce4404979de396442b9
+    });
   }
 });
 
