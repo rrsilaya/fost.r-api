@@ -408,9 +408,6 @@ module.exports.datePet = function(newDate, callback) {
 module.exports.getPetUUID = function(dates_uuid, callback){
   connection.query('SELECT * FROM dates WHERE dates_uuid = ?', dates_uuid, (err, results)=>{
     if (err) callback(err);
-    console.log('get ' + results[0]);
-    console.log('get ' + results);
-    console.log('get ' + results[0].user_Username)
     return callback(null, results[0]);
   });
 }
@@ -425,7 +422,6 @@ module.exports.approveDate = function(shelter, uuid, callback){
     if (err) callback(err);
     else{
       connection.query('UPDATE dates SET ? WHERE dates_uuid = ?', [update, uuid], (err, results)=>{
-                console.log('results ' + results[0]);
         if (err) callback(err);
         return callback(null, results); // mysql query results
       });
@@ -443,7 +439,6 @@ module.exports.rejectDate = function(shelter, uuid, callback){
     if (err) callback(err);
     else{
       connection.query('UPDATE dates SET ? WHERE dates_uuid = ?', [update, uuid], (err, results)=>{
-        console.log('results ' + results);
         if (err) callback(err);
         return callback(null, results); // mysql query results
         
@@ -459,7 +454,7 @@ module.exports.viewDateRequestForShelter = function(shelter, uuid, callback){
     LEFT OUTER JOIN dates ON (users.Username = dates.user_Username)\
     LEFT OUTER JOIN pets_of_shelters ON (dates.pet_uuid = pets_of_shelters.uuid)\
     WHERE pets_of_shelters.shelter_Username = ? && dates.dates_uuid = ?',
-    shelter,
+    [shelter, uuid],
     (err, results) => {
       if (err) callback(err);
       callback(null, results);
@@ -477,18 +472,19 @@ module.exports.viewDateRequests = function(shelter, callback) {
     shelter,
     (err, results) => {
       if (err) callback(err);
-      callback(null, results);
+      return callback(null, results);
     }
   );
 };
 
-module.exports.viewAllDateRequestsForUser = function(callback){
+module.exports.viewAllDateRequestsForUser = function(user, callback){
   connection.query(
     'SELECT dates.dates_uuid, dates.status, shelters.shelter_name, shelters.address, pets_of_shelters.name, pets_of_shelters.kind,\
     pets_of_shelters.breed, pets_of_shelters.sex from shelters\
     LEFT OUTER JOIN dates ON (dates.user_Username = dates.user_Username)\
-    LEFT OUTER JOIN pets_of_shelters ON (dates.pet_uuid = pets_of_shelters.uuid)',
-    (err, results)=>{
+    LEFT OUTER JOIN pets_of_shelters ON (dates.pet_uuid = pets_of_shelters.uuid)\
+    where dates.user_Username = ?',
+    user, (err, results)=>{
       if (err) callback(err);
       callback(null, results);
     });
@@ -498,10 +494,10 @@ module.exports.viewDateRequestForUser = function(user, uuid, callback) {
   connection.query(
     'SELECT dates.dates_uuid, dates.status, shelters.shelter_name, shelters.address, pets_of_shelters.name, pets_of_shelters.kind,\
     pets_of_shelters.breed, pets_of_shelters.sex from shelters\
-    LEFT OUTER JOIN dates ON (dates.user_Username = dates.user_Username)\
-    LEFT OUTER JOIN pets_of_shelters ON (dates.pet_uuid = pets_of_shelters.uuid)\
+    LEFT OUTER JOIN pets_of_shelters ON (shelters.Username = pets_of_shelters.shelter_Username)\
+    LEFT OUTER JOIN dates ON (pets_of_shelters.uuid = dates.pet_uuid)\
     WHERE dates.user_Username = ? && dates.dates_uuid = ?',
-    user,
+    [user, uuid],
     (err, results)=>{
       if (err) callback(err);
       callback(null, results);
