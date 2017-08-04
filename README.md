@@ -174,7 +174,8 @@
 | `/pets/dates/:pet_uuid`                  | `POST`   | 201           | json of time of the date submitted by the user                        |
 | `/pets/dates/approve/:pet_uuid`          |  `PUT`   | 201           | json of the updated date request                                      |
 | `/pets/dates/reject/:pet_uuid`           |  `PUT`   | 201           | json of the updated date request                                      |
-| `/pets/dateRequests`                     | `GET`    | 200           | json of requests together with user's info and pet's info             |
+| `/pets/dateRequests`                     | `GET`    | 200           | json of requests together with user's info (if shelter) or shelter's info (if user) and pet's info             |
+| `/pets/dateRequests/:dates_uuid`         | `GET`    | 200           | json of specific request together with user's info (if shelter) or shelter's info (if user) and pet's info             |
 | `/pets/both/page/:page_number`           | `GET`    | 200           | json of page (number), pageTotal and pets for both adopt and dates    |
 | `/pets/:owner/viewShelterPets`           | `GET`    | 200           | json of pets of :owner                                                |
 | `/pets/:owner/viewUserPets`              | `GET`    | 200           | json of pets of :owner                                                |

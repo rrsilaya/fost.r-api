@@ -289,16 +289,17 @@ router.get('/dateRequests', function(req, res){
   }
 });
 
-router.get('/dateRequests/:date_uuid', function(req, res){
+router.get('/dateRequests/:dates_uuid', function(req, res){
+  var uuid = req.params.dates_uuid;
   if (req.session.body.accountType === 'shelter'){
     var shelter = req.session.body.Username;
-    controller.viewDateRequests(shelter, function(err, results){
+    controller.viewDateRequests(shelter, uuid, function(err, results){
       if (err) res.status(500).json(err);
       res.status(200).json(results);
     });
   }else if (req.session.body.accountType === 'user'){
     var user = req.session.body.Username;
-    controller.viewDateRequestForUser(user, function(err, results){
+    controller.viewDateRequestForUser(user, uuid, function(err, results){
       if (err) res.status(500).json(err);
       res.status(200).json(results);
     });
