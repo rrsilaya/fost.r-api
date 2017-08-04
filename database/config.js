@@ -244,7 +244,7 @@ DELETE FROM notifications WHERE date_created < (CURDATE() - INTERVAL 15 DAY);'
 // delete date requests that are one day older
 connection.query(
   '\
-DELETE FROM dates WHERE date_created < (CURDATE() - INTERVAL 1 DAY);'
+DELETE FROM dates WHERE created_at < (CURDATE() - INTERVAL 1 DAY);'
 );
 
 connection.end();

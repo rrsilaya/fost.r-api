@@ -662,7 +662,7 @@ module.exports.deleteUserPet = function(Username, uuid, callback) {
     'SELECT * FROM pets_of_users where user_Username = ? and uuid = ?',
     [Username, uuid],
     function(err, results) {
-      if (results.affectedRows !== 0 && typeof results[0].abspath !== undefined)
+      if (results.affectedRows !== 0 && typeof results[0].abspath !== undefined && results[0].abspath !== null) 
         fs.unlink(JSON.parse(JSON.stringify(results[0].abspath)), resultHandler);
     }
   );

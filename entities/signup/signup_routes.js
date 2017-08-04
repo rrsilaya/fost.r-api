@@ -42,7 +42,6 @@ router.post('/shelterEmail', function(req, res) {
 });
 
 router.post('/shelter', function(req, res, next) {
-  // console.log(req.files);
   if (
     typeof req.body.Username !== 'undefined' &&
     typeof req.body.shelter_name !== 'undefined' &&
@@ -232,7 +231,6 @@ router.post('/user', function(req, res, next) {
         var mime = req.files.icon.mimetype;
         var name = newUser.Username + '-' + icon.name;
         var url = __dirname + '/icons/users/' + name;
-        console.log('here');
         if (mime.substring(0, 5) === 'image') {
           icon.mv(url, function(err) {
             if (err) {
