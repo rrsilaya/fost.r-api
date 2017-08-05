@@ -1,11 +1,11 @@
 <h1 align="center">
 	<img alt="fost.r" src="./src/assets/images/logo2-dblue.png" height="256px" />
 	<br />
-	fost.r Client
+	fost.r API
 	<br />
 	<img src="https://img.shields.io/badge/status-development-yellow.svg" />
-	<a href=""><img src="https://img.shields.io/badge/node-v7.8.0-green.svg" /></a>
-	<a href="https://facebook.github.io/react/"><img src="https://img.shields.io/badge/react-v15.5.4-green.svg" /></a>
+	<img src="https://img.shields.io/badge/node-v7.8.0-green.svg" />
+	<img src="https://img.shields.io/badge/express-v4.15.3-green.svg" />
 	<br />
 </h1>
 <h4 align="center">Raise the awareness on homeless animals because of neglect or abuse</h4>
