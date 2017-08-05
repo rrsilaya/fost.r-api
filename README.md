@@ -1,373 +1,86 @@
 <h1 align="center">
-  <img alt="fost.r" src="./assets/logo2-dblue.png" height="256px" />
-  <br />
-  fost.r API
-  <br />
-  <img src="https://img.shields.io/badge/status-development-yellow.svg" />
-  <img src="https://img.shields.io/badge/node-v7.8.0-green.svg" />
-  <img src="https://img.shields.io/badge/express-v4.15.3-green.svg" />
-  <img src="https://img.shields.io/badge/mysql-v2.13.0-green.svg" />
-  <br />
+	<img alt="fost.r" src="./src/assets/images/logo2-dblue.png" height="256px" />
+	<br />
+	fost.r Client
+	<br />
+	<img src="https://img.shields.io/badge/status-development-yellow.svg" />
+	<a href=""><img src="https://img.shields.io/badge/node-v7.8.0-green.svg" /></a>
+	<a href="https://facebook.github.io/react/"><img src="https://img.shields.io/badge/react-v15.5.4-green.svg" /></a>
+	<br />
 </h1>
-<h4 align="center">Raise the awareness on homeless animals because of neglect or abuse</h4>
+<h4 align="center">Raise awareness on homeless animals because of neglect or abuse</h4>
 
-## Table of Contents
-- [Installation](#installation)
-- [Routes](#routes)
-- [API](#api)
-  * [Requests](#requests)
-  * [Responses](#responses)
-- [Tables](#tables)
-  * [`users`](#users)
-  * [`shelters`](#shelters)
-  * [`pets_of_users`](#pets_of_users)
-  * [`pets_of_shelters`](#pets_of_shelters)
-  * [`adopts`](#adopts)
-  * [`dates`](#dates)
-  * [`posts`](#posts)
-  * [`comments_on_posts`](#comments_on_posts)
-  * [`rescue`](#rescue)
-  * [`notifications`](#notifications)
-- [Developers](#developers)
-  * [API](#api)
-  * [Client](#client)
+### Installation
+1. Have the latest version of [yarn](http://www.yarnpkg.com/).
+2. Clone this repository.
+3. Install all the dependencies using `yarn install`.
+4. Run the [API server](https://github.com/rrsilaya/fost.r-backend).
+5. Start the react app with `yarn start`.
 
-## Installation
-1. Install [NodeJS](https://nodejs.org/en/download/) and [MySQL](https://dev.mysql.com/downloads/installer/).
-2. Install dependencies with `npm install`.
-3. Configure database by editing `database/db.js` and `database/connection.js` with your MySQL credentials.
-4. Create database with `node ./database/config.js`.
-5. Start the server with `npm run devstart`.
-6. Access the api through `http://localhost:3000/api/`.
+It is assumed that you are using [yarn](http://www.yarnpkg.com/) as your package manager. To use [npm](https://www.npmjs.com/), do:
+```
+$ npm install && npm start
+```
 
-## Routes
+### Technologies Used
+* [ReactJS](https://facebook.github.io/react/)
+* [Redux (React Redux)](https://redux.js.org/)
+* [UIkit](https://getuikit.com/)
+* [MomentJS](https://momentjs.com/)
+* [Axios](https://github.com/mzabriskie/axios)
 
-|                  Route                   |  Method  |                                            Remarks                                             |
-| :--------------------------------------- | :------- | :--------------------------------------------------------------------------------------------- |
-| `/`                                      | `GET`    | Displays message(temp)                                                                         |
-| `/session`                               | `GET`    | Returns the account type (if logged in)                                                        |
-| `/login/user`                            | `POST`   | Redirects to `/` if logged in                                                                  |
-| `/login/shelter`                         | `POST`   | Redirects to `/` if logged in                                                                  |
-| `/logout`                                | `GET`    | Redirects to `/` after user logged out                                                         |
-| `/signup/userUsername`                   | `POST`   | Checks if entered username is already taken (users)                                            |
-| `/signup/userEmail`                      | `POST`   | Checks if entered email is already taken (users)                                               |
-| `/signup/shelterUsername`                | `POST`   | Checks if username is already taken (shelters)                                                 |
-| `/signup/shelterUsername`                | `POST`   | Checks if entered email is already taken (shelters)                                            |
-| `/signup/user`                           | `POST`   | Redirects to `/` if logged in                                                                  |
-| `/signup/shelter`                        | `POST`   | Redirects to `/` if logged in                                                                  |
-| `/notifications`                         | `GET`    | View all notifications                                                                         |
-| `/accounts/viewShelters/page/:page_number`| `GET`   | View all shelter accounts by page                                                              |
-| `/accounts/viewUsers/page/:page_number`  | `GET`    | View all user accounts by page                                                                 |
-| `/accounts/MyAccount`                    | `GET`    | View own info                                                                                  |
-| `/accounts/MyAccount`                    | `PUT`    | Update own info                                                                                |
-| `/accounts/MyAccount`                    | `DELETE` | Delete own account                                                                             |
-| `/pets/shelters/viewPetsBySex/:page_number/:sex/`|`GET`| View pets by specified sex in paramaters by page                                            |
-| `/pets/shelters/viewPetsByKind/:page_number/:kind/`|`GET`| View pets by specified kind in paramaters by page                                         |
-| `/pets/shelters/viewAllPets/page/:page_number`| `GET`| View pets owned by shelters by page                                                           |
-| `/pets/users/viewAllPets/page/:page_number`| `GET`  | View pets owned by users by page                                                               |
-| `/pets/adopt/page/:page_number`        | `GET`    | Show all pets (of shelters) that are allowed for adoption by page                                |
-| `/pets/adopt/:owner`                     | `GET`    | Show all pets (of a shelter) that are allowed for adoption                                     |
-| `/pets/adopt/:pet_uuid`                  | `POST`   | Process adoption request for :pet_uuid (if you're a user)                                      |
-| `/pets/dates/page/:page_number`          | `GET`    | Show all pets (of shelters) that are allowed for dates by page                                 |
-| `/pets/dates/:owner`                     | `GET`    | Show all pets (of a shelter) that are allowed for dates                                        |
-| `/pets/dates/:pet_uuid`                  | `POST`   | Process date request for :pet_uuid (if you're a user)                                          |
-| `/pets/dates/approve/:pet_uuid`          |  `PUT`   | Approve a date request; change its status to 'APPROVED'                                        |
-| `/pets/dates/reject/:pet_uuid`           |  `PUT`   | Reject a date request; change its status to 'REJECTED'                                         |
-| `/pets/dateRequests`                     | `GET`    | Show all date requests together with the user info (if shelter) and shelter info (if user) and pet's info   |
-| `/pets/dateRequests/:dates_uuid`         | `GET`    | Show specific date request together with the user info (if shelter) and shelter info (if user) and pet's info   |
-| `/pets/both/page/:page_number`           | `GET`    | Show all pets (of shelters) that are allowed for adoption & dates by page                      |
-| `/pets/:owner/viewShelterPets`           | `GET`    | View pets of owner                                                                             |
-| `/pets/:owner/viewUserPets`              | `GET`    | View pets of owner                                                                             |
-| `/pets/myPets`                           | `POST`   | Add a pet to db                                                                                |
-| `/pets/myPets`                           | `GET`    | View own pets                                                                                  |
-| `/pets/:pet_uuid`                        | `GET`    | View specific pet                                                                              |
-| `/pets/:pet_uuid`                        | `PUT`    | Update info of a pet  (could be used for ADOPT and DATES, set status to ADOPT, DATES, OR BOTH) |
-| `/pets/:pet_uuid`                        | `DELETE` | Delete a single pet given the pet_uuid                                                         |
-| `/community/sortByTimeDesc/page/:page_number`| `GET`| Displays all posts sorted by date (from newest to oldest) by page                              |
-| `/community/sortByTimeAsc/page/:page_number`| `GET` | Displays all posts sorted by date (from oldest to newest) by page                              |
-| `/community/sortByCommentsDesc/page/:page_number`|`GET`| Displays all posts sorted by number of comments (from most to least) by page                |
-| `/community/sortByCommentsAsc/page/:page_number`| `GET`| Displays all posts sorted by number of comments (from least to most) by page                |
-| `/community/sortByVotesDesc/page/:page_number`| `GET`| Displays all posts sorted by number of votes (from most to least) by page                     |
-| `/community/sortByVotesAsc/page/:page_number`| `GET`| Displays all posts sorted by number of votes (from least to most) by page                      |
-| `/community/addPost`                     | `POST`   | Add post                                                                                       |
-| `/community/:post_uuid`                  | `GET`    | View a post given its uuid                                                                     |
-| `/community/:post_uuid`                  | `PUT`    | Vote a post given its uuid                                                                     |
-| `/community/:post_uuid`                  | `DELETE` | Delete a post given its uuid (iff post is posted by the user itself)                           |
-| `/community/:post_uuid`                  | `POST`   | Add a comment                                                                                  |
-| `/community/:user/viewPosts/page/:page_number`| `GET`    | View all posts of a user (shelter or user) by page         |
-| `/community/viewAllComments/:post_uuid/page/:page_number`| `GET`| View all comments in the post by page; ordered by most to least votes (by 10 comments)|
-| `/community/:post_uuid/:comment_uuid`    | `GET`    | View a comment                                                                                 |
-| `/community/:post_uuid/:comment_uuid`    | `DELETE` | Delete a comment                                                                               |
-| `/community/:post_uuid/:comment_uuid`    | `PUT`    | Vote a comment                                                                                 |
-| `/rescue/`                               | `GET`    | View all requests                                                                              |
-| `/rescue/viewMyRequests`                 | `GET`    | View all submitted requests                                                                    |
-| `/rescue/:rescue_uuid`                   | `GET`    | View :rescue_uuid of logged in user                                                            |
-| `/rescue/:rescue_uuid`                   | `DELETE` | Deletes :rescue_uuid of logged in user                                                         |
-| `/rescue/:user/viewAllRequests`          | `GET`    | View all rescue requests from a user                                                           |
-| `/rescue/:rescue_uuid/deleteRequest`     | `GET`    | Delete a rescue request                                                                        |
-| `/rescue/:rescue_uuid/viewRescueRequest` | `GET`    | View a rescue request                                                                          |
-| `/rescue/submit_a_rescue_request`        | `POST`   | Submit a request for rescue                                                                    |
-| `/*`                                     | `GET`    | redirect to `/`                                                                                |
+### Features
+1. **Adopt** - adopt from pets offered by different animal shelters 
+2. **Date** - experience being with a pet in a day
+3. **Connect** - connect with the community of animal lovers and experts
+4. **Rescue** - file a rescue request on animals experiencing neglect or abuse
 
+### Project Structure
+```
+.
+├── node_modules
+├── public
+│   ├── index.html
+│   └── manifest.json
+├── src
+│   ├── app
+│   │   ├── components                  # global components
+│   │   │   ├── Main.js                 # main component, handles rendering of pages
+│   │   │   └── Navigation.js           # navigation bar
+│   │   ├── ducks                       # folder for all ducks*
+│   │   │   └── auth.js
+│   │   ├── pages                       # 'page' components of app
+│   │   │   ├── page1
+│   │   │   │   ├── <PageContainer>.js  # container component of page
+│   │   │   │   └── <Page>.js           # presentational component of page
+│   │   │   ├── AnonUser.js             # handles routes for unauthenticated users
+│   │   │   └── LoggedIn.js             # handles routes for logged in users
+│   │   ├── AppContainer.js
+│   │   ├── App.js
+│   │   └── store.js                    # redux store, handles app state
+│   ├── assets
+│   │   ├── css                         # folder for the app's stylesheets
+│   │   │   ├── <componentStyle>.css    # specific component stylesheet
+│   │   │   ├── index.css               # global stylesheet
+│   │   │   └── uikit.min.css           # framework stylesheet
+│   │   ├── fonts
+│   │   │   ├── <font>.eot
+│   │   │   ├── <font>.svg
+│   │   │   ├── <font>.ttf
+│   │   │   └── <font>.woff
+│   │   └── images
+│   │       └── section-background.svg  # framework image dependency
+│   └── index.js
+├── package.json
+├── README.md
+└── yarn.lock
+```
 
-
-### Routes for photos : 'localhost:3000/route/<filename.jpg>'
-
-|                  Route                   |  Method  |                                            Remarks                                             |
-| :--------------------------------------- | :------- | :--------------------------------------------------------------------------------------------- |
-| `/signup/icons/shelters`                 | `GET`    | Display a photo  from  `entities/signup/icons/shelters`                                        |
-| `signup/icons/users`                     | `GET`    | Display a photo  from  `entities/signup/icons/users`                                           |
-| `/signup/shelter-docs`                   | `GET`    | Display a photo  from  `entities/signup/shelter-docs`                                          |
-| `/pets/photos`                           | `GET`    | Display a photo  from  `entities/pets/photos`                                                  |
-| `/community/images_attached_to_posts`    | `GET`    | Display a photo  from  `entities/community/images_attached_to_posts`                           |
-| `/community/images_attached_to_comments` | `GET`    | Display a photo  from  `entities/community/images_attached_to_comments`                        | 
-| `/rescue/rescue-images`                  | `GET`    | Display a photo  from  `entities/rescue/rescue-images`                                         |
-
-
-## API
-### Requests
-> Please take note of the capitalization.
-
-|               Route               | Method |                                                                 Required Fields                                                                  |     Optional Fields     |
-| :-------------------------------- | :----- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------- |
-| `/signup/user`                    | `POST` | <ul><li>Username</li><li>firstname</li><li>lastname</li><li>birthday</li><li>address</li><li>contactnum</li><li>email</li><li>password</li></ul> | <ul><li>icon</li></ul>  |
-| `/signup/shelter`                 | `POST` | <ul><li>Username</li><li>shelter_name</li><li>address</li><li>contactnum</li><li>email</li><li>password</li><li>file</li></ul>                   | <ul><li>icon</li></ul>  |
-| `/login/user`                     | `POST` | <ul><li>Username</li><li>password</li></ul>                                                                                                      |                         |
-| `/login/shelter`                  | `POST` | <ul><li>Username</li><li>password</li></ul>                                                                                                      |                         |
-| `/pets/myPets`                    | `POST` | <ul><li>name</li><li>kind *(DOG, CAT, BIRD, or OTHERS)*</li><li>breed</li><li>sex *(MALE or FEMALE)*</li><li>birthday</li></ul>                  | <ul><li>photo</li></ul> |
-| `/accounts/MyAccount`             | `PUT`  | refer to `signup/` route depending on account type                                                                                               |                         |
-| `/pets/:pet_uuid`                 | `PUT`  | refer to `pets/myPets` route                                                                                                                     |                         |
-| `/pets/adopt/:pet_uuid`           | `POST`  |  route                                                                                                                     |                         |
-| `/pets/dates/:pet_uuid`           | `POST` |  date                            |                         |
-| `/pets/dates/approve/:pet_uuid`   | `PUT`  |                              |                         |
-| `/pets/dates/reject/:pet_uuid`    | `PUT`  |                              |                         |
-| `/community/addPost`              | `POST` | <ul><li>post_title</li><li>text_post</li></ul>                                                                                                   | <ul><li>photo</li></ul> |
-| `/community/:post_uuid`           | `POST` | <ul><li>comment_body</li><li>comment_title</li></ul>                                                                                                                   | <ul><li>photo</li></ul> |
-| `/rescue/submit_a_rescue_request` | `POST` | <ul><li>rescue_body</li></ul>                                                                                                                    | <ul><li>photo</li></ul> |
-
-### Responses
-|                  Route                   |  Method  | Response Code |                             Response Body                             |
-| :--------------------------------------- | :------- | :------------ | :-------------------------------------------------------------------- |
-| `/session`                               | `GET`    | 200           | `req.session.body.accountType`                                        |
-| `/login/user`                            | `POST`   | 200           | `req.session.body.accountType`                                        |
-| `/login/shelter`                         | `POST`   | 200           | `req.session.body.accountType`                                        |
-| `/logout`                                | `GET`    | 200           | `null`                                                                |
-| `/signup/user`                           | `POST`   | 201           | json of newUser                                                       |
-| `/signup/shelter`                        | `POST`   | 201           | json of newShelter                                                    |
-| `/notifications`                         | `GET`    | 200           | json of notifications                                                 |
-| `/accounts/viewShelters`                 | `GET`    | 200           | json of shelters                                                      |
-| `/accounts/viewUsers`                    | `GET`    | 200           | json of users                                                         |
-| `/accounts/MyAccount`                    | `GET`    | 200           | json of own account's info                                            |
-| `/accounts/MyAccount`                    | `PUT`    | 201           | json of mysql query                                                   |
-| `/accounts/MyAccount`                    | `DELETE` | 204           |                                                                       |
-| `/pets/users/viewAllPets/page/:page_number`| `GET`    | 200         | json of pets                                                          |
-| `/pets/shelters/viewAllPets/page/:page_number`| `GET`    | 200      | json of pets                                                          |
-| `/pets/shelters/viewPetsBySex/:page_number/:sex/`|`GET`| 200        | json of page (number), pageTotal and pets with specified sex          |
-| `/pets/shelters/viewPetsByKind/:page_number/:kind/`|`GET`| 200      | json of page (number), pageTotal and pets with specified kind         |
-| `/pets/shelters/viewAllPets/page/:page_number`| `GET`| 200          | json of page (number), pageTotal and pets                             |
-| `/pets/users/viewAllPets/page/:page_number`| `GET`  | 200           | json of page (number), pageTotal and pets                             |
-| `/pets/adopt/page/:page_number`          | `GET`    | 200           | json of page (number), pageTotal and pets for adopt                   |
-| `/pets/adopt/:owner`                     | `GET`    | 200           | json of pets for adopt owned by :owner                                |
-| `/pets/adopt/:pet_uuid`                  | `POST`   | 201           | json of true or false if submitted                                    |
-| `/pets/dates/page/:page_number`          | `GET`    | 200           | json of page (number), pageTotal and pets for dates                   |
-| `/pets/dates/:owner`                     | `GET`    | 200           | json of pets for dates owned by :owner                                |
-| `/pets/dates/:pet_uuid`                  | `POST`   | 201           | json of time of the date submitted by the user                        |
-| `/pets/dates/approve/:pet_uuid`          |  `PUT`   | 201           | json of the updated date request                                      |
-| `/pets/dates/reject/:pet_uuid`           |  `PUT`   | 201           | json of the updated date request                                      |
-| `/pets/dateRequests`                     | `GET`    | 200           | json of requests together with user's info (if shelter) or shelter's info (if user) and pet's info             |
-| `/pets/dateRequests/:dates_uuid`         | `GET`    | 200           | json of specific request together with user's info (if shelter) or shelter's info (if user) and pet's info             |
-| `/pets/both/page/:page_number`           | `GET`    | 200           | json of page (number), pageTotal and pets for both adopt and dates    |
-| `/pets/:owner/viewShelterPets`           | `GET`    | 200           | json of pets of :owner                                                |
-| `/pets/:owner/viewUserPets`              | `GET`    | 200           | json of pets of :owner                                                |
-| `/pets/:owner/deleteAllUserPets`         | `DELETE` | 204           |                                                                       |
-| `/pets/:owner/deleteAllShelter`          | `DELETE` | 204           |                                                                       |
-| `/pets/myPets`                           | `POST`   | 201           | json of mysql query                                                   |
-| `/pets/myPets`                           | `GET`    | 200           | json of own pets                                                      |
-| `/pets/:pet_uuid`                        | `GET`    | 200           | json of pet                                                           |
-| `/pets/:pet_uuid`                        | `DELETE` | 204           |                                                                       |
-| `/community/sortByTimeDesc/page/:page_number`| `GET`| 200           | json of posts sorted by date (from newest to oldest)                  |
-| `/community/sortByTimeAsc/page/:page_number` | `GET`| 200           | json of posts sorted by date (from oldest to newest)                  |
-| `/community/sortByCommentsDesc/page/:page_number`| `GET`| 200       | json of posts sorted by number of comments (from most to least)       |
-| `/community/sortByCommentsAsc/page/:page_number` | `GET`| 200       | json of posts sorted by number of comments (from least to most)       |
-| `/community/sortByVotesDesc/page/:page_number`| `GET`   | 200       | json of posts sorted by number of votes (from most to least)          |
-| `/community/sortByVotesAsc/page/:page_number` | `GET`   | 200       | json of posts sorted by number of votes (from least to most)          |
-| `/community/addPost`                     | `POST`   | 201           | json of post                                                          |
-| `/community/:post_uuid`                  | `GET`    | 200           |                                                                       |
-| `/community/:post_uuid`                  | `PUT`    | 201           | json of mysql query                                                   |
-| `/community/:post_uuid`                  | `DELETE` | 204           |                                                                       |
-| `/community/:post_uuid`                  | `POST`   | 201           | json of newComment                                                    |
-| `/community/:user/viewPosts`             | `GET`    | 200           | json of posts by :user                                                |
-| `/community/viewAllComments/:post_uuid`  | `GET`    | 200           | json of comments in :post_uuid                                        |
-| `/community/:post_uuid/:comment_uuid`    | `GET`    | 200           | json `comment_uuid` in `post_uuid`                                    |
-| `/community/:post_uuid/:comment_uuid`    | `DELETE` | 204           |                                                                       |
-| `/community/:post_uuid/:comment_uuid`    | `PUT`    | 201           | json of mysql query                                                   |
-| `/rescue/`                               | `GET`    | 200           | json of requests (if shelter); redirects to /viewMyRequests (if user) |
-| `/rescue/viewMyRequests`                 | `GET`    | 200           | json of requests (only for users)                                     |
-| `/rescue/:rescue_uuid`                   | `GET`    | 200           | json of rescue                                                        |
-| `/rescue/:rescue_uuid`                   | `DELETE` | 204           |                                                                       |
-| `/rescue/:user/viewAllRequests`          | `GET`    | 200           | json of requests from :user (only for shelters)                       |
-| `/rescue/:rescue_uuid/viewRescueRequest` | `GET`    | 200           | json of rescue where rescue_uuid = :rescue_uuid                       |
-| `/rescue/submit_a_rescue_request`        | `POST`   | 201           | json of newRescue                                                     |
-
-## Tables
-### `users`
-
-| Field        | Type         | Null | Key | Default | Extra |
-|--------------|--------------|------|-----|---------|-------|
-| Username     | varchar(36)  | NO   | PRI | NULL    |       |
-| firstname    | varchar(36)  | NO   |     | NULL    |       |
-| lastname     | varchar(36)  | NO   |     | NULL    |       |
-| birthday     | date         | YES  |     | NULL    |       |
-| address      | varchar(236) | NO   |     | NULL    |       |
-| contactnum   | varchar(20)  | NO   |     | NULL    |       |
-| email        | varchar(36)  | NO   | PRI | NULL    |       |
-| password     | varchar(255) | NO   |     | NULL    |       |
-| icon_url     | varchar(255) | YES  |     | NULL    |       |
-| icon_abspath | varchar(255) | YES  |     | NULL    |       |
-| icon_width   | varchar(36)  | YES  |     | NULL    |       |
-| icon_height  | varchar(36)  | YES  |     | NULL    |       |
-| created_at   | datetime     | NO   |     | NULL    |       |
-| updated_at   | datetime     | NO   |     | NULL    |       |
-
-
-### `shelters`
-| Field        | Type         | Null | Key | Default | Extra |
-|--------------|--------------|------|-----|---------|-------|
-| Username     | varchar(52)  | NO   | PRI | NULL    |       |
-| shelter_name | varchar(52)  | NO   |     | NULL    |       |
-| address      | varchar(236) | NO   |     | NULL    |       |
-| contactnum   | varchar(20)  | NO   |     | NULL    |       |
-| email        | varchar(36)  | NO   | PRI | NULL    |       |
-| password     | varchar(255) | NO   |     | NULL    |       |
-| icon_url     | varchar(255) | YES  |     | NULL    |       |
-| icon_abspath | varchar(255) | YES  |     | NULL    |       |
-| icon_width   | varchar(36)  | YES  |     | NULL    |       |
-| icon_height  | varchar(36)  | YES  |     | NULL    |       |
-| file_path    | varchar(255) | NO   |     | NULL    |       |
-| absfile_path | varchar(255) | NO   |     | NULL    |       |
-| created_at   | datetime     | NO   |     | NULL    |       |
-| updated_at   | datetime     | NO   |     | NULL    |       |
-
-
-### `pets_of_users`
-
-| Field         | Type                              | Null | Key | Default | Extra |
-|---------------|-----------------------------------|------|-----|---------|-------|
-| name          | varchar(52)                       | NO   |     | NULL    |       |
-| kind          | enum('DOG','CAT','BIRD','OTHERS') | NO   |     | NULL    |       |
-| breed         | varchar(36)                       | NO   |     | NULL    |       |
-| sex           | enum('MALE','FEMALE')             | NO   |     | NULL    |       |
-| birthday      | date                              | YES  |     | NULL    |       |
-| description   | varchar(200)                      | YES  |     | NULL    |       |
-| created_at    | datetime                          | NO   |     | NULL    |       |
-| updated_at    | datetime                          | NO   |     | NULL    |       |
-| uuid          | varchar(36)                       | NO   | PRI | NULL    |       |
-| url           | varchar(255)                      | YES  |     | NULL    |       |
-| abspath       | varchar(255)                      | YES  |     | NULL    |       |
-| width         | varchar(36)                       | YES  |     | NULL    |       |
-| height        | varchar(36)                       | YES  |     | NULL    |       |
-| user_Username | varchar(36)                       | NO   | MUL | NULL    |       |
-
-### `pets_of_shelters`
-| Field            | Type                              | Null | Key | Default | Extra |
-|------------------|-----------------------------------|------|-----|---------|-------|
-| name             | varchar(52)                       | NO   |     | NULL    |       |
-| kind             | enum('DOG','CAT','BIRD','OTHERS') | NO   |     | NULL    |       |
-| breed            | varchar(36)                       | NO   |     | NULL    |       |
-| sex              | enum('MALE','FEMALE')             | NO   |     | NULL    |       |
-| birthday         | varchar(36)                       | NO   |     | NULL    |       |
-| description      | varchar(200)                      | YES  |     | NULL    |       |
-| status           | enum('DATES','ADOPT','BOTH')      | YES  |     | NULL    |       |
-| created_at       | datetime                          | NO   |     | NULL    |       |
-| updated_at       | datetime                          | NO   |     | NULL    |       |
-| uuid             | varchar(36)                       | NO   | PRI | NULL    |       |
-| url              | varchar(255)                      | YES  |     | NULL    |       |
-| abspath          | varchar(255)                      | YES  |     | NULL    |       |
-| width            | varchar(36)                       | YES  |     | NULL    |       |
-| height           | varchar(36)                       | YES  |     | NULL    |       |
-| shelter_Username | varchar(52)                       | NO   | MUL | NULL    |       |
-
-### `adopts`
-| Field              | Type                                 | Null | Key | Default |
-|:-------------------|:-------------------------------------|:----:|:---:|:-------:|
-| `user_Username`    | varchar(36)                          |  NO  | MUL |  NULL   |
-| `pet_uuid`         | varchar(36)                          |  NO  | MUL |  NULL   | 
-| `adopt_uuid`       | varchar(36)                          |  No  |     |  NULL   |
-| `created_at`       | datetime                             |  NO  |     |  NULL   |
-| `updated_at`       | datetime                             |  NO  |     |  NULL   |
-
-### `dates`
-| Field              | Type                                 | Null | Key | Default |
-|:-------------------|:-------------------------------------|:----:|:---:|:-------:|
-| `user_Username`    | varchar(36)                          |  NO  | MUL |  NULL   |
-| `pet_uuid`         | varchar(36)                          |  NO  | MUL |  NULL   | 
-| `status`           | enum('PENDING', 'APPROVED', 'REJECTED')|  NO|     |  NULL   |
-| `dates_uuid`       | varchar(36)                          |  No  |     |  NULL   |
-| `created_at`       | datetime                             |  NO  |     |  NULL   |
-| `updated_at`       | datetime                             |  NO  |     |  NULL   |
-
-
-### `posts`
-
-| Field         | Type         | Null | Key | Default | Extra |
-|---------------|--------------|------|-----|---------|-------|
-| Posted_by     | varchar(52)  | NO   |     | NULL    |       |
-| post_title    | varchar(255) | NO   |     | NULL    |       |
-| text_post     | text         | NO   |     | NULL    |       |
-| votes         | int(6)       | NO   |     | NULL    |       |
-| comments      | int(6)       | NO   |     | NULL    |       |
-| image_urlpath | varchar(255) | YES  | UNI | NULL    |       |
-| img_abspath   | varchar(255) | YES  | UNI | NULL    |       |
-| post_uuid     | varchar(36)  | NO   | PRI | NULL    |       |
-| created_at    | datetime     | NO   |     | NULL    |       |
-| updated_at    | datetime     | NO   |     | NULL    |       |
-
-### `comments_on_posts`
-| Field         | Type         | Null | Key | Default | Extra |
-|---------------|--------------|------|-----|---------|-------|
-| comment_title | varchar(36)  | NO   |     | NULL    |       |
-| comment_uuid  | varchar(36)  | NO   | PRI | NULL    |       |
-| commented_by  | varchar(52)  | NO   |     | NULL    |       |
-| comment_body  | varchar(255) | NO   |     | NULL    |       |
-| votes         | int(6)       | NO   |     | NULL    |       |
-| img_abspath   | varchar(255) | YES  | UNI | NULL    |       |
-| image_urlpath | varchar(255) | YES  | UNI | NULL    |       |
-| created_at    | datetime     | NO   |     | NULL    |       |
-| updated_at    | datetime     | NO   |     | NULL    |       |
-| post_uuid     | varchar(36)  | NO   | MUL | NULL    |       |
-
-
-
-### `rescue`
-
-| Field             | Type         | Null | Key | Default | Extra |
-|-------------------|--------------|------|-----|---------|-------|
-| rescue_uuid       | varchar(36)  | NO   | PRI | NULL    |       |
-| rescue_body       | text         | NO   |     | NULL    |       |
-| rescue_abspath    | varchar(255) | YES  | UNI | NULL    |       |
-| rescue_imgurl     | varchar(255) | YES  | UNI | NULL    |       |
-| date_submitted    | datetime     | NO   |     | NULL    |       |
-| updated_on        | datetime     | NO   |     | NULL    |       |
-| contactnum_sender | int(11)      | NO   |     | NULL    |       |
-| email_sender      | varchar(36)  | NO   |     | NULL    |       |
-| address_sender    | varchar(236) | NO   |     | NULL    |       |
-| sender_Username   | varchar(52)  | NO   | MUL | NULL    |       |
-
-
-### `notifications`
-
-| Field         | Type         | Null | Key | Default | Extra          |
-|---------------|--------------|------|-----|---------|----------------|
-| notif_id      | int(11)      | NO   | PRI | NULL    | auto_increment |
-| notif_for     | varchar(36)  | NO   | MUL | NULL    |                |
-| notif_message | varchar(255) | NO   |     | NULL    |                |
-| notif_url     | varchar(255) | NO   |     | NULL    |                |
-| date_created  | datetime     | NO   |     | NULL    |                |
-
-## Developers
-#### API
+### Developers
+This web app is part of the PAD project of Batch o(ctal) in Young Software Engineers' Society (YSES) UPLB.
+##### API
 * Evangelista, Erlen Mae
-* Somabes, Kia Mei
+* Sombaes, Kia Mei
 
 ##### Client
 * Gotis, Ciara Mae
