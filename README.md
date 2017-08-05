@@ -1,5 +1,5 @@
 <h1 align="center">
-	<img alt="fost.r" src="./src/assets/images/logo2-dblue.png" height="256px" />
+	<img alt="fost.r" src="./assets/images/logo2-dblue.png" height="256px" />
 	<br />
 	fost.r API
 	<br />
