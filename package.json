@@ -1,47 +1,40 @@
 {
   "name": "fost.r",
-  "version": "0.1.0",
-  "private": true,
-  "proxy": "http://localhost:3001/",
-  "dependencies": {
-    "axios": "^0.16.2",
-    "jquery": "^3.2.1",
-    "less": "^2.7.2",
-    "less-plugin-clean-css": "^1.5.1",
-    "moment": "^2.18.1",
-    "prettier": "^1.4.4",
-    "react": "^15.5.4",
-    "react-datepicker": "^0.52.0",
-    "react-document-title": "^2.0.3",
-    "react-dom": "^15.5.4",
-    "react-image-holder": "^2.0.1",
-    "react-redux": "^5.0.5",
-    "react-router": "^4.1.1",
-    "react-router-dom": "^4.1.1",
-    "react-stack-grid": "^0.2.2",
-    "redux": "^3.6.0",
-    "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0",
-    "uikit": "^3.0.0-beta.25"
-  },
-  "devDependencies": {
-    "husky": "^0.13.4",
-    "lint-staged": "^4.0.0",
-    "react-scripts": "1.0.7"
-  },
+  "version": "1.0.0",
+  "main": "server.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "prettify": "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write \"./src/**/*.js\"",
-    "precommit": "lint-staged",
-    "build-css": "./node_modules/less/bin/lessc --clean-css src/assets/less/theme.less src/assets/css/uikit/styles.min.css"
+    "start": "nodemon server.js",
+    "build": "mysql -u root -p > ./database/schema.sql",
+    "configure": "node ./database/config.js",
+    "prettify": "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write \"./entities/**/*.js\" \"./database/*.js\""
   },
   "lint-staged": {
     "*.js": [
       "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write",
       "git add"
     ]
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "express-fileupload": "^0.1.4",
+    "express-session": "^1.15.3",
+    "express-validator": "^3.2.1",
+    "fs": "0.0.1-security",
+    "image-size": "^0.6.0",
+    "moment": "^2.18.1",
+    "morgan": "^1.8.2",
+    "multer": "^1.3.0",
+    "mv": "^2.1.1",
+    "mysql": "^2.13.0",
+    "shortid": "^2.2.8",
+    "socket.io": "^2.0.3"
+  },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.2",
+    "nodemon": "^1.11.0",
+    "prettier": "^1.5.3"
   }
 }
