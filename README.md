@@ -1,5 +1,5 @@
 <h1 align="center">
-	<img alt="fost.r" src="./assets/images/logo2-dblue.png" height="256px" />
+	<img alt="fost.r" src="./assets/logo2-dblue.png" height="256px" />
 	<br />
 	fost.r API
 	<br />
@@ -296,7 +296,7 @@ Access the files at `/<route>/<file>`.
 This web app is part of the PAD project of Batch o(ctal) in Young Software Engineers' Society (YSES) UPLB.
 #### API
 * Evangelista, Erlen Mae
-* Sombaes, Kia Mei
+* Somabes, Kia Mei
 
 ##### Client
 * Gotis, Ciara Mae
